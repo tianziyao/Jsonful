@@ -1,0 +1,6 @@
+framework module Jsonful {
+  umbrella header "Jsonful-umbrella.h"
+
+  export *
+  module * { export * }
+}

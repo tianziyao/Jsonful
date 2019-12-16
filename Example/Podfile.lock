@@ -1,0 +1,16 @@
+PODS:
+  - Jsonful (0.1.0)
+
+DEPENDENCIES:
+  - Jsonful (from `../`)
+
+EXTERNAL SOURCES:
+  Jsonful:
+    :path: "../"
+
+SPEC CHECKSUMS:
+  Jsonful: 10f7a855d836241ccf6d8caeed819e5f54d41a02
+
+PODFILE CHECKSUM: b1a4b0a3f81ca2994b51d502510f9c5a6db397f4
+
+COCOAPODS: 1.8.4

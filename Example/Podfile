@@ -1,0 +1,11 @@
+use_frameworks!
+
+target 'Jsonful_Example' do
+  pod 'Jsonful', :path => '../'
+
+  target 'Jsonful_Tests' do
+    inherit! :search_paths
+
+    
+  end
+end

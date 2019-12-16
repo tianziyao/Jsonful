@@ -1,0 +1,21 @@
+{
+  "name": "Jsonful",
+  "version": "0.1.0",
+  "summary": "A short description of Jsonful.",
+  "homepage": "https://github.com/tianziyao/Jsonful",
+  "license": {
+    "type": "MIT",
+    "file": "LICENSE"
+  },
+  "authors": {
+    "tianziyao": "tianziyao@jingdata.com"
+  },
+  "source": {
+    "git": "https://github.com/tianziyao/Jsonful.git",
+    "tag": "0.1.0"
+  },
+  "platforms": {
+    "ios": "8.0"
+  },
+  "source_files": "Jsonful/Classes/**/*"
+}
