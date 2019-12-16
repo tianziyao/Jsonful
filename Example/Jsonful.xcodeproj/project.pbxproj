@@ -47,7 +47,7 @@
 		957E76012443C09B25B2E2B1 /* Pods-Jsonful_Tests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Jsonful_Tests.release.xcconfig"; path = "Target Support Files/Pods-Jsonful_Tests/Pods-Jsonful_Tests.release.xcconfig"; sourceTree = "<group>"; };
 		ADC5EAE32138C32D3217488F /* Pods-Jsonful_Example.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Jsonful_Example.debug.xcconfig"; path = "Target Support Files/Pods-Jsonful_Example/Pods-Jsonful_Example.debug.xcconfig"; sourceTree = "<group>"; };
 		C6D82E37B5CF4EC1B9D622DC /* Pods_Jsonful_Example.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Jsonful_Example.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		D55BEF3A6989807BA5125786 /* Jsonful.podspec */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = Jsonful.podspec; path = ../Jsonful.podspec; sourceTree = "<group>"; };
+		D55BEF3A6989807BA5125786 /* Jsonful.podspec */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = Jsonful.podspec; path = ../Jsonful.podspec; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
 		EF0405284DAD5070A68F3936 /* README.md */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = net.daringfireball.markdown; name = README.md; path = ../README.md; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -104,7 +104,7 @@
 		607FACD21AFB9204008FA782 /* Example for Jsonful */ = {
 			isa = PBXGroup;
 			children = (
-				940847C023A729B30011DB5E /* Mock */,
+				940847C123A729C70011DB5E /* Mock.swift */,
 				607FACD51AFB9204008FA782 /* AppDelegate.swift */,
 				607FACD71AFB9204008FA782 /* ViewController.swift */,
 				607FACD91AFB9204008FA782 /* Main.storyboard */,
@@ -149,14 +149,6 @@
 				33B4795DAD0E2B0C530743BC /* LICENSE */,
 			);
 			name = "Podspec Metadata";
-			sourceTree = "<group>";
-		};
-		940847C023A729B30011DB5E /* Mock */ = {
-			isa = PBXGroup;
-			children = (
-				940847C123A729C70011DB5E /* Mock.swift */,
-			);
-			path = Mock;
 			sourceTree = "<group>";
 		};
 		FE43BD91D15CA6DE0B6AB678 /* Pods */ = {

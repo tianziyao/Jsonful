@@ -450,37 +450,6 @@
 			};
 			name = Release;
 		};
-		489BD8B119479FD1DDB4F13ADCD2F1E9 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			baseConfigurationReference = 0B58D839A7E761A12978C14FADD2FFD4 /* Jsonful.xcconfig */;
-			buildSettings = {
-				CODE_SIGN_IDENTITY = "";
-				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
-				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "";
-				CURRENT_PROJECT_VERSION = 1;
-				DEFINES_MODULE = YES;
-				DYLIB_COMPATIBILITY_VERSION = 1;
-				DYLIB_CURRENT_VERSION = 1;
-				DYLIB_INSTALL_NAME_BASE = "@rpath";
-				GCC_PREFIX_HEADER = "Target Support Files/Jsonful/Jsonful-prefix.pch";
-				INFOPLIST_FILE = "Target Support Files/Jsonful/Jsonful-Info.plist";
-				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				MODULEMAP_FILE = "Target Support Files/Jsonful/Jsonful.modulemap";
-				PRODUCT_MODULE_NAME = Jsonful;
-				PRODUCT_NAME = Jsonful;
-				SDKROOT = iphoneos;
-				SKIP_INSTALL = YES;
-				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) ";
-				SWIFT_VERSION = 4.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				VERSIONING_SYSTEM = "apple-generic";
-				VERSION_INFO_PREFIX = "";
-			};
-			name = Debug;
-		};
 		572C5E23A7B138B69048806785D8C8AA /* Debug */ = {
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = D5D6041D363DE0F5D61ED462689CABF1 /* Pods-Jsonful_Example.debug.xcconfig */;
@@ -546,38 +515,6 @@
 				VERSION_INFO_PREFIX = "";
 			};
 			name = Debug;
-		};
-		A4FF59F15957545708EF44B528D2663F /* Release */ = {
-			isa = XCBuildConfiguration;
-			baseConfigurationReference = 0B58D839A7E761A12978C14FADD2FFD4 /* Jsonful.xcconfig */;
-			buildSettings = {
-				CODE_SIGN_IDENTITY = "";
-				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
-				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "";
-				CURRENT_PROJECT_VERSION = 1;
-				DEFINES_MODULE = YES;
-				DYLIB_COMPATIBILITY_VERSION = 1;
-				DYLIB_CURRENT_VERSION = 1;
-				DYLIB_INSTALL_NAME_BASE = "@rpath";
-				GCC_PREFIX_HEADER = "Target Support Files/Jsonful/Jsonful-prefix.pch";
-				INFOPLIST_FILE = "Target Support Files/Jsonful/Jsonful-Info.plist";
-				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				MODULEMAP_FILE = "Target Support Files/Jsonful/Jsonful.modulemap";
-				PRODUCT_MODULE_NAME = Jsonful;
-				PRODUCT_NAME = Jsonful;
-				SDKROOT = iphoneos;
-				SKIP_INSTALL = YES;
-				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) ";
-				SWIFT_VERSION = 4.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				VALIDATE_PRODUCT = YES;
-				VERSIONING_SYSTEM = "apple-generic";
-				VERSION_INFO_PREFIX = "";
-			};
-			name = Release;
 		};
 		A77A357172C5CD3FEDAD7EB29421592A /* Release */ = {
 			isa = XCBuildConfiguration;
@@ -737,6 +674,69 @@
 			};
 			name = Debug;
 		};
+		BE5A8B04F0E82F981BB69A9C8AC2AB79 /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 0B58D839A7E761A12978C14FADD2FFD4 /* Jsonful.xcconfig */;
+			buildSettings = {
+				CODE_SIGN_IDENTITY = "";
+				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "";
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				GCC_PREFIX_HEADER = "Target Support Files/Jsonful/Jsonful-prefix.pch";
+				INFOPLIST_FILE = "Target Support Files/Jsonful/Jsonful-Info.plist";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				MODULEMAP_FILE = "Target Support Files/Jsonful/Jsonful.modulemap";
+				PRODUCT_MODULE_NAME = Jsonful;
+				PRODUCT_NAME = Jsonful;
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) ";
+				SWIFT_VERSION = 4.2;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Release;
+		};
+		D048E5978ACB032419600110B303CAEF /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 0B58D839A7E761A12978C14FADD2FFD4 /* Jsonful.xcconfig */;
+			buildSettings = {
+				CODE_SIGN_IDENTITY = "";
+				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "";
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				GCC_PREFIX_HEADER = "Target Support Files/Jsonful/Jsonful-prefix.pch";
+				INFOPLIST_FILE = "Target Support Files/Jsonful/Jsonful-Info.plist";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				MODULEMAP_FILE = "Target Support Files/Jsonful/Jsonful.modulemap";
+				PRODUCT_MODULE_NAME = Jsonful;
+				PRODUCT_NAME = Jsonful;
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) ";
+				SWIFT_VERSION = 4.2;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Debug;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -761,8 +761,8 @@
 		63AB1A4476DA4E6BC4BB2BAD1DC07A6B /* Build configuration list for PBXNativeTarget "Jsonful" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				489BD8B119479FD1DDB4F13ADCD2F1E9 /* Debug */,
-				A4FF59F15957545708EF44B528D2663F /* Release */,
+				D048E5978ACB032419600110B303CAEF /* Debug */,
+				BE5A8B04F0E82F981BB69A9C8AC2AB79 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
