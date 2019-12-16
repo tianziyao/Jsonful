@@ -8,15 +8,20 @@
 
 import Foundation
 
-public protocol JsonfulKeyble {
+internal protocol JsonfulKeyble {
+    
     var describe: String { get }
-    var hashable: AnyHashable { get }
+    
     func fetch(from any: Any?) -> Any?
 }
 
 extension Int: JsonfulKeyble {
     
-    public func fetch(from any: Any?) -> Any? {
+    var describe: String {
+        return "[\(self)]"
+    }
+    
+    func fetch(from any: Any?) -> Any? {
         guard let array = any as? [Any] else {
             return nil
         }
@@ -25,18 +30,9 @@ extension Int: JsonfulKeyble {
         }
         return array[self]
     }
-    
-    public var hashable: AnyHashable {
-        return self
-    }
-    
-    public var describe: String {
-        return "[\(self)]"
-    }
-    
 }
 
-extension NSObject {
+internal extension NSObject {
     
     var ivarNameSet: Set<String> {
         guard let cls = object_getClass(self) else { return [] }
@@ -55,15 +51,19 @@ extension NSObject {
 
 extension String: JsonfulKeyble {
     
-    private var keys: Set<String> {
+    var describe: String {
+        return ".\(self)"
+    }
+    
+    var keys: Set<String> {
         return Set([self, ".\(self)", "_\(self)"])
     }
     
-    private func fetch(dic: [AnyHashable: Any]) -> Any? {
+    func fetch(dic: [AnyHashable: Any]) -> Any? {
         return dic.filter({ keys.contains($0.key as? String ?? "") }).first?.value
     }
     
-    private func fetch(obj: NSObject) -> Any? {
+    func fetch(obj: NSObject) -> Any? {
         if obj.ivarNameSet.contains(where: { keys.contains($0) }) {
             return obj.value(forKey: self)
         }
@@ -72,7 +72,7 @@ extension String: JsonfulKeyble {
         }
     }
     
-    public func fetch(from any: Any?) -> Any? {
+    func fetch(from any: Any?) -> Any? {
         
         guard let any = any else { return nil }
         
@@ -106,11 +106,4 @@ extension String: JsonfulKeyble {
         }
     }
     
-    public var hashable: AnyHashable {
-        return self
-    }
-    
-    public var describe: String {
-        return ".\(self)"
-    }
 }

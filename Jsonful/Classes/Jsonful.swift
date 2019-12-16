@@ -12,7 +12,7 @@ import Foundation
 @dynamicMemberLookup
 public struct Jsonful {
     
-    public typealias Maper = (JsonfulKeyble) -> JsonfulKeyble
+    public typealias Maper = (String) -> String
     
     private let raw: Any?
     
@@ -46,18 +46,26 @@ public struct Jsonful {
     private func value(for tokens: [JsonfulKeyble]) -> (Optional<Any>, [String]) {
         var current: Any? = self.raw
         var subscripts = [String]()
-        
         for token in tokens {
-            let token = maper(token)
+            let token = tokenMap(token)
             subscripts.append(token.describe)
-            if let result = token.fetch(from: current) {
+            switch token.fetch(from: current) {
+            case .none:
+                return (current, subscripts)
+            case .some(let result):
                 current = Mirror.unwrap(value: result)
-            }
-            else {
-                return (.none, subscripts)
             }
         }
         return (current, subscripts)
+    }
+    
+    private func tokenMap(_ token: JsonfulKeyble) -> JsonfulKeyble {
+        if let string = token as? String {
+            return maper(string)
+        }
+        else {
+            return token
+        }
     }
     
     private func append(token: JsonfulKeyble) -> Jsonful {

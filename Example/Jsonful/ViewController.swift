@@ -19,6 +19,10 @@ class ViewController: UIViewController {
         snapshot()
         print("---------------------")
         reference()
+        
+        
+        let a = ""
+    
     }
 
     override func didReceiveMemoryWarning() {
