@@ -30,13 +30,15 @@ class ViewController: UIViewController {
     
     func unwrap() {
         let data = Jsonful.reference(mock)
-        data.set.unwrap().set().then(success: { value in
+        data.set.unwrap().asSet().then(success: { value in
             print(value)
         })
     }
 
     func reference() {
-        let data = Jsonful.reference(mock)
+        var data = Jsonful.reference(mock)
+        
+
         
         print(data.int.int.current)
         print(data.tuple.tuple.0.current)

@@ -45,12 +45,21 @@ public struct Unwrap {
             }
         }
         
-        public func map<O>(closure: (Result<T>.Success) -> Result<O>) -> Result<O> {
+        public func map<O>(_ closure: (Result<T>.Success) -> Result<O>) -> Result<O> {
             switch self {
             case .failure(let reason):
                 return .failure(reason)
             case .success(let arg):
                 return closure(arg)
+            }
+        }
+        
+        public func map<O>(_ closure: (T) -> O) -> Result<O> {
+            switch self {
+            case .failure(let reason):
+                return .failure(reason)
+            case .success(let arg):
+                return .success((closure(arg.value), arg.identity))
             }
         }
              
@@ -108,15 +117,15 @@ public struct Unwrap {
 
 public extension Unwrap.Result {
     
-    var image: Unwrap.Result<UIImage> {
+    var asImage: Unwrap.Result<UIImage> {
         return self.this()
     }
     
-    var color: Unwrap.Result<UIColor> {
+    var asColor: Unwrap.Result<UIColor> {
         return self.this()
     }
     
-    var font: Unwrap.Result<UIFont> {
+    var asFont: Unwrap.Result<UIFont> {
         return self.this()
     }
     
@@ -138,83 +147,93 @@ extension Data: Containable {}
 
 extension Range: Containable {}
 
-extension URL: Containable {
-    public var isEmpty: Bool {
-        return absoluteString.isEmpty
-    }
-}
+//public extension Unwrap.Result {
+//
+//    var asString: Unwrap.Result<String> {
+//        return self.map({ (value) -> String in
+//            return String(describing: value)
+//        })
+//    }
+//
+//    var asInt: Unwrap.Result<Int> {
+//        return self.asString.map({ (arg) -> Unwrap.Result<Int> in
+//            if let int = Int(arg.value) {
+//                return .success((int, arg.identity))
+//            }
+//            else {
+//                return .failure(arg.identity)
+//            }
+//        })
+//    }
+//}
 
 public extension Unwrap.Result {
 
-    var string: Unwrap.Result<String> {
+    var asString: Unwrap.Result<String> {
         return self.this()
     }
 
-    var int: Unwrap.Result<Int> {
+    var asInt: Unwrap.Result<Int> {
         return self.this()
     }
 
-    var double: Unwrap.Result<Double> {
+    var asDouble: Unwrap.Result<Double> {
         return self.this()
     }
 
-    var bool: Unwrap.Result<Bool> {
+    var asBool: Unwrap.Result<Bool> {
         return self.this()
     }
 
-    var error: Unwrap.Result<Error> {
+    var asError: Unwrap.Result<Error> {
         return self.this()
     }
     
-    func array<T: Any>() -> Unwrap.Result<[T]> {
-        return array(T.self)
-    }
-    
-    func array<T: Any>(_ t: T.Type) -> Unwrap.Result<[T]> {
+    func asArray<T: Any>(_ type: T.Type) -> Unwrap.Result<[T?]> {
         return self.this()
     }
     
-    func array() -> Unwrap.Result<[Any]> {
-        return array(Any.self)
+    func asArray<T: Any>() -> Unwrap.Result<[T?]> {
+        return self.asArray(T.self)
     }
-    
-    func dictionary<T: Any>(_ t: T.Type) -> Unwrap.Result<[AnyHashable: T]> {
+
+    func asArray() -> Unwrap.Result<[Any?]> {
+        return self.asArray(Any.self)
+    }
+
+    func asDictionary<T: Any>(_ t: T.Type) -> Unwrap.Result<[AnyHashable: T?]> {
         return self.this()
     }
     
-    func dictionary<T: Any>() -> Unwrap.Result<[AnyHashable: T]> {
-        return self.dictionary(T.self)
+    func asDictionary<T: Any>() -> Unwrap.Result<[AnyHashable: T?]> {
+        return self.asDictionary(T.self)
     }
     
-    func dictionary() -> Unwrap.Result<[AnyHashable: Any]> {
-        return dictionary(Any.self)
+    func asDictionary() -> Unwrap.Result<[AnyHashable: Any?]> {
+        return self.asDictionary(Any.self)
     }
     
-    func set<T: Hashable>(_ t: T.Type) -> Unwrap.Result<Set<T>> {
+    func asSet<T: Hashable>(_ t: T.Type) -> Unwrap.Result<Set<T?>> {
         return self.this()
     }
 
-    func set<T: Hashable>() -> Unwrap.Result<Set<T>> {
-        return self.set(T.self)
+    func asSet<T: Hashable>() -> Unwrap.Result<Set<T?>> {
+        return self.asSet(T.self)
     }
     
-    func set() -> Unwrap.Result<Set<AnyHashable>> {
-        return self.set(AnyHashable.self)
+    func asSet() -> Unwrap.Result<Set<AnyHashable?>> {
+        return self.asSet(AnyHashable.self)
     }
 
-    var date: Unwrap.Result<Date> {
+    var asDate: Unwrap.Result<Date> {
         return self.this()
     }
     
-    var data: Unwrap.Result<Data> {
+    var asData: Unwrap.Result<Data> {
         return self.this()
     }
     
-    var range: Unwrap.Result<Range<Int>> {
-        return self.this()
-    }
-    
-    var url: Unwrap.Result<URL> {
+    var asRange: Unwrap.Result<Range<Int>> {
         return self.this()
     }
     
@@ -223,19 +242,19 @@ public extension Unwrap.Result {
 
 public extension Unwrap.Result {
 
-    var cgFloat: Unwrap.Result<CGFloat> {
+    var asCGFloat: Unwrap.Result<CGFloat> {
         return self.this()
     }
     
-    var cgSize: Unwrap.Result<CGSize> {
+    var asCGSize: Unwrap.Result<CGSize> {
         return self.this()
     }
     
-    var cgPoint: Unwrap.Result<CGPoint> {
+    var asCGPoint: Unwrap.Result<CGPoint> {
         return self.this()
     }
     
-    var cgRect: Unwrap.Result<CGRect> {
+    var asCGRect: Unwrap.Result<CGRect> {
         return self.this()
     }
     
@@ -309,79 +328,91 @@ extension NSURL: Containable {
 
 public extension Unwrap.Result {
     
-    var nsString: Unwrap.Result<NSString> {
+    var asNSString: Unwrap.Result<NSString> {
         return self.this()
     }
     
-    var nsMutableString: Unwrap.Result<NSMutableString> {
+    var asNSMutableString: Unwrap.Result<NSMutableString> {
         return self.this()
     }
     
-    var nsAttributedString: Unwrap.Result<NSAttributedString> {
+    var asNSAttributedString: Unwrap.Result<NSAttributedString> {
         return self.this()
     }
     
-    var nsMutableAttributedString: Unwrap.Result<NSMutableAttributedString> {
+    var asNSMutableAttributedString: Unwrap.Result<NSMutableAttributedString> {
         return self.this()
     }
     
-    var nsNumber: Unwrap.Result<NSNumber> {
+    var asNSNumber: Unwrap.Result<NSNumber> {
         return self.this()
     }
     
-    var nsArray: Unwrap.Result<NSArray> {
+    var asNSArray: Unwrap.Result<NSArray> {
         return self.this()
     }
     
-    var nsMutableArray: Unwrap.Result<NSMutableArray> {
+    var asNSMutableArray: Unwrap.Result<NSMutableArray> {
         return self.this()
     }
     
-    var nsDictionary: Unwrap.Result<NSDictionary> {
+    var asNSPointerArray: Unwrap.Result<NSPointerArray> {
         return self.this()
     }
     
-    var nsMutableDictionary: Unwrap.Result<NSMutableDictionary> {
+    var asNSDictionary: Unwrap.Result<NSDictionary> {
         return self.this()
     }
     
-    var nsSet: Unwrap.Result<NSSet> {
+    var asNSMutableDictionary: Unwrap.Result<NSMutableDictionary> {
         return self.this()
     }
     
-    var nsMutableSet: Unwrap.Result<NSMutableSet> {
+    var asNSMapTable: Unwrap.Result<NSMapTable<AnyObject, AnyObject>> {
         return self.this()
     }
     
-    var nsDate: Unwrap.Result<NSDate> {
+    var asNSSet: Unwrap.Result<NSSet> {
         return self.this()
     }
     
-    var nsData: Unwrap.Result<NSData> {
+    var asNSMutableSet: Unwrap.Result<NSMutableSet> {
         return self.this()
     }
     
-    var nsRange: Unwrap.Result<NSRange> {
+    var asNSHashTable: Unwrap.Result<NSHashTable<AnyObject>> {
         return self.this()
     }
     
-    var nsObject: Unwrap.Result<NSObject> {
+    var asNSDate: Unwrap.Result<NSDate> {
         return self.this()
     }
     
-    var nsUrl: Unwrap.Result<NSURL> {
+    var asNSData: Unwrap.Result<NSData> {
         return self.this()
     }
     
-    var nsBool: Unwrap.Result<ObjCBool> {
+    var asNSRange: Unwrap.Result<NSRange> {
         return self.this()
     }
     
-    var nsError: Unwrap.Result<NSError> {
+    var asNSObject: Unwrap.Result<NSObject> {
         return self.this()
     }
     
-    var nsValue: Unwrap.Result<NSValue> {
+    var asNSUrl: Unwrap.Result<NSURL> {
+        return self.this()
+    }
+    
+    var asNSBool: Unwrap.Result<ObjCBool> {
+        return self.this()
+    }
+    
+    var asNSError: Unwrap.Result<NSError> {
+        return self.this()
+    }
+    
+    var asNSValue: Unwrap.Result<NSValue> {
         return self.this()
     }
 

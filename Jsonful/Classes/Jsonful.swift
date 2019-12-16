@@ -75,11 +75,21 @@ public struct Jsonful {
     }
 
     public subscript(dynamicMember member: String) -> Jsonful {
-        return append(token: member)
+        set {
+            fatalError("暂不支持写操作")
+        }
+        get {
+            return append(token: member)
+        }
     }
     
     public subscript(index: Int) -> Jsonful {
-        return append(token: index)
+        set {
+            fatalError("暂不支持写操作")
+        }
+        get {
+            return append(token: index)
+        }
     }
 
 }
