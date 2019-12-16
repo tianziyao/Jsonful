@@ -9,23 +9,15 @@
 Pod::Spec.new do |s|
   s.name             = 'Jsonful'
   s.version          = '0.1.0'
-  s.summary          = 'A short description of Jsonful.'
+  s.summary          = 'Jsonful可以让你像JavaScript使用JSON一样使用Swift原生数据和模型.'
 
   s.homepage         = 'https://github.com/tianziyao/Jsonful'
   s.license          = { :type => 'MIT', :file => 'LICENSE' }
-  s.author           = { 'tianziyao' => 'tianziyao@jingdata.com' }
+  s.author           = { 'tianziyao' => 'ziyao.tian@gmail.com' }
   s.source           = { :git => 'https://github.com/tianziyao/Jsonful.git', :tag => s.version.to_s }
 
   s.ios.deployment_target = '8.0'
   s.swift_version = '4.2'
   s.source_files = 'Jsonful/Classes/**/*'
-  s.frameworks = 'UIKit', 'MapKit'
-  
-  # s.resource_bundles = {
-  #   'Jsonful' => ['Jsonful/Assets/*.png']
-  # }
 
-  # s.public_header_files = 'Pod/Classes/**/*.h'
-  
-  # s.dependency 'AFNetworking', '~> 2.3'
 end

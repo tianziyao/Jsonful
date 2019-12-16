@@ -16,18 +16,23 @@ class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        snapshot()
-        print("---------------------")
-        reference()
+//        snapshot()
+//        print("---------------------")
+//        reference()
         
-        
-        let a = ""
-    
+        unwrap()
     }
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
+    }
+    
+    func unwrap() {
+        let data = Jsonful.reference(mock)
+        data.set.unwrap().set().then(success: { value in
+            print(value)
+        })
     }
 
     func reference() {
