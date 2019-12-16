@@ -39,7 +39,7 @@ enum StringEnum: String {
 
 enum Enum {
     case tuple(String, Object)
-    case parameter(name: String, age: Int, nil: Any?)
+    case parameter(name: String, age: Int)
     case int(IntEnum)
 }
 
