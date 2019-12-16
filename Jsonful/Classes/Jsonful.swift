@@ -51,7 +51,7 @@ public struct Jsonful {
             let token = maper(token)
             subscripts.append(token.describe)
             if let result = token.fetch(from: current) {
-                current = result
+                current = Mirror.unwrap(value: result)
             }
             else {
                 return (.none, subscripts)

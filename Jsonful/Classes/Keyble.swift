@@ -93,27 +93,16 @@ extension String: JsonfulKeyble {
             
             let mirror = Mirror(reflecting: value)
             
-            switch mirror.displayStyle {
-            case .none:
+            if mirror.displayStyle != .optional {
                 return value
-            case .some(let style):
-                switch style {
-                case .optional:
-                    // value 有可能是多层 Optional 嵌套
-                    // 需要解包到最底层
-                    // 否则外界可能只解包一次，把可选类型当做非可选类型使用
-                    return Mirror.unwrap(value: value)
-                case .enum:
-                    return value
-                default:
-                    if mirror.children.count == 0 {
-                        return value
-                    }
-                    else {
-                        return mirror.children.first?.value
-                    }
-                }
             }
+            
+            if mirror.children.count == 0 {
+                return value
+            }
+
+            return mirror.children.first?.value
+
         }
     }
     
