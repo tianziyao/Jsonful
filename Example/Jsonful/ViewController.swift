@@ -30,7 +30,9 @@ class ViewController: UIViewController {
     
     func unwrap() {
         let data = Jsonful.reference(mock)
-        data.set.unwrap().asSet().then(success: { value in
+//        let nsb: Enum = .int(.one)
+        mock.dic["string"] = "xxxx"
+        data.dic.string.unwrap().int.then(success: { value in
             print(value)
         })
     }

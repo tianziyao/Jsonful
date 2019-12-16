@@ -58,7 +58,7 @@ extension String: JsonfulKeyble {
     var keys: Set<String> {
         return Set([self, ".\(self)", "_\(self)"])
     }
-    
+        
     func fetch(dic: [AnyHashable: Any]) -> Any? {
         return dic.filter({ keys.contains($0.key as? String ?? "") }).first?.value
     }

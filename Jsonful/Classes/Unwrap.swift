@@ -26,23 +26,39 @@ public struct Unwrap {
             }
         }
         
-        public var reason: String? {
+        public var info: String? {
             switch self {
             case .success:
                 return nil
-            case .failure(let text):
-                return text
+            case .failure(let info):
+                return info
             }
         }
         
         public init(value: Optional<T>, file: String = #file, line: Int = #line, id: String) {
-            let identity = "-----\(file):\(line)-----\nid = \(id), rawType = <\(T.self)>\n"
+            let identity = Unwrap.debug { () -> String in
+                let cls = String(describing: object_getClass(value))
+                return "-----\(file):\(line)-----\nid: \(id)\nrawType: <\(cls)>\n"
+            }
             switch value {
             case .none:
-                self = .failure("\(identity)reason: this data is nil.\n")
+                self = Result.failure(identity: identity, value: nil, reason: "this data is nil")
             case .some(let value):
                 self = .success((value, identity))
             }
+        }
+        
+        private static func failure(identity: String, value: Any?, reason: String) -> Result<T> {
+            let info = Unwrap.debug { () -> String in
+                var string: String = ""
+                string.append(contentsOf: identity)
+                if let value = value {
+                    string.append(contentsOf: "rawValue: \(String(describing: value))\n")
+                }
+                string.append(contentsOf: "reason: \(reason).\n")
+                return string
+            }
+            return .failure(info)
         }
         
         public func map<O>(_ closure: (Result<T>.Success) -> Result<O>) -> Result<O> {
@@ -69,9 +85,7 @@ public struct Unwrap {
                     return closure((data, arg.identity))
                 }
                 else {
-                    let cls = String(describing: object_getClass(arg.value))
-                    let reason = "\(arg.identity)reason: <\(cls)> -> <\(O.self)> fail\nraw: \(arg.value)\n"
-                    return .failure(reason)
+                    return .failure(identity: arg.identity, value: arg.value, reason: "this data is not <\(O.self)>")
                 }
             }
         }
@@ -79,7 +93,7 @@ public struct Unwrap {
         public func this<O: Containable>() -> Result<O> {
             return this(closure: { (arg) -> Result<O> in
                 if arg.value.isEmpty {
-                    return .failure("\(arg.identity)reason: this data is empty.\n")
+                    return .failure(identity: arg.identity, value: nil, reason: "this data is empty")
                 }
                 else {
                     return .success(arg)
@@ -102,17 +116,79 @@ public struct Unwrap {
     }
     
     public static func merge<O1, O2>(_ r1: Result<O1>, _ r2: Result<O2>) -> Result<(O1, O2)> {
-        guard let v1 = r1.value else { return .failure(r1.reason ?? "") }
-        guard let v2 = r2.value else { return .failure(r2.reason ?? "") }
+        guard let v1 = r1.value else { return .failure(r1.info ?? "") }
+        guard let v2 = r2.value else { return .failure(r2.info ?? "") }
         return .success(((v1, v2), ""))
     }
     
     public static func merge<O1, O2, O3>(_ r1: Result<O1>, _ r2: Result<O2>, _ r3: Result<O3>) -> Result<(O1, O2, O3)> {
-        guard let v1 = r1.value else { return .failure(r1.reason ?? "") }
-        guard let v2 = r2.value else { return .failure(r2.reason ?? "") }
-        guard let v3 = r3.value else { return .failure(r3.reason ?? "") }
+        guard let v1 = r1.value else { return .failure(r1.info ?? "") }
+        guard let v2 = r2.value else { return .failure(r2.info ?? "") }
+        guard let v3 = r3.value else { return .failure(r3.info ?? "") }
         return .success(((v1, v2, v3), ""))
     }
+    
+    private static func debug(action: () -> String) -> String {
+        #if DEBUG
+        return action()
+        #else
+        return ""
+        #endif
+    }
+}
+
+internal extension String {
+    
+    var decimalNumber: NSDecimalNumber {
+        let set = Set(["false", "null", "<null>", "nil", "nan", "undefined", "", "true"])
+        let text = self.lowercased()
+        if set.contains(text)  {
+            return NSDecimalNumber(string: text == "true" ? "1" : "0")
+        }
+        else {
+            return NSDecimalNumber(string: self)
+        }
+    }
+}
+
+public extension Unwrap.Result {
+
+    var string: Unwrap.Result<String> {
+        return self.map({ (value) -> String in
+            return String(describing: value)
+        })
+    }
+
+    var number: Unwrap.Result<NSNumber> {
+        return self.string.map({ (arg) -> Unwrap.Result<NSNumber> in
+            let number = arg.value.decimalNumber
+            if number == NSDecimalNumber.notANumber {
+                return .failure(identity: arg.identity, value: arg.value, reason: "this data is not a number")
+            }
+            else {
+                return .success((number, arg.identity))
+            }
+        })
+    }
+    
+    var int: Unwrap.Result<Int> {
+        return self.number.map({ (value) -> Int in
+            return value.intValue
+        })
+    }
+    
+    var double: Unwrap.Result<Double> {
+        return self.number.map({ (value) -> Double in
+            return value.doubleValue
+        })
+    }
+    
+    var bool: Unwrap.Result<Bool> {
+        return self.number.map({ (value) -> Bool in
+            return value.boolValue
+        })
+    }
+    
 }
 
 public extension Unwrap.Result {
@@ -147,25 +223,6 @@ extension Data: Containable {}
 
 extension Range: Containable {}
 
-//public extension Unwrap.Result {
-//
-//    var asString: Unwrap.Result<String> {
-//        return self.map({ (value) -> String in
-//            return String(describing: value)
-//        })
-//    }
-//
-//    var asInt: Unwrap.Result<Int> {
-//        return self.asString.map({ (arg) -> Unwrap.Result<Int> in
-//            if let int = Int(arg.value) {
-//                return .success((int, arg.identity))
-//            }
-//            else {
-//                return .failure(arg.identity)
-//            }
-//        })
-//    }
-//}
 
 public extension Unwrap.Result {
 
