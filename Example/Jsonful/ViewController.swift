@@ -35,6 +35,11 @@ class ViewController: UIViewController {
         data.dic.string.unwrap().int.then(success: { value in
             print(value)
         })
+        
+        data.dic.string.unwrap().array.then(success: { value in
+            print(value)
+        })
+        
     }
 
     func reference() {

@@ -78,7 +78,7 @@ public struct Unwrap {
                 return .success((closure(arg.value), arg.identity))
             }
         }
-             
+        
         public func this<O>(closure: (Result<O>.Success) -> Result<O> = {.success($0)}) -> Result<O> {
             return map { (arg) -> Unwrap.Result<O> in
                 if let data = arg.value as? O {
@@ -112,9 +112,9 @@ public struct Unwrap {
                 failure?(reason)
             }
         }
-
+        
     }
-    
+
     public static func merge<O1, O2>(_ r1: Result<O1>, _ r2: Result<O2>) -> Result<(O1, O2)> {
         guard let v1 = r1.value else { return .failure(r1.info ?? "") }
         guard let v2 = r2.value else { return .failure(r2.info ?? "") }
@@ -189,6 +189,38 @@ public extension Unwrap.Result {
         })
     }
     
+    var array: Unwrap.Result<[Any]> {
+        return self.array()
+    }
+    
+    var dictionary: Unwrap.Result<[AnyHashable: Any]> {
+        return self.dictionary()
+    }
+
+    var set: Unwrap.Result<Set<AnyHashable>> {
+        return self.set()
+    }
+    
+    func array<T>(_ type: T.Type = T.self) -> Unwrap.Result<[T]> {
+        return self.asArray(type).map({ (value) -> [T] in
+            return value.compactMap({$0})
+        }).this()
+    }
+    
+    
+    func dictionary<T>(_ type: T.Type = T.self) -> Unwrap.Result<[AnyHashable: T]> {
+        return self.asDictionary(type).map { (value) -> [AnyHashable: T] in
+            return value.filter({$0.value != nil}) as! [AnyHashable: T]
+        }.this()
+    }
+    
+    func set<T: Hashable>(_ type: T.Type = T.self) -> Unwrap.Result<Set<T>> {
+        return self.asSet(type).map { (value) -> Set<T> in
+            return value.filter({$0 != nil}) as! Set<T>
+        }.this()
+    }
+
+
 }
 
 public extension Unwrap.Result {
@@ -204,7 +236,7 @@ public extension Unwrap.Result {
     var asFont: Unwrap.Result<UIFont> {
         return self.this()
     }
-    
+
 }
 
 public protocol Containable {
@@ -246,40 +278,17 @@ public extension Unwrap.Result {
         return self.this()
     }
     
-    func asArray<T: Any>(_ type: T.Type) -> Unwrap.Result<[T?]> {
+    func asArray<T: Any>(_ type: T.Type = T.self) -> Unwrap.Result<[T?]> {
         return self.this()
     }
     
-    func asArray<T: Any>() -> Unwrap.Result<[T?]> {
-        return self.asArray(T.self)
-    }
 
-    func asArray() -> Unwrap.Result<[Any?]> {
-        return self.asArray(Any.self)
-    }
-
-    func asDictionary<T: Any>(_ t: T.Type) -> Unwrap.Result<[AnyHashable: T?]> {
+    func asDictionary<T: Any>(_ t: T.Type = T.self) -> Unwrap.Result<[AnyHashable: T?]> {
         return self.this()
     }
     
-    func asDictionary<T: Any>() -> Unwrap.Result<[AnyHashable: T?]> {
-        return self.asDictionary(T.self)
-    }
-    
-    func asDictionary() -> Unwrap.Result<[AnyHashable: Any?]> {
-        return self.asDictionary(Any.self)
-    }
-    
-    func asSet<T: Hashable>(_ t: T.Type) -> Unwrap.Result<Set<T?>> {
+    func asSet<T: Hashable>(_ t: T.Type = T.self) -> Unwrap.Result<Set<T?>> {
         return self.this()
-    }
-
-    func asSet<T: Hashable>() -> Unwrap.Result<Set<T?>> {
-        return self.asSet(T.self)
-    }
-    
-    func asSet() -> Unwrap.Result<Set<AnyHashable?>> {
-        return self.asSet(AnyHashable.self)
     }
 
     var asDate: Unwrap.Result<Date> {
