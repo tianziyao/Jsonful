@@ -443,20 +443,28 @@ public extension Unwrap.Result {
         return self.this()
     }
     
-    var asNSArray: Unwrap.Result<NSArray> {
-        return self.this()
+    func asNSArray(rule: Unwrap.Rule = .all) -> Unwrap.Result<NSArray> {
+        let result: Unwrap.Result<NSArray> = self.this()
+        return result.asArray(Any.self, rule: rule).this()
     }
     
-    var asNSMutableArray: Unwrap.Result<NSMutableArray> {
-        return self.this()
+    func asNSMutableArray(rule: Unwrap.Rule = .all) -> Unwrap.Result<NSMutableArray> {
+        let result: Unwrap.Result<NSMutableArray> = self.this()
+        return result.map { (array) -> NSMutableArray in
+            array.filter(using: .init(block: { (value, _) -> Bool in
+                return rule.isAllow(value)
+            }))
+            return array
+        }.this()
     }
     
     var asNSPointerArray: Unwrap.Result<NSPointerArray> {
         return self.this()
     }
     
-    var asNSDictionary: Unwrap.Result<NSDictionary> {
-        return self.this()
+    func asNSDictionary(rule: Unwrap.Rule = .all) ->  Unwrap.Result<NSDictionary> {
+        let result: Unwrap.Result<NSDictionary> = self.this()
+        return result.asDictionary(Any.self, rule: rule).this()
     }
     
     var asNSMutableDictionary: Unwrap.Result<NSMutableDictionary> {

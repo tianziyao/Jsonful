@@ -9,21 +9,11 @@
 import UIKit
 import Jsonful
 
-
-
-
-extension Array {
-
-    func asOption() -> Array<Element?> {
-        return self as Array<Element?>
-    }
-}
-extension AppDelegate {
+extension NSMutableDictionary {
     
-    func application(_ application: UIApplication, supportedInterfaceOrientationsFor window: UIWindow?) -> UIInterfaceOrientationMask {
-        return .all
+    func filted() {
+        
     }
-    
 }
 
 class ViewController: UIViewController {
@@ -34,9 +24,11 @@ class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        let arr: [String?] = [nil, "", "2"]
+        let dic = NSMutableDictionary(dictionary: ["a": 1, "b": NSNull()])
         
-        print(arr.asOption())
+        
+        print(dic)
+        
     }
     
 
