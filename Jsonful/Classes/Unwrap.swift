@@ -302,7 +302,6 @@ public extension Unwrap.Result {
         }
     }
     
-
     func asDictionary<T: Any>(_ type: T.Type = T.self, filter: Unwrap.Filter = .all) -> Unwrap.Result<[AnyHashable: T]> {
         if "\(type)".contains("Optional") {
             return self.this()
@@ -312,8 +311,6 @@ public extension Unwrap.Result {
             return result.map({$0.filter({filter.isAllow($0)})}).this()
         }
     }
-    
-
     
     func asSet<T: Hashable>(_ type: T.Type = T.self, filter: Unwrap.Filter = .all) -> Unwrap.Result<Set<T>> {
         if "\(type)".contains("Optional") {
