@@ -10,7 +10,7 @@ import Foundation
 
 public struct Unwrap {
     
-    public struct Filter: OptionSet {
+    public struct Rule: OptionSet {
         
         public var rawValue: Int
         
@@ -18,19 +18,19 @@ public struct Unwrap {
             self.rawValue = rawValue
         }
         
-        public static let `nil`: Filter = .init(rawValue: 1 << 0)
-        public static let null: Filter = .init(rawValue: 1 << 1)
-        public static let empty: Filter = .init(rawValue: 1 << 2)
-        public static let all: Filter = [.nil, .null, .empty]
+        public static let notNil: Rule = .init(rawValue: 1 << 0)
+        public static let notNull: Rule = .init(rawValue: 1 << 1)
+        public static let notEmpty: Rule = .init(rawValue: 1 << 2)
+        public static let all: Rule = [.notNil, .notNull, .notEmpty]
         
         public func isAllow(_ element: Any?) -> Bool {
-            if element == nil && self.contains(.nil) {
+            if element == nil && self.contains(.notNil) {
                 return false
             }
-            else if element is NSNull && self.contains(.null) {
+            else if element is NSNull && self.contains(.notNull) {
                 return false
             }
-            else if let data = element as? Containable, self.contains(.empty) {
+            else if let data = element as? Containable, self.contains(.notEmpty) {
                 return !data.isEmpty
             }
             else {
@@ -71,14 +71,9 @@ public struct Unwrap {
             }
             switch value {
             case .none:
-                self = Result.failure(identity: identity, value: nil, reason: "this data is nil")
+                self = .failure(identity: identity, value: nil, reason: "this data is nil")
             case .some(let value):
-                if value is NSNull {
-                    self = Result.failure(identity: identity, value: nil, reason: "this data is NSNull")
-                }
-                else {
-                    self = .success((value, identity))
-                }
+                self = .success((value, identity))
             }
         }
         
@@ -292,33 +287,33 @@ public extension Unwrap.Result {
         return self.this()
     }
     
-    func asArray<T: Any>(_ type: T.Type = T.self, filter: Unwrap.Filter = .all) -> Unwrap.Result<[T]> {
+    func asArray<T: Any>(_ type: T.Type = T.self, rule: Unwrap.Rule = .all) -> Unwrap.Result<[T]> {
         if "\(type)".contains("Optional") {
             return self.this()
         }
         else {
             let result: Unwrap.Result<[T?]> = self.this()
-            return result.map({$0.filter({filter.isAllow($0)})}).this()
+            return result.map({$0.filter({rule.isAllow($0)})}).this()
         }
     }
     
-    func asDictionary<T: Any>(_ type: T.Type = T.self, filter: Unwrap.Filter = .all) -> Unwrap.Result<[AnyHashable: T]> {
+    func asDictionary<T: Any>(_ type: T.Type = T.self, rule: Unwrap.Rule = .all) -> Unwrap.Result<[AnyHashable: T]> {
         if "\(type)".contains("Optional") {
             return self.this()
         }
         else {
             let result: Unwrap.Result<[AnyHashable: T?]> = self.this()
-            return result.map({$0.filter({filter.isAllow($0)})}).this()
+            return result.map({$0.filter({rule.isAllow($0)})}).this()
         }
     }
     
-    func asSet<T: Hashable>(_ type: T.Type = T.self, filter: Unwrap.Filter = .all) -> Unwrap.Result<Set<T>> {
+    func asSet<T: Hashable>(_ type: T.Type = T.self, rule: Unwrap.Rule = .all) -> Unwrap.Result<Set<T>> {
         if "\(type)".contains("Optional") {
             return self.this()
         }
         else {
             let result: Unwrap.Result<Set<T?>> = self.this()
-            return result.map({$0.filter({filter.isAllow($0)})}).this()
+            return result.map({$0.filter({rule.isAllow($0)})}).this()
         }
     }
 
