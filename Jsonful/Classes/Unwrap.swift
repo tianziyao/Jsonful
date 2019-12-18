@@ -10,6 +10,35 @@ import Foundation
 
 public struct Unwrap {
     
+    public struct Filter: OptionSet {
+        
+        public var rawValue: Int
+        
+        public init(rawValue: Int) {
+            self.rawValue = rawValue
+        }
+        
+        public static let `nil`: Filter = .init(rawValue: 1 << 0)
+        public static let null: Filter = .init(rawValue: 1 << 1)
+        public static let empty: Filter = .init(rawValue: 1 << 2)
+        public static let all: Filter = [.nil, .null, .empty]
+        
+        public func isAllow(_ element: Any?) -> Bool {
+            if element == nil && self.contains(.nil) {
+                return false
+            }
+            else if element is NSNull && self.contains(.null) {
+                return false
+            }
+            else if let data = element as? Containable, self.contains(.empty) {
+                return !data.isEmpty
+            }
+            else {
+                return true
+            }
+        }
+    }
+    
     public enum Result<T> {
         
         public typealias Success = (value: T, identity: String)
@@ -112,7 +141,7 @@ public struct Unwrap {
                 success(value)
             case .failure(let reason):
                 #if DEBUG
-                print(reason)
+                dump(reason)
                 #endif
                 failure?(reason)
             }
@@ -225,9 +254,7 @@ public extension Unwrap.Result {
 }
 
 public protocol Containable {
-    
     var isEmpty: Bool { get }
-    
 }
 
 extension String: Containable {}
@@ -265,36 +292,36 @@ public extension Unwrap.Result {
         return self.this()
     }
     
-    func asArray<T: Any>(_ type: T.Type = T.self) -> Unwrap.Result<[T]> {
+    func asArray<T: Any>(_ type: T.Type = T.self, filter: Unwrap.Filter = .all) -> Unwrap.Result<[T]> {
         if "\(type)".contains("Optional") {
             return self.this()
         }
         else {
             let result: Unwrap.Result<[T?]> = self.this()
-            return result.map { $0.compactMap({$0}) }.this()
+            return result.map({$0.filter({filter.isAllow($0)})}).this()
         }
     }
     
 
-    func asDictionary<T: Any>(_ type: T.Type = T.self) -> Unwrap.Result<[AnyHashable: T]> {
+    func asDictionary<T: Any>(_ type: T.Type = T.self, filter: Unwrap.Filter = .all) -> Unwrap.Result<[AnyHashable: T]> {
         if "\(type)".contains("Optional") {
             return self.this()
         }
         else {
             let result: Unwrap.Result<[AnyHashable: T?]> = self.this()
-            return result.map { $0.filter({$0.value != nil}) as! [AnyHashable: T] }.this()
+            return result.map({$0.filter({filter.isAllow($0)})}).this()
         }
     }
     
 
     
-    func asSet<T: Hashable>(_ type: T.Type = T.self) -> Unwrap.Result<Set<T>> {
+    func asSet<T: Hashable>(_ type: T.Type = T.self, filter: Unwrap.Filter = .all) -> Unwrap.Result<Set<T>> {
         if "\(type)".contains("Optional") {
             return self.this()
         }
         else {
             let result: Unwrap.Result<Set<T?>> = self.this()
-            return result.map { $0.filter({$0 != nil}) as! Set<T> }.this()
+            return result.map({$0.filter({filter.isAllow($0)})}).this()
         }
     }
 

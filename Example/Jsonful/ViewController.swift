@@ -12,6 +12,12 @@ import Jsonful
 
 
 
+extension Array {
+
+    func asOption() -> Array<Element?> {
+        return self as Array<Element?>
+    }
+}
 extension AppDelegate {
     
     func application(_ application: UIApplication, supportedInterfaceOrientationsFor window: UIWindow?) -> UIInterfaceOrientationMask {
@@ -27,12 +33,10 @@ class ViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-                
-        let mock = Jsonful.snapshot(Mock())
-
-        let nsArray = mock.nsArrayOrNil
-        print(nsArray[0].unwrap().value)
         
+        let arr: [String?] = [nil, "", "2"]
+        
+        print(arr.asOption())
     }
     
 
