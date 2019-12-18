@@ -1,11 +1,14 @@
 import XCTest
 import Jsonful
 
+
 class Tests: XCTestCase {
+    
+    var mock: Mock!
     
     override func setUp() {
         super.setUp()
-        // Put setup code here. This method is called before the invocation of each test method in the class.
+        self.mock = Mock()
     }
     
     override func tearDown() {
@@ -16,6 +19,60 @@ class Tests: XCTestCase {
     func testExample() {
         // This is an example of a functional test case.
         XCTAssert(true, "Pass")
+    }
+    
+    func testSnapshot() {
+        
+        let mock = Jsonful.snapshot(self.mock)
+        
+        let tuple = mock.tuple
+        XCTAssert(tuple.0.unwrap().asString.value == "success")
+        XCTAssert(tuple.1.unwrap().asInt.value == 200)
+
+        let tupleWithPropertyName = mock.tupleWithPropertyName
+        XCTAssert(tupleWithPropertyName.status.unwrap().asString.value == "success")
+        XCTAssert(tupleWithPropertyName.code.unwrap().asInt.value == 200)
+
+        let tupleOrNil = mock.tupleOrNil
+        XCTAssert(tupleOrNil.status.unwrap().asString.value == nil)
+        XCTAssert(tupleOrNil.code.unwrap().asInt.value == 404)
+
+        let dictionary = mock.dictionary
+        XCTAssert(dictionary.key.unwrap().asString.value == "value")
+
+        let dictionaryOrNil = mock.dictionaryOrNil
+        XCTAssert(dictionaryOrNil.nil.unwrap().asString.value == nil)
+
+        let nsDictionary = mock.nsDictionary
+        XCTAssert(nsDictionary.key.unwrap().asString.value == "value")
+
+        let nsDictionaryOrNil = mock.nsDictionaryOrNil
+        XCTAssert(nsDictionaryOrNil.null.unwrap().asString.value == nil)
+
+        let array = mock.array
+        XCTAssert(array[0].unwrap().asInt.value == 500)
+
+        let arrayOrNil = mock.arrayOrNil
+        XCTAssert(arrayOrNil[0].unwrap().asInt.value == nil)
+
+        let nsArray = mock.nsArray
+        XCTAssert(nsArray[0].unwrap().asInt.value == 500)
+        
+        let nsArrayOrNil = mock.nsArrayOrNil
+        XCTAssert(nsArrayOrNil[0].unwrap().asInt.value == nil)
+
+        let set = mock.set
+        XCTAssert(set.unwrap().asSet(AnyHashable.self).value?.count == 3)
+
+        let setOrNil = mock.setOrNil
+        XCTAssert(setOrNil.unwrap().asSet(AnyHashable.self).value?.count == 2)
+
+        let nsSet = mock.nsSet
+        XCTAssert(nsSet.unwrap().asSet(AnyHashable.self).value?.count == 3)
+
+        let nsSetOrNil = mock.nsSetOrNil
+        XCTAssert(nsSetOrNil.unwrap().asSet(AnyHashable.self).value?.count == 2)
+
     }
     
     func testPerformanceExample() {

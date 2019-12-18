@@ -44,7 +44,12 @@ public struct Unwrap {
             case .none:
                 self = Result.failure(identity: identity, value: nil, reason: "this data is nil")
             case .some(let value):
-                self = .success((value, identity))
+                if value is NSNull {
+                    self = Result.failure(identity: identity, value: nil, reason: "this data is NSNull")
+                }
+                else {
+                    self = .success((value, identity))
+                }
             }
         }
         
@@ -189,38 +194,18 @@ public extension Unwrap.Result {
         })
     }
     
-    var array: Unwrap.Result<[Any]> {
-        return self.array()
+    var array: Unwrap.Result<[Jsonful]> {
+        return asArray(Any?.self).map({ (data) -> [Jsonful] in
+            return data.map({Jsonful.reference($0)})
+        })
     }
     
-    var dictionary: Unwrap.Result<[AnyHashable: Any]> {
-        return self.dictionary()
-    }
-
-    var set: Unwrap.Result<Set<AnyHashable>> {
-        return self.set()
+    var dictionary: Unwrap.Result<[AnyHashable: Jsonful]> {
+        return asDictionary(Any?.self).map({ (data) -> [AnyHashable: Jsonful] in
+            return data.mapValues({Jsonful.reference($0)})
+        })
     }
     
-    func array<T>(_ type: T.Type = T.self) -> Unwrap.Result<[T]> {
-        return self.asArray(type).map({ (value) -> [T] in
-            return value.compactMap({$0})
-        }).this()
-    }
-    
-    
-    func dictionary<T>(_ type: T.Type = T.self) -> Unwrap.Result<[AnyHashable: T]> {
-        return self.asDictionary(type).map { (value) -> [AnyHashable: T] in
-            return value.filter({$0.value != nil}) as! [AnyHashable: T]
-        }.this()
-    }
-    
-    func set<T: Hashable>(_ type: T.Type = T.self) -> Unwrap.Result<Set<T>> {
-        return self.asSet(type).map { (value) -> Set<T> in
-            return value.filter({$0 != nil}) as! Set<T>
-        }.this()
-    }
-
-
 }
 
 public extension Unwrap.Result {
@@ -240,7 +225,9 @@ public extension Unwrap.Result {
 }
 
 public protocol Containable {
+    
     var isEmpty: Bool { get }
+    
 }
 
 extension String: Containable {}
@@ -278,17 +265,37 @@ public extension Unwrap.Result {
         return self.this()
     }
     
-    func asArray<T: Any>(_ type: T.Type = T.self) -> Unwrap.Result<[T?]> {
-        return self.this()
+    func asArray<T: Any>(_ type: T.Type = T.self) -> Unwrap.Result<[T]> {
+        if "\(type)".contains("Optional") {
+            return self.this()
+        }
+        else {
+            let result: Unwrap.Result<[T?]> = self.this()
+            return result.map { $0.compactMap({$0}) }.this()
+        }
     }
     
 
-    func asDictionary<T: Any>(_ t: T.Type = T.self) -> Unwrap.Result<[AnyHashable: T?]> {
-        return self.this()
+    func asDictionary<T: Any>(_ type: T.Type = T.self) -> Unwrap.Result<[AnyHashable: T]> {
+        if "\(type)".contains("Optional") {
+            return self.this()
+        }
+        else {
+            let result: Unwrap.Result<[AnyHashable: T?]> = self.this()
+            return result.map { $0.filter({$0.value != nil}) as! [AnyHashable: T] }.this()
+        }
     }
     
-    func asSet<T: Hashable>(_ t: T.Type = T.self) -> Unwrap.Result<Set<T?>> {
-        return self.this()
+
+    
+    func asSet<T: Hashable>(_ type: T.Type = T.self) -> Unwrap.Result<Set<T>> {
+        if "\(type)".contains("Optional") {
+            return self.this()
+        }
+        else {
+            let result: Unwrap.Result<Set<T?>> = self.this()
+            return result.map { $0.filter({$0 != nil}) as! Set<T> }.this()
+        }
     }
 
     var asDate: Unwrap.Result<Date> {
@@ -303,6 +310,9 @@ public extension Unwrap.Result {
         return self.this()
     }
     
+    var asURL: Unwrap.Result<URL> {
+        return self.this()
+    }
 }
 
 
@@ -466,7 +476,7 @@ public extension Unwrap.Result {
         return self.this()
     }
     
-    var asNSUrl: Unwrap.Result<NSURL> {
+    var asNSURL: Unwrap.Result<NSURL> {
         return self.this()
     }
     

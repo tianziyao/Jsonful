@@ -20,10 +20,6 @@ public struct Jsonful {
     
     private let maper: Maper
     
-    public var current: Any? {
-        return value(for: tokens).0
-    }
-    
     private init(_ raw: Any?, tokens: [JsonfulKeyble], maper: @escaping Maper) {
         self.raw = raw
         self.tokens = tokens

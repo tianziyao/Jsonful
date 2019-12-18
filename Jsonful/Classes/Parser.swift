@@ -10,7 +10,7 @@ import Foundation
 
 extension Mirror {
     
-    func object(depth: Int) -> [String: Any?] {
+    func object(value: Any, depth: Int) -> [String: Any?] {
         var dictionary = [String: Any?]()
         for child in self.children {
             dictionary[child.label ?? ""] = Mirror.parse(value: child.value, depth: depth)
@@ -38,13 +38,7 @@ extension Mirror {
     }
     
     func enmu(value: Any, depth: Int) -> Any {
-        // 没有关联值的枚举
-        if self.children.count == 0 {
-            return value
-        }
-        else {
-            return object(depth: depth)
-        }
+        return object(value: value, depth: depth)
     }
     
     func set(value: Any, depth: Int) -> Set<AnyHashable?> {
@@ -55,15 +49,18 @@ extension Mirror {
         return set
     }
     
-    static func parse(value: Any?, depth: Int = 1000) -> Any? {
+    public static func parse(value: Any?, depth: Int = 1000) -> Any? {
         guard let value = value, depth >= 0 else {
             return nil
         }
         let mirror = Mirror(reflecting: value)
         switch mirror.displayStyle {
         case .none:
+            // 基本类型
             return value
         case .some(let style):
+            // 没有子节点的数据 不需要解析
+            guard mirror.children.count != 0 else { return value }
             switch style {
             case .set:
                 return mirror.set(value: value, depth: depth - 1)
@@ -74,8 +71,9 @@ extension Mirror {
             case .enum:
                 return mirror.enmu(value: value, depth: depth - 1)
             case .struct, .class, .tuple:
-                return mirror.object(depth: depth - 1)
+                return mirror.object(value: value, depth: depth - 1)
             case .optional:
+                // 尝试解析.some，如获取不到则是nil
                 if let value = mirror.children.first?.value {
                     return parse(value: value, depth: depth)
                 }
