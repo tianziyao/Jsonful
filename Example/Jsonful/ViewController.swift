@@ -24,14 +24,22 @@ class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        let dic = NSMutableDictionary(dictionary: ["a": 1, "b": NSNull()])
-        
-//        var ss: NSDictionary? = Unwrap.Result(value: dic, id: "").as().value
-        
-        print(dic)
-        
+        let arr: [Any?] = [1, nil, NSNull()]
+        let arr2 = arr as NSArray
+
+        let arr3 = NSArray(array: [NSNull(), NSNull()]) as? [Any?]
+        ddd(any: arr3?[1])
+
     }
     
+    func ddd(any: Any?) {
+        if any is NSNull {
+            print(222)
+        }
+        if any == nil {
+            print(333)
+        }
+    }
 
     
     override func didReceiveMemoryWarning() {
