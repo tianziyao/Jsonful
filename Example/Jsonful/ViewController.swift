@@ -26,6 +26,7 @@ class ViewController: UIViewController {
         
         let dic = NSMutableDictionary(dictionary: ["a": 1, "b": NSNull()])
         
+        var ss: NSDictionary? = Unwrap.Result(value: dic, id: "").as().that
         
         print(dic)
         

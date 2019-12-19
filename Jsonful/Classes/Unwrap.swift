@@ -108,7 +108,7 @@ public struct Unwrap {
             }
         }
         
-        public func this<O>(closure: (Result<O>.Success) -> Result<O> = {.success($0)}) -> Result<O> {
+        public func `as`<O>(closure: (Result<O>.Success) -> Result<O> = {.success($0)}) -> Result<O> {
             return map { (arg) -> Unwrap.Result<O> in
                 if let data = arg.value as? O {
                     return closure((data, arg.identity))
@@ -119,8 +119,8 @@ public struct Unwrap {
             }
         }
         
-        public func this<O: Containable>() -> Result<O> {
-            return this(closure: { (arg) -> Result<O> in
+        public func `as`<O: Containable>() -> Result<O> {
+            return `as`(closure: { (arg) -> Result<O> in
                 if arg.value.isEmpty {
                     return .failure(identity: arg.identity, value: nil, reason: "this data is empty")
                 }
@@ -235,15 +235,15 @@ public extension Unwrap.Result {
 public extension Unwrap.Result {
     
     var asImage: Unwrap.Result<UIImage> {
-        return self.this()
+        return self.as()
     }
     
     var asColor: Unwrap.Result<UIColor> {
-        return self.this()
+        return self.as()
     }
     
     var asFont: Unwrap.Result<UIFont> {
-        return self.this()
+        return self.as()
     }
 
 }
@@ -268,69 +268,69 @@ extension Range: Containable {}
 public extension Unwrap.Result {
 
     var asString: Unwrap.Result<String> {
-        return self.this()
+        return self.as()
     }
 
     var asInt: Unwrap.Result<Int> {
-        return self.this()
+        return self.as()
     }
 
     var asDouble: Unwrap.Result<Double> {
-        return self.this()
+        return self.as()
     }
 
     var asBool: Unwrap.Result<Bool> {
-        return self.this()
+        return self.as()
     }
 
     var asError: Unwrap.Result<Error> {
-        return self.this()
+        return self.as()
     }
     
     func asArray<T: Any>(_ type: T.Type = T.self, rule: Unwrap.Rule = .all) -> Unwrap.Result<[T]> {
         if "\(type)".contains("Optional") {
-            return self.this()
+            return self.as()
         }
         else {
-            let result: Unwrap.Result<[T?]> = self.this()
-            return result.map({$0.filter({rule.isAllow($0)})}).this()
+            let result: Unwrap.Result<[T?]> = self.as()
+            return result.map({$0.filter({rule.isAllow($0)})}).as()
         }
     }
     
     func asDictionary<T: Any>(_ type: T.Type = T.self, rule: Unwrap.Rule = .all) -> Unwrap.Result<[AnyHashable: T]> {
         if "\(type)".contains("Optional") {
-            return self.this()
+            return self.as()
         }
         else {
-            let result: Unwrap.Result<[AnyHashable: T?]> = self.this()
-            return result.map({$0.filter({rule.isAllow($0)})}).this()
+            let result: Unwrap.Result<[AnyHashable: T?]> = self.as()
+            return result.map({$0.filter({rule.isAllow($0)})}).as()
         }
     }
     
     func asSet<T: Hashable>(_ type: T.Type = T.self, rule: Unwrap.Rule = .all) -> Unwrap.Result<Set<T>> {
         if "\(type)".contains("Optional") {
-            return self.this()
+            return self.as()
         }
         else {
-            let result: Unwrap.Result<Set<T?>> = self.this()
-            return result.map({$0.filter({rule.isAllow($0)})}).this()
+            let result: Unwrap.Result<Set<T?>> = self.as()
+            return result.map({$0.filter({rule.isAllow($0)})}).as()
         }
     }
 
     var asDate: Unwrap.Result<Date> {
-        return self.this()
+        return self.as()
     }
     
     var asData: Unwrap.Result<Data> {
-        return self.this()
+        return self.as()
     }
     
     var asRange: Unwrap.Result<Range<Int>> {
-        return self.this()
+        return self.as()
     }
     
     var asURL: Unwrap.Result<URL> {
-        return self.this()
+        return self.as()
     }
 }
 
@@ -338,80 +338,80 @@ public extension Unwrap.Result {
 public extension Unwrap.Result {
 
     var asCGFloat: Unwrap.Result<CGFloat> {
-        return self.this()
+        return self.as()
     }
     
     var asCGSize: Unwrap.Result<CGSize> {
-        return self.this()
+        return self.as()
     }
     
     var asCGPoint: Unwrap.Result<CGPoint> {
-        return self.this()
+        return self.as()
     }
     
     var asCGRect: Unwrap.Result<CGRect> {
-        return self.this()
+        return self.as()
     }
     
 }
 
 extension NSString: Containable {
     public var isEmpty: Bool {
-        return length == 0
+        return length <= 0
     }
 }
 
 extension NSAttributedString: Containable {
     public var isEmpty: Bool {
-        return length == 0
+        return length <= 0
     }
 }
 
 extension NSArray: Containable {
     public var isEmpty: Bool {
-        return count == 0
+        return count <= 0
     }
 }
 
 extension NSPointerArray: Containable {
     public var isEmpty: Bool {
-        return count == 0
+        return count <= 0
     }
 }
 
 extension NSDictionary: Containable {
     public var isEmpty: Bool {
-        return count == 0
+        return count <= 0
     }
 }
 
 @objc extension NSMapTable: Containable {
     public var isEmpty: Bool {
-        return count == 0
+        return count <= 0
     }
 }
 
 extension NSSet: Containable {
     public var isEmpty: Bool {
-        return count == 0
+        return count <= 0
     }
 }
 
 @objc extension NSHashTable: Containable {
     public var isEmpty: Bool {
-        return count == 0
+        return count <= 0
     }
 }
 
 extension NSData: Containable {
     public var isEmpty: Bool {
-        return length == 0
+        return length <= 0
     }
 }
 
 extension NSRange: Containable {
     public var isEmpty: Bool {
-        return length == 0
+        return length <= 0
     }
 }
 
@@ -424,99 +424,99 @@ extension NSURL: Containable {
 public extension Unwrap.Result {
     
     var asNSString: Unwrap.Result<NSString> {
-        return self.this()
+        return self.as()
     }
     
     var asNSMutableString: Unwrap.Result<NSMutableString> {
-        return self.this()
+        return self.as()
     }
     
     var asNSAttributedString: Unwrap.Result<NSAttributedString> {
-        return self.this()
+        return self.as()
     }
     
     var asNSMutableAttributedString: Unwrap.Result<NSMutableAttributedString> {
-        return self.this()
+        return self.as()
     }
     
     var asNSNumber: Unwrap.Result<NSNumber> {
-        return self.this()
+        return self.as()
     }
     
     func asNSArray(rule: Unwrap.Rule = .all) -> Unwrap.Result<NSArray> {
-        let result: Unwrap.Result<NSArray> = self.this()
-        return result.asArray(Any.self, rule: rule).this()
+        let result: Unwrap.Result<NSArray> = self.as()
+        return result.asArray(Any.self, rule: rule).as()
     }
     
     func asNSMutableArray(rule: Unwrap.Rule = .all) -> Unwrap.Result<NSMutableArray> {
-        let result: Unwrap.Result<NSMutableArray> = self.this()
+        let result: Unwrap.Result<NSMutableArray> = self.as()
         return result.map { (array) -> NSMutableArray in
             array.filter(using: .init(block: { (value, _) -> Bool in
                 return rule.isAllow(value)
             }))
             return array
-        }.this()
+        }.as()
     }
     
     var asNSPointerArray: Unwrap.Result<NSPointerArray> {
-        return self.this()
+        return self.as()
     }
     
     func asNSDictionary(rule: Unwrap.Rule = .all) ->  Unwrap.Result<NSDictionary> {
-        let result: Unwrap.Result<NSDictionary> = self.this()
-        return result.asDictionary(Any.self, rule: rule).this()
+        let result: Unwrap.Result<NSDictionary> = self.as()
+        return result.asDictionary(Any.self, rule: rule).as()
     }
     
     var asNSMutableDictionary: Unwrap.Result<NSMutableDictionary> {
-        return self.this()
+        return self.as()
     }
     
     var asNSMapTable: Unwrap.Result<NSMapTable<AnyObject, AnyObject>> {
-        return self.this()
+        return self.as()
     }
     
     var asNSSet: Unwrap.Result<NSSet> {
-        return self.this()
+        return self.as()
     }
     
     var asNSMutableSet: Unwrap.Result<NSMutableSet> {
-        return self.this()
+        return self.as()
     }
     
     var asNSHashTable: Unwrap.Result<NSHashTable<AnyObject>> {
-        return self.this()
+        return self.as()
     }
     
     var asNSDate: Unwrap.Result<NSDate> {
-        return self.this()
+        return self.as()
     }
     
     var asNSData: Unwrap.Result<NSData> {
-        return self.this()
+        return self.as()
     }
     
     var asNSRange: Unwrap.Result<NSRange> {
-        return self.this()
+        return self.as()
     }
     
     var asNSObject: Unwrap.Result<NSObject> {
-        return self.this()
+        return self.as()
     }
     
     var asNSURL: Unwrap.Result<NSURL> {
-        return self.this()
+        return self.as()
     }
     
     var asNSBool: Unwrap.Result<ObjCBool> {
-        return self.this()
+        return self.as()
     }
     
     var asNSError: Unwrap.Result<NSError> {
-        return self.this()
+        return self.as()
     }
     
     var asNSValue: Unwrap.Result<NSValue> {
-        return self.this()
+        return self.as()
     }
 
 }
