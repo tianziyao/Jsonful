@@ -23,20 +23,26 @@ public struct Unwrap {
         public static let notEmpty: Rule = .init(rawValue: 1 << 2)
         public static let all: Rule = [.notNil, .notNull, .notEmpty]
         
-        public func isAllow(_ element: Any?) -> Bool {
-            if element == nil && self.contains(.notNil) {
-                return false
+        public func result<T>(value: Optional<T>, identity: String) -> Result<T> {
+            let value = Mirror.unwrap(value: value)
+            if value == nil && self.contains(.notNil) {
+                return .failure(value: value, identity: identity, reason: "this data is nil")
             }
-            else if element is NSNull && self.contains(.notNull) {
-                return false
+            if value is NSNull && self.contains(.notNull) {
+                return .failure(value: value, identity: identity, reason: "this data is null")
             }
-            else if let data = element as? Containable, self.contains(.notEmpty) {
-                return !data.isEmpty
+            if let data = value as? Containable, self.contains(.notEmpty), data.isEmpty {
+                return .failure(value: value, identity: identity, reason: "this data is empty")
+            }
+            if let data = value {
+                return .success((data, identity))
             }
             else {
-                return true
+                return .failure(value: value, identity: identity, reason: "this data is exception")
             }
         }
+        
+
     }
     
     public enum Result<T> {
@@ -64,20 +70,15 @@ public struct Unwrap {
             }
         }
         
-        public init(value: Optional<T>, file: String = #file, line: Int = #line, id: String) {
+        public init(value: Optional<T>, id: String, rule: Rule = .all, file: String = #file, line: Int = #line) {
             let identity = Unwrap.debug { () -> String in
                 let cls = String(describing: object_getClass(value))
                 return "-----\(file):\(line)-----\nid: \(id)\nrawType: <\(cls)>\n"
             }
-            switch value {
-            case .none:
-                self = .failure(identity: identity, value: nil, reason: "this data is nil")
-            case .some(let value):
-                self = .success((value, identity))
-            }
+            self = rule.result(value: value, identity: identity)
         }
         
-        private static func failure(identity: String, value: Any?, reason: String) -> Result<T> {
+        internal static func failure(value: Any?, identity: String, reason: String) -> Result<T> {
             let info = Unwrap.debug { () -> String in
                 var string: String = ""
                 string.append(contentsOf: identity)
@@ -99,36 +100,36 @@ public struct Unwrap {
             }
         }
         
-        public func map<O>(_ closure: (T) -> O) -> Result<O> {
-            switch self {
-            case .failure(let reason):
-                return .failure(reason)
-            case .success(let arg):
-                return .success((closure(arg.value), arg.identity))
-            }
-        }
+//        public func map<O>(_ closure: (T) -> O) -> Result<O> {
+//            switch self {
+//            case .failure(let reason):
+//                return .failure(reason)
+//            case .success(let arg):
+//                return .success((closure(arg.value), arg.identity))
+//            }
+//        }
         
-        public func `as`<O>(closure: (Result<O>.Success) -> Result<O> = {.success($0)}) -> Result<O> {
-            return map { (arg) -> Unwrap.Result<O> in
-                if let data = arg.value as? O {
-                    return closure((data, arg.identity))
-                }
-                else {
-                    return .failure(identity: arg.identity, value: arg.value, reason: "this data is not <\(O.self)>")
-                }
-            }
-        }
-        
-        public func `as`<O: Containable>() -> Result<O> {
-            return `as`(closure: { (arg) -> Result<O> in
-                if arg.value.isEmpty {
-                    return .failure(identity: arg.identity, value: nil, reason: "this data is empty")
-                }
-                else {
-                    return .success(arg)
-                }
-            })
-        }
+//        public func `as`<O>(closure: (Result<O>.Success) -> Result<O> = {.success($0)}) -> Result<O> {
+//            return map { (arg) -> Unwrap.Result<O> in
+//                if let data = arg.value as? O {
+//                    return closure((data, arg.identity))
+//                }
+//                else {
+//                    return .failure(identity: arg.identity, value: arg.value, reason: "this data is not <\(O.self)>")
+//                }
+//            }
+//        }
+//
+//        public func `as`<O: Containable>() -> Result<O> {
+//            return `as`(closure: { (arg) -> Result<O> in
+//                if arg.value.isEmpty {
+//                    return .failure(identity: arg.identity, value: nil, reason: "this data is empty")
+//                }
+//                else {
+//                    return .success(arg)
+//                }
+//            })
+//        }
         
         public func then(success: (T) -> (), failure: ((String) -> ())? = nil) {
             switch self {
@@ -142,6 +143,262 @@ public struct Unwrap {
             }
         }
         
+    }
+    
+    public struct As<T> {
+        
+        private let result: Result<T>
+        
+        public init(result: Result<T>) {
+            self.result = result
+        }
+        
+        public func that<O>(closure: (Result<O>.Success) -> Result<O> = {.success($0)}) -> Result<O> {
+            return result.map({ (arg) -> Result<O> in
+                if let data = arg.value as? O {
+                    return closure((data, arg.identity))
+                }
+                else {
+                    return .failure(value: arg.value, identity: arg.identity, reason: "this data is not <\(O.self)>")
+                }
+            })
+        }
+        
+        //MARK: ---字符串---
+        
+        var string: Result<String> {
+            return that()
+        }
+        
+        var cfString: Result<CFString> {
+            return that()
+        }
+        
+        var nsString: Unwrap.Result<NSString> {
+            return that()
+        }
+        
+        var nsMutableString: Unwrap.Result<NSMutableString> {
+            return that()
+        }
+        
+        //MARK: ---属性字符串---
+
+        var nsAttributedString: Unwrap.Result<NSAttributedString> {
+            return that()
+        }
+    
+        var nsMutableAttributedString: Unwrap.Result<NSMutableAttributedString> {
+            return that()
+        }
+        
+        //MARK: ---数字---
+
+        var int: Result<Int> {
+            return that()
+        }
+
+        var double: Result<Double> {
+            return that()
+        }
+        
+        var float: Result<Float> {
+            return that()
+        }
+        
+        var nsNumber: Unwrap.Result<NSNumber> {
+            return that()
+        }
+        
+        //MARK: ---布尔---
+
+        var bool: Result<Bool> {
+            return that()
+        }
+        
+        var objcBool: Unwrap.Result<ObjCBool> {
+            return that()
+        }
+    
+        //MARK: ---对象---
+        
+        var date: Result<Date> {
+            return that()
+        }
+        
+        var nsDate: Unwrap.Result<NSDate> {
+            return that()
+        }
+        
+        var data: Result<Data> {
+            return that()
+        }
+        
+        var nsData: Unwrap.Result<NSData> {
+            return that()
+        }
+        
+        var range: Result<Range<Int>> {
+            return that()
+        }
+        
+        var nsRange: Unwrap.Result<NSRange> {
+            return that()
+        }
+        
+        var url: Result<URL> {
+            return that()
+        }
+        
+        var asNSURL: Unwrap.Result<NSURL> {
+            return that()
+        }
+    
+        var anyObject: Result<AnyObject> {
+            return that()
+        }
+    
+        var nsObject: Unwrap.Result<NSObject> {
+            return that()
+        }
+        
+        var error: Result<Error> {
+            return that()
+        }
+        
+        var nsError: Unwrap.Result<NSError> {
+            return that()
+        }
+    
+        var nsValue: Unwrap.Result<NSValue> {
+            return that()
+        }
+
+
+        //MARK: ---UIKit对象---
+
+        var image: Unwrap.Result<UIImage> {
+            return that()
+        }
+    
+        var color: Unwrap.Result<UIColor> {
+            return that()
+        }
+    
+        var font: Unwrap.Result<UIFont> {
+            return that()
+        }
+        
+        //MARK: ---CoreGraphics对象---
+        
+        var cgFloat: Unwrap.Result<CGFloat> {
+            return that()
+        }
+    
+        var cgSize: Unwrap.Result<CGSize> {
+            return that()
+        }
+    
+        var cgPoint: Unwrap.Result<CGPoint> {
+            return that()
+        }
+    
+        var cgRect: Unwrap.Result<CGRect> {
+            return that()
+        }
+        
+        var cgFont: Unwrap.Result<CGFont> {
+            return that()
+        }
+        
+        var cgImage: Unwrap.Result<CGImage> {
+            return that()
+        }
+        
+        var cgPath: Unwrap.Result<CGPath> {
+            return that()
+        }
+        
+        //MARK: ---容器---
+
+        //
+        //    func asNSArray(rule: Unwrap.Rule = .all) -> Unwrap.Result<NSArray> {
+        //        let result: Unwrap.Result<NSArray> = self.as()
+        //        return result.asArray(Any.self, rule: rule).as()
+        //    }
+        //
+        //    func asNSMutableArray(rule: Unwrap.Rule = .all) -> Unwrap.Result<NSMutableArray> {
+        //        let result: Unwrap.Result<NSMutableArray> = self.as()
+        //        return result.map { (array) -> NSMutableArray in
+        //            array.filter(using: .init(block: { (value, _) -> Bool in
+        //                return rule.isAllow(value)
+        //            }))
+        //            return array
+        //        }.as()
+        //    }
+        //
+        //    var asNSPointerArray: Unwrap.Result<NSPointerArray> {
+        //        return self.as()
+        //    }
+        //
+        //    func asNSDictionary(rule: Unwrap.Rule = .all) ->  Unwrap.Result<NSDictionary> {
+        //        let result: Unwrap.Result<NSDictionary> = self.as()
+        //        return result.asDictionary(Any.self, rule: rule).as()
+        //    }
+        //
+        //    var asNSMutableDictionary: Unwrap.Result<NSMutableDictionary> {
+        //        return self.as()
+        //    }
+        //
+        //    var asNSMapTable: Unwrap.Result<NSMapTable<AnyObject, AnyObject>> {
+        //        return self.as()
+        //    }
+        //
+        //    var asNSSet: Unwrap.Result<NSSet> {
+        //        return self.as()
+        //    }
+        //
+        //    var asNSMutableSet: Unwrap.Result<NSMutableSet> {
+        //        return self.as()
+        //    }
+        //
+        //    var asNSHashTable: Unwrap.Result<NSHashTable<AnyObject>> {
+        //        return self.as()
+        //    }
+        //
+
+
+        
+//        func array<T: Any>(_ type: T.Type = T.self, rule: Unwrap.Rule = .all) -> Unwrap.Result<[T]> {
+//            if "\(type)".contains("Optional") {
+//                return self.that()
+//            }
+//            else {
+//                let result: Unwrap.Result<[T?]> = self.that()
+//                return result.map({$0.filter({rule.isAllow($0)})}).that()
+//            }
+//        }
+//
+//        func dictionary<T: Any>(_ type: T.Type = T.self, rule: Unwrap.Rule = .all) -> Unwrap.Result<[AnyHashable: T]> {
+//            if "\(type)".contains("Optional") {
+//                return self.as()
+//            }
+//            else {
+//                let result: Unwrap.Result<[AnyHashable: T?]> = self.as()
+//                return result.map({$0.filter({rule.isAllow($0)})}).as()
+//            }
+//        }
+//
+//        func set<T: Hashable>(_ type: T.Type = T.self, rule: Unwrap.Rule = .all) -> Unwrap.Result<Set<T>> {
+//            if "\(type)".contains("Optional") {
+//                return self.as()
+//            }
+//            else {
+//                let result: Unwrap.Result<Set<T?>> = self.as()
+//                return result.map({$0.filter({rule.isAllow($0)})}).as()
+//            }
+//        }
+
     }
 
     public static func merge<O1, O2>(_ r1: Result<O1>, _ r2: Result<O2>) -> Result<(O1, O2)> {
@@ -182,71 +439,57 @@ internal extension String {
 
 public extension Unwrap.Result {
 
-    var string: Unwrap.Result<String> {
-        return self.map({ (value) -> String in
-            return String(describing: value)
-        })
-    }
-
-    var number: Unwrap.Result<NSNumber> {
-        return self.string.map({ (arg) -> Unwrap.Result<NSNumber> in
-            let number = arg.value.decimalNumber
-            if number == NSDecimalNumber.notANumber {
-                return .failure(identity: arg.identity, value: arg.value, reason: "this data is not a number")
-            }
-            else {
-                return .success((number, arg.identity))
-            }
-        })
-    }
-    
-    var int: Unwrap.Result<Int> {
-        return self.number.map({ (value) -> Int in
-            return value.intValue
-        })
-    }
-    
-    var double: Unwrap.Result<Double> {
-        return self.number.map({ (value) -> Double in
-            return value.doubleValue
-        })
-    }
-    
-    var bool: Unwrap.Result<Bool> {
-        return self.number.map({ (value) -> Bool in
-            return value.boolValue
-        })
-    }
-    
-    var array: Unwrap.Result<[Jsonful]> {
-        return asArray(Any?.self).map({ (data) -> [Jsonful] in
-            return data.map({Jsonful.reference($0)})
-        })
-    }
-    
-    var dictionary: Unwrap.Result<[AnyHashable: Jsonful]> {
-        return asDictionary(Any?.self).map({ (data) -> [AnyHashable: Jsonful] in
-            return data.mapValues({Jsonful.reference($0)})
-        })
-    }
+//    var string: Unwrap.Result<String> {
+//        return self.map({ (value) -> String in
+//            return String(describing: value)
+//        })
+//    }
+//
+//    var number: Unwrap.Result<NSNumber> {
+//        return self.string.map({ (arg) -> Unwrap.Result<NSNumber> in
+//            let number = arg.value.decimalNumber
+//            if number == NSDecimalNumber.notANumber {
+//                return .failure(identity: arg.identity, value: arg.value, reason: "this data is not a number")
+//            }
+//            else {
+//                return .success((number, arg.identity))
+//            }
+//        })
+//    }
+//
+//    var int: Unwrap.Result<Int> {
+//        return self.number.map({ (value) -> Int in
+//            return value.intValue
+//        })
+//    }
+//
+//    var double: Unwrap.Result<Double> {
+//        return self.number.map({ (value) -> Double in
+//            return value.doubleValue
+//        })
+//    }
+//
+//    var bool: Unwrap.Result<Bool> {
+//        return self.number.map({ (value) -> Bool in
+//            return value.boolValue
+//        })
+//    }
+//
+//    var array: Unwrap.Result<[Jsonful]> {
+//        return asArray(Any?.self).map({ (data) -> [Jsonful] in
+//            return data.map({Jsonful.reference($0)})
+//        })
+//    }
+//
+//    var dictionary: Unwrap.Result<[AnyHashable: Jsonful]> {
+//        return asDictionary(Any?.self).map({ (data) -> [AnyHashable: Jsonful] in
+//            return data.mapValues({Jsonful.reference($0)})
+//        })
+//    }
     
 }
 
-public extension Unwrap.Result {
-    
-    var asImage: Unwrap.Result<UIImage> {
-        return self.as()
-    }
-    
-    var asColor: Unwrap.Result<UIColor> {
-        return self.as()
-    }
-    
-    var asFont: Unwrap.Result<UIFont> {
-        return self.as()
-    }
 
-}
 
 public protocol Containable {
     var isEmpty: Bool { get }
@@ -263,97 +506,6 @@ extension Set: Containable {}
 extension Data: Containable {}
 
 extension Range: Containable {}
-
-
-public extension Unwrap.Result {
-
-    var asString: Unwrap.Result<String> {
-        return self.as()
-    }
-
-    var asInt: Unwrap.Result<Int> {
-        return self.as()
-    }
-
-    var asDouble: Unwrap.Result<Double> {
-        return self.as()
-    }
-
-    var asBool: Unwrap.Result<Bool> {
-        return self.as()
-    }
-
-    var asError: Unwrap.Result<Error> {
-        return self.as()
-    }
-    
-    func asArray<T: Any>(_ type: T.Type = T.self, rule: Unwrap.Rule = .all) -> Unwrap.Result<[T]> {
-        if "\(type)".contains("Optional") {
-            return self.as()
-        }
-        else {
-            let result: Unwrap.Result<[T?]> = self.as()
-            return result.map({$0.filter({rule.isAllow($0)})}).as()
-        }
-    }
-    
-    func asDictionary<T: Any>(_ type: T.Type = T.self, rule: Unwrap.Rule = .all) -> Unwrap.Result<[AnyHashable: T]> {
-        if "\(type)".contains("Optional") {
-            return self.as()
-        }
-        else {
-            let result: Unwrap.Result<[AnyHashable: T?]> = self.as()
-            return result.map({$0.filter({rule.isAllow($0)})}).as()
-        }
-    }
-    
-    func asSet<T: Hashable>(_ type: T.Type = T.self, rule: Unwrap.Rule = .all) -> Unwrap.Result<Set<T>> {
-        if "\(type)".contains("Optional") {
-            return self.as()
-        }
-        else {
-            let result: Unwrap.Result<Set<T?>> = self.as()
-            return result.map({$0.filter({rule.isAllow($0)})}).as()
-        }
-    }
-
-    var asDate: Unwrap.Result<Date> {
-        return self.as()
-    }
-    
-    var asData: Unwrap.Result<Data> {
-        return self.as()
-    }
-    
-    var asRange: Unwrap.Result<Range<Int>> {
-        return self.as()
-    }
-    
-    var asURL: Unwrap.Result<URL> {
-        return self.as()
-    }
-}
-
-
-public extension Unwrap.Result {
-
-    var asCGFloat: Unwrap.Result<CGFloat> {
-        return self.as()
-    }
-    
-    var asCGSize: Unwrap.Result<CGSize> {
-        return self.as()
-    }
-    
-    var asCGPoint: Unwrap.Result<CGPoint> {
-        return self.as()
-    }
-    
-    var asCGRect: Unwrap.Result<CGRect> {
-        return self.as()
-    }
-    
-}
 
 extension NSString: Containable {
     public var isEmpty: Bool {
@@ -415,115 +567,10 @@ extension NSRange: Containable {
     }
 }
 
-extension NSURL: Containable {
-    public var isEmpty: Bool {
-        return (absoluteString ?? "").count == 0
-    }
-}
-
-public extension Unwrap.Result {
-    
-    var asNSString: Unwrap.Result<NSString> {
-        return self.as()
-    }
-    
-    var asNSMutableString: Unwrap.Result<NSMutableString> {
-        return self.as()
-    }
-    
-    var asNSAttributedString: Unwrap.Result<NSAttributedString> {
-        return self.as()
-    }
-    
-    var asNSMutableAttributedString: Unwrap.Result<NSMutableAttributedString> {
-        return self.as()
-    }
-    
-    var asNSNumber: Unwrap.Result<NSNumber> {
-        return self.as()
-    }
-    
-    func asNSArray(rule: Unwrap.Rule = .all) -> Unwrap.Result<NSArray> {
-        let result: Unwrap.Result<NSArray> = self.as()
-        return result.asArray(Any.self, rule: rule).as()
-    }
-    
-    func asNSMutableArray(rule: Unwrap.Rule = .all) -> Unwrap.Result<NSMutableArray> {
-        let result: Unwrap.Result<NSMutableArray> = self.as()
-        return result.map { (array) -> NSMutableArray in
-            array.filter(using: .init(block: { (value, _) -> Bool in
-                return rule.isAllow(value)
-            }))
-            return array
-        }.as()
-    }
-    
-    var asNSPointerArray: Unwrap.Result<NSPointerArray> {
-        return self.as()
-    }
-    
-    func asNSDictionary(rule: Unwrap.Rule = .all) ->  Unwrap.Result<NSDictionary> {
-        let result: Unwrap.Result<NSDictionary> = self.as()
-        return result.asDictionary(Any.self, rule: rule).as()
-    }
-    
-    var asNSMutableDictionary: Unwrap.Result<NSMutableDictionary> {
-        return self.as()
-    }
-    
-    var asNSMapTable: Unwrap.Result<NSMapTable<AnyObject, AnyObject>> {
-        return self.as()
-    }
-    
-    var asNSSet: Unwrap.Result<NSSet> {
-        return self.as()
-    }
-    
-    var asNSMutableSet: Unwrap.Result<NSMutableSet> {
-        return self.as()
-    }
-    
-    var asNSHashTable: Unwrap.Result<NSHashTable<AnyObject>> {
-        return self.as()
-    }
-    
-    var asNSDate: Unwrap.Result<NSDate> {
-        return self.as()
-    }
-    
-    var asNSData: Unwrap.Result<NSData> {
-        return self.as()
-    }
-    
-    var asNSRange: Unwrap.Result<NSRange> {
-        return self.as()
-    }
-    
-    var asNSObject: Unwrap.Result<NSObject> {
-        return self.as()
-    }
-    
-    var asNSURL: Unwrap.Result<NSURL> {
-        return self.as()
-    }
-    
-    var asNSBool: Unwrap.Result<ObjCBool> {
-        return self.as()
-    }
-    
-    var asNSError: Unwrap.Result<NSError> {
-        return self.as()
-    }
-    
-    var asNSValue: Unwrap.Result<NSValue> {
-        return self.as()
-    }
-
-}
 
 public extension Optional {
 
     func unwrap(file: String = #file, line: Int = #line, id: String = "") -> Unwrap.Result<Wrapped> {
-        return .init(value: self, file: file, line: line, id: id)
+        return .init(value: self, id: id, file: file, line: line)
     }
 }

@@ -84,11 +84,11 @@ extension Mirror {
         }
     }
     
-    public static func unwrap(value: Any?) -> Any? {
+    public static func unwrap<T>(value: T?) -> T? {
         guard let value = value else { return nil }
         let mirror = Mirror(reflecting: value)
         guard mirror.displayStyle == .optional else { return value }
-        if let value = mirror.children.first?.value {
+        if let value = mirror.children.first?.value as? T {
             return unwrap(value: value)
         }
         else {

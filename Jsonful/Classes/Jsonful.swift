@@ -8,7 +8,6 @@
 
 import Foundation
 
-
 @dynamicMemberLookup
 public struct Jsonful {
     
@@ -36,7 +35,7 @@ public struct Jsonful {
     
     public func unwrap(file: String = #file, line: Int = #line) -> Unwrap.Result<Any> {
         let (result, members) = value(for: tokens)
-        return .init(value: result, file: file, line: line, id: members.joined())
+        return .init(value: result, id: members.joined(), file: file, line: line)
     }
     
     private func value(for tokens: [JsonfulKeyble]) -> (Optional<Any>, [String]) {
