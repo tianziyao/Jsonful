@@ -7,23 +7,27 @@
 
 import Foundation
 
-extension Unwrap {
+
+public extension Unwrap {
     
-    public struct Filtration: OptionSet {
+    public typealias Filtered = Filter
+    
+    public struct Filter: OptionSet {
         
         public var rawValue: Int
-        
+
         public init(rawValue: Int) {
             self.rawValue = rawValue
         }
-        
-        public static let `nil`: Filtration = .init(rawValue: 1 << 0)
-        public static let null: Filtration = .init(rawValue: 1 << 1)
-        public static let empty: Filtration = .init(rawValue: 1 << 2)
-        public static let all: Filtration = [.nil, .null, .empty]
-        
+
+        public static let `nil`: Filter = .init(rawValue: 1 << 0)
+        public static let null: Filter = .init(rawValue: 1 << 1)
+        public static let empty: Filter = .init(rawValue: 1 << 2)
+        public static let none: Filter = .init(rawValue: 1 << 3)
+        public static let exception: Filter = [.nil, .null, .empty]
+
         public func result<T>(value: Optional<T>, identity: String) -> Result<T> {
-            let validate = self.validate(value: value)
+            let validate = self.element(value: value)
             if let data = validate.data {
                 return .success((data, identity))
             }
@@ -31,9 +35,12 @@ extension Unwrap {
                 return .failure(value: value, identity: identity, reason: validate.reason)
             }
         }
-        
-        public func validate<T>(value: Optional<T>) -> (data: Optional<T>, reason: String) {
+
+        public func element<T>(value: Optional<T>) -> (data: Optional<T>, reason: String) {
             let value = Mirror.unwrap(value: value)
+            if self.contains(.none) {
+                return (value, "success")
+            }
             if value == nil && self.contains(.nil) {
                 return (nil, "this data is nil")
             }
@@ -54,3 +61,7 @@ extension Unwrap {
     }
     
 }
+
+
+
+

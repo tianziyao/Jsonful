@@ -148,9 +148,9 @@ public extension Unwrap.Result {
 
 
 
-public extension Optional {
-
-    func unwrap(file: String = #file, line: Int = #line, id: String = "") -> Unwrap.Result<Wrapped> {
-        return .init(value: self, id: id, file: file, line: line)
-    }
-}
+//public extension Optional {
+//
+//    func unwrap(file: String = #file, line: Int = #line, id: String = "") -> Unwrap.Result<Wrapped> {
+//        return .init(value: self, id: id, rule: Unwrap.Filter<Wrapped>(), file: file, line: line)
+//    }
+//}

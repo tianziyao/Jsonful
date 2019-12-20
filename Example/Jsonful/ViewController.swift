@@ -24,21 +24,31 @@ class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        let arr: [Any?] = [1, nil, NSNull()]
-        let arr2 = arr as NSArray
+        let dic = NSMutableDictionary(dictionary: ["1": "a", "2": "b", "3": "c"])
+        var i = 0
+        for kv in dic {
+            //dic.removeObject(forKey: kv.key)
+            dic.setValue("eee", forKey: "2\(i)")
+            i += 1
+        }
 
-        let arr3 = NSArray(array: [NSNull(), NSNull()]) as? [Any?]
-        ddd(any: arr3?[1])
+        print(dic)
+        
+//        var dic = ["1": "a", "2": "b", "3": "c"]
+//
+//        var i = 0
+//        for kv in dic {
+//            //dic.removeObject(forKey: kv.key)
+//            dic["e\(i)"] = "eee"
+//            i += 1
+//        }
+//
+//        print(dic)
 
     }
     
     func ddd(any: Any?) {
-        if any is NSNull {
-            print(222)
-        }
-        if any == nil {
-            print(333)
-        }
+
     }
 
     

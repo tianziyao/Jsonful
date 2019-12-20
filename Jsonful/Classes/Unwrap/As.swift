@@ -7,7 +7,7 @@
 
 import Foundation
 
-extension Unwrap {
+public extension Unwrap {
     
     public struct As<T> {
         
@@ -16,7 +16,7 @@ extension Unwrap {
         public init(result: Result<T>) {
             self.result = result
         }
-        
+                
         public func that<O>(closure: (Result<O>.Success) -> Result<O> = {.success($0)}) -> Result<O> {
             return result.map({ (arg) -> Result<O> in
                 if let data = arg.value as? O {
@@ -49,21 +49,21 @@ extension Unwrap {
             return that()
         }
         
-        var nsString: Unwrap.Result<NSString> {
+        var nsString: Result<NSString> {
             return that()
         }
         
-        var nsMutableString: Unwrap.Result<NSMutableString> {
+        var nsMutableString: Result<NSMutableString> {
             return that()
         }
         
         //MARK: ---属性字符串---
         
-        var nsAttributedString: Unwrap.Result<NSAttributedString> {
+        var nsAttributedString: Result<NSAttributedString> {
             return that()
         }
         
-        var nsMutableAttributedString: Unwrap.Result<NSMutableAttributedString> {
+        var nsMutableAttributedString: Result<NSMutableAttributedString> {
             return that()
         }
         
@@ -81,7 +81,7 @@ extension Unwrap {
             return that()
         }
         
-        var nsNumber: Unwrap.Result<NSNumber> {
+        var nsNumber: Result<NSNumber> {
             return that()
         }
         
@@ -91,7 +91,7 @@ extension Unwrap {
             return that()
         }
         
-        var objcBool: Unwrap.Result<ObjCBool> {
+        var objcBool: Result<ObjCBool> {
             return that()
         }
         
@@ -101,7 +101,7 @@ extension Unwrap {
             return that()
         }
         
-        var nsDate: Unwrap.Result<NSDate> {
+        var nsDate: Result<NSDate> {
             return that()
         }
         
@@ -109,7 +109,7 @@ extension Unwrap {
             return that()
         }
         
-        var nsData: Unwrap.Result<NSData> {
+        var nsData: Result<NSData> {
             return that()
         }
         
@@ -117,7 +117,7 @@ extension Unwrap {
             return that()
         }
         
-        var nsRange: Unwrap.Result<NSRange> {
+        var nsRange: Result<NSRange> {
             return that()
         }
         
@@ -125,7 +125,7 @@ extension Unwrap {
             return that()
         }
         
-        var asNSURL: Unwrap.Result<NSURL> {
+        var asNSURL: Result<NSURL> {
             return that()
         }
         
@@ -133,7 +133,7 @@ extension Unwrap {
             return that()
         }
         
-        var nsObject: Unwrap.Result<NSObject> {
+        var nsObject: Result<NSObject> {
             return that()
         }
         
@@ -141,56 +141,56 @@ extension Unwrap {
             return that()
         }
         
-        var nsError: Unwrap.Result<NSError> {
+        var nsError: Result<NSError> {
             return that()
         }
         
-        var nsValue: Unwrap.Result<NSValue> {
+        var nsValue: Result<NSValue> {
             return that()
         }
         
         
         //MARK: ---UIKit对象---
         
-        var image: Unwrap.Result<UIImage> {
+        var image: Result<UIImage> {
             return that()
         }
         
-        var color: Unwrap.Result<UIColor> {
+        var color: Result<UIColor> {
             return that()
         }
         
-        var font: Unwrap.Result<UIFont> {
+        var font: Result<UIFont> {
             return that()
         }
         
         //MARK: ---CoreGraphics对象---
         
-        var cgFloat: Unwrap.Result<CGFloat> {
+        var cgFloat: Result<CGFloat> {
             return that()
         }
         
-        var cgSize: Unwrap.Result<CGSize> {
+        var cgSize: Result<CGSize> {
             return that()
         }
         
-        var cgPoint: Unwrap.Result<CGPoint> {
+        var cgPoint: Result<CGPoint> {
             return that()
         }
         
-        var cgRect: Unwrap.Result<CGRect> {
+        var cgRect: Result<CGRect> {
             return that()
         }
         
-        var cgFont: Unwrap.Result<CGFont> {
+        var cgFont: Result<CGFont> {
             return that()
         }
         
-        var cgImage: Unwrap.Result<CGImage> {
+        var cgImage: Result<CGImage> {
             return that()
         }
         
-        var cgPath: Unwrap.Result<CGPath> {
+        var cgPath: Result<CGPath> {
             return that()
         }
     }

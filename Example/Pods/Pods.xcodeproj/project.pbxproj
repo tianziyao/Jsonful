@@ -8,23 +8,23 @@
 
 /* Begin PBXBuildFile section */
 		0CBF9D871DF36727EC1C2F4B9DED4001 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FD608BCCF279B1277BB911F33106997F /* Foundation.framework */; };
-		18C9C332354F950076B233370B4CC4C1 /* Containable.swift in Sources */ = {isa = PBXBuildFile; fileRef = C40490FC8B3B46F7CC6CFB622D654289 /* Containable.swift */; };
+		0E081247A725ECED334620CEF16D50E1 /* Jsonful.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24D3684EB5055F4328D3B2B875A71974 /* Jsonful.swift */; };
 		235BC12ECF6EEC246F7CD1B2FA4D70A9 /* Pods-Jsonful_Example-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = D646625D90C6FB7B7F8A696D192AF2DE /* Pods-Jsonful_Example-umbrella.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		27A655F7D9A8A8BA04F081A16303724D /* Unwrap.swift in Sources */ = {isa = PBXBuildFile; fileRef = F681D07053816082025CAEA67793E3E9 /* Unwrap.swift */; };
+		376745F584D50624594C96F5AFB6705C /* As.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87920310714A0B97A860D4009040B4F2 /* As.swift */; };
+		3CEA66794DEB0CE4F512FFF59B992C6A /* Keyble.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99323E24F37F20F9EC15A97E879FA4E0 /* Keyble.swift */; };
 		3E3CABE824E7FBDE85A8F67EDB720E98 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 01BDA658338AD3813D969D7011B56B8D /* UIKit.framework */; };
 		3FCEDC4D2421C57CC1E906AF7D49A3EC /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 276842F3A283EE87124FE6C3EAAFD184 /* CoreGraphics.framework */; };
-		403C71B058E4C1CD5347F53FA2E268B3 /* As.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B45731510BAA91D709AC0A35CA88043 /* As.swift */; };
 		41EAA4DBAFCE7049CE3E222D5A41FAD3 /* Pods-Jsonful_Tests-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = 1DDDA961F6131F79777AA18E037B5105 /* Pods-Jsonful_Tests-dummy.m */; };
-		5A7E97A813381FE76CE1EDD39B15D17B /* Result.swift in Sources */ = {isa = PBXBuildFile; fileRef = 455563F2C9A15CDA66621B0CA561EFF7 /* Result.swift */; };
+		468D96BF471C1FA63ADAE65D0F5D8291 /* Parser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4391C55A3EBAF2D1A6F528848F73249C /* Parser.swift */; };
+		572FDD91481DE0ABD34522DFE0FCF412 /* Result.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C84C820DBC8381417AFCF5D3250B9CF /* Result.swift */; };
 		6B33BF1BD14708827DA6AEB946B22C37 /* Pods-Jsonful_Tests-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = DC6E2A68923E0AD1C219D531EFE51553 /* Pods-Jsonful_Tests-umbrella.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		6D3AAF1FC0C4AF3CC7173B1ECD8368B3 /* Filtration.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD89B0430A7554373A60DBD357AE9D2C /* Filtration.swift */; };
-		77A06488F91D4764810E85016AB53F11 /* Parser.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4329B6EF48E58DB3012EC62682EDC43 /* Parser.swift */; };
-		9AFE7F6757A601523A15A8AA3B7E0733 /* Jsonful-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = FE1309A5F39C8121576CD9D410712632 /* Jsonful-umbrella.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		7A2A7F4D7A0AA41438A1C41D3BA708B5 /* Jsonful-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = 4E37B58FF93B2F4BA2E053580890A512 /* Jsonful-dummy.m */; };
+		7D7B02D46298F7E4CB3ECC0CD2FC2958 /* Containable.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCE425424F7FAC1F3DD479BCB55830F6 /* Containable.swift */; };
+		947E2D2523ACB164001C9E43 /* Filter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5665C0D0AE184FC0044870D028ECABCD /* Filter.swift */; };
+		9AFE7F6757A601523A15A8AA3B7E0733 /* Jsonful-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = C3274166EA08544440B74E8CBCEEF6C6 /* Jsonful-umbrella.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		9D7E8F6E44226F0C1507E8D78AFD02EE /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FD608BCCF279B1277BB911F33106997F /* Foundation.framework */; };
 		C4A3E9E9F47823F9F3D822FCAEBF05AB /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FD608BCCF279B1277BB911F33106997F /* Foundation.framework */; };
-		C6ED13AAAFD2D31AF27D7F447B19A533 /* Jsonful-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = F79FDD992C79744F1EACB9BE70143DA7 /* Jsonful-dummy.m */; };
-		D776A73BFBD22B9E00D806F929DDC698 /* Jsonful.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75531EE9281681542384C48E61B8A1CE /* Jsonful.swift */; };
-		EC48701BE00BCAF7844889C549159868 /* Keyble.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56BF2397D7F8682DBA34ADE19184FFCA /* Keyble.swift */; };
+		E610BEB13ACF72D017109F0F7C7BB24E /* Unwrap.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1CF1E8EFE3C50F9212073D8FF1F2676F /* Unwrap.swift */; };
 		F8769688AF806F6BAC0FC6E07E44788C /* Pods-Jsonful_Example-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = 8E7E39F0B6A7FE5A8351E08FF0FFF966 /* Pods-Jsonful_Example-dummy.m */; };
 /* End PBXBuildFile section */
 
@@ -49,44 +49,44 @@
 		01BDA658338AD3813D969D7011B56B8D /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS12.2.sdk/System/Library/Frameworks/UIKit.framework; sourceTree = DEVELOPER_DIR; };
 		04D85C2D5A2B023DE14BA3B59B5DD4FD /* Pods-Jsonful_Example-acknowledgements.markdown */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; path = "Pods-Jsonful_Example-acknowledgements.markdown"; sourceTree = "<group>"; };
 		0948A969954368F0C9362C660A7F9590 /* Pods-Jsonful_Tests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-Jsonful_Tests.release.xcconfig"; sourceTree = "<group>"; };
-		1C6AA2998BA91750243408E7B518312C /* README.md */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
+		139B587B749325F61CB8ECD2D97E1026 /* Jsonful-Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "Jsonful-Info.plist"; sourceTree = "<group>"; };
+		1C84C820DBC8381417AFCF5D3250B9CF /* Result.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = Result.swift; sourceTree = "<group>"; };
+		1CF1E8EFE3C50F9212073D8FF1F2676F /* Unwrap.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = Unwrap.swift; sourceTree = "<group>"; };
 		1DDDA961F6131F79777AA18E037B5105 /* Pods-Jsonful_Tests-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "Pods-Jsonful_Tests-dummy.m"; sourceTree = "<group>"; };
 		1EB3AAB852CDA57D307D6159D29F63A0 /* Pods-Jsonful_Example.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.module; path = "Pods-Jsonful_Example.modulemap"; sourceTree = "<group>"; };
 		2389ED57EB7EDA92BD395D202743D3D6 /* Pods-Jsonful_Tests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-Jsonful_Tests.debug.xcconfig"; sourceTree = "<group>"; };
+		24D3684EB5055F4328D3B2B875A71974 /* Jsonful.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = Jsonful.swift; sourceTree = "<group>"; };
 		276842F3A283EE87124FE6C3EAAFD184 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS12.2.sdk/System/Library/Frameworks/CoreGraphics.framework; sourceTree = DEVELOPER_DIR; };
-		33246C27BFDB43D1AEA0A239E067E2B7 /* Jsonful.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.module; path = Jsonful.modulemap; sourceTree = "<group>"; };
 		35F988A2EF81813073DD5CEFF7456101 /* Pods_Jsonful_Example.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Jsonful_Example.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		455563F2C9A15CDA66621B0CA561EFF7 /* Result.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = Result.swift; path = Jsonful/Classes/Result.swift; sourceTree = "<group>"; };
-		48E209059C861EEF14163DC13C79D2A5 /* Jsonful-prefix.pch */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "Jsonful-prefix.pch"; sourceTree = "<group>"; };
+		4391C55A3EBAF2D1A6F528848F73249C /* Parser.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = Parser.swift; sourceTree = "<group>"; };
+		4E37B58FF93B2F4BA2E053580890A512 /* Jsonful-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "Jsonful-dummy.m"; sourceTree = "<group>"; };
 		526A8FB4176763496E94107BE136EE67 /* Pods-Jsonful_Tests-acknowledgements.markdown */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; path = "Pods-Jsonful_Tests-acknowledgements.markdown"; sourceTree = "<group>"; };
-		56BF2397D7F8682DBA34ADE19184FFCA /* Keyble.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = Keyble.swift; path = Jsonful/Classes/Keyble.swift; sourceTree = "<group>"; };
-		5B45731510BAA91D709AC0A35CA88043 /* As.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = As.swift; path = Jsonful/Classes/As.swift; sourceTree = "<group>"; };
-		5BEA4DC38E9FB65FB3F38BFE93D7EBF5 /* Jsonful.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = Jsonful.xcconfig; sourceTree = "<group>"; };
-		6AB9CAA8C22876B62856E6031ADEABB7 /* LICENSE */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; path = LICENSE; sourceTree = "<group>"; };
+		5665C0D0AE184FC0044870D028ECABCD /* Filter.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = Filter.swift; sourceTree = "<group>"; };
 		6F22CD95AA5FC8E1B0E82E558CFC01A2 /* Pods-Jsonful_Tests.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.module; path = "Pods-Jsonful_Tests.modulemap"; sourceTree = "<group>"; };
-		75531EE9281681542384C48E61B8A1CE /* Jsonful.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = Jsonful.swift; path = Jsonful/Classes/Jsonful.swift; sourceTree = "<group>"; };
 		7606498828DE7A04984DFAA1A4BB5E8F /* Pods-Jsonful_Example-acknowledgements.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "Pods-Jsonful_Example-acknowledgements.plist"; sourceTree = "<group>"; };
 		7DB5F6919F9FFE8725C344E610345A54 /* Pods-Jsonful_Tests-Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "Pods-Jsonful_Tests-Info.plist"; sourceTree = "<group>"; };
+		86D2E013EBD04C07BBF473BDAF8F63BF /* Jsonful.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.module; path = Jsonful.modulemap; sourceTree = "<group>"; };
+		87920310714A0B97A860D4009040B4F2 /* As.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = As.swift; sourceTree = "<group>"; };
 		8E7E39F0B6A7FE5A8351E08FF0FFF966 /* Pods-Jsonful_Example-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "Pods-Jsonful_Example-dummy.m"; sourceTree = "<group>"; };
-		9047502B180CFF3CBADA644D9B62CE8C /* Jsonful-Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "Jsonful-Info.plist"; sourceTree = "<group>"; };
-		947D53E583F3BC7A766B0574FE5397A9 /* Jsonful.podspec */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; includeInIndex = 1; indentWidth = 2; path = Jsonful.podspec; sourceTree = "<group>"; tabWidth = 2; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
+		99323E24F37F20F9EC15A97E879FA4E0 /* Keyble.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = Keyble.swift; sourceTree = "<group>"; };
 		9994E8D7271C06EE1D5FA5FD045B7340 /* Pods-Jsonful_Tests-acknowledgements.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "Pods-Jsonful_Tests-acknowledgements.plist"; sourceTree = "<group>"; };
 		9D940727FF8FB9C785EB98E56350EF41 /* Podfile */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; includeInIndex = 1; indentWidth = 2; name = Podfile; path = ../Podfile; sourceTree = SOURCE_ROOT; tabWidth = 2; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
 		A463E9981FF7FE5B1D84AB0BF0AE2DEE /* Pods-Jsonful_Example-frameworks.sh */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.script.sh; path = "Pods-Jsonful_Example-frameworks.sh"; sourceTree = "<group>"; };
-		C40490FC8B3B46F7CC6CFB622D654289 /* Containable.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = Containable.swift; path = Jsonful/Classes/Containable.swift; sourceTree = "<group>"; };
-		C4329B6EF48E58DB3012EC62682EDC43 /* Parser.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = Parser.swift; path = Jsonful/Classes/Parser.swift; sourceTree = "<group>"; };
+		ADB1795B1616D46C9FECA35D6EBB8A23 /* README.md */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
+		B08BCD6E50BDD3E4E6809EE8A7155509 /* LICENSE */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; path = LICENSE; sourceTree = "<group>"; };
+		C3274166EA08544440B74E8CBCEEF6C6 /* Jsonful-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "Jsonful-umbrella.h"; sourceTree = "<group>"; };
+		C3AEEA973EC8433B577FB350A2FA9FDD /* Jsonful-prefix.pch */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "Jsonful-prefix.pch"; sourceTree = "<group>"; };
+		D1318CB6FD0706D3DF5250A7CC102E96 /* Jsonful.podspec */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; includeInIndex = 1; indentWidth = 2; path = Jsonful.podspec; sourceTree = "<group>"; tabWidth = 2; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
 		D16FC84C68FA22528C8B5F7FED3254EF /* Pods_Jsonful_Tests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Jsonful_Tests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		D5D6041D363DE0F5D61ED462689CABF1 /* Pods-Jsonful_Example.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-Jsonful_Example.debug.xcconfig"; sourceTree = "<group>"; };
 		D646625D90C6FB7B7F8A696D192AF2DE /* Pods-Jsonful_Example-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "Pods-Jsonful_Example-umbrella.h"; sourceTree = "<group>"; };
 		DC6E2A68923E0AD1C219D531EFE51553 /* Pods-Jsonful_Tests-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "Pods-Jsonful_Tests-umbrella.h"; sourceTree = "<group>"; };
-		DD89B0430A7554373A60DBD357AE9D2C /* Filtration.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = Filtration.swift; path = Jsonful/Classes/Filtration.swift; sourceTree = "<group>"; };
+		E9C53D5ED2CAEC581AE9CDC25AB2D354 /* Jsonful.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = Jsonful.xcconfig; sourceTree = "<group>"; };
 		ED1AC46038EC6FC49F9D98284A6BC414 /* Pods-Jsonful_Example-Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "Pods-Jsonful_Example-Info.plist"; sourceTree = "<group>"; };
 		F12FC09FFC70B401B0DF7AB7036459BF /* Jsonful.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Jsonful.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		F46FB1977D8043FB798DA9651AE6A297 /* Pods-Jsonful_Example.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-Jsonful_Example.release.xcconfig"; sourceTree = "<group>"; };
-		F681D07053816082025CAEA67793E3E9 /* Unwrap.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = Unwrap.swift; path = Jsonful/Classes/Unwrap.swift; sourceTree = "<group>"; };
-		F79FDD992C79744F1EACB9BE70143DA7 /* Jsonful-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "Jsonful-dummy.m"; sourceTree = "<group>"; };
+		FCE425424F7FAC1F3DD479BCB55830F6 /* Containable.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = Containable.swift; sourceTree = "<group>"; };
 		FD608BCCF279B1277BB911F33106997F /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS12.2.sdk/System/Library/Frameworks/Foundation.framework; sourceTree = DEVELOPER_DIR; };
-		FE1309A5F39C8121576CD9D410712632 /* Jsonful-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "Jsonful-umbrella.h"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -127,14 +127,6 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
-		04F9DEBC6C578994C6E71F2D6002958D /* Development Pods */ = {
-			isa = PBXGroup;
-			children = (
-				63EBD7AB11BCE3B6DE2A574658133698 /* Jsonful */,
-			);
-			name = "Development Pods";
-			sourceTree = "<group>";
-		};
 		09C427622BD0A0BF82C9204B5806701E /* Targets Support Files */ = {
 			isa = PBXGroup;
 			children = (
@@ -144,14 +136,15 @@
 			name = "Targets Support Files";
 			sourceTree = "<group>";
 		};
-		39FB06799FE7597AB0253A5B4E1DDB39 /* Pod */ = {
+		2B61A352605C3FB3A09C45E3F0A6CD72 /* Core */ = {
 			isa = PBXGroup;
 			children = (
-				947D53E583F3BC7A766B0574FE5397A9 /* Jsonful.podspec */,
-				6AB9CAA8C22876B62856E6031ADEABB7 /* LICENSE */,
-				1C6AA2998BA91750243408E7B518312C /* README.md */,
+				24D3684EB5055F4328D3B2B875A71974 /* Jsonful.swift */,
+				99323E24F37F20F9EC15A97E879FA4E0 /* Keyble.swift */,
+				4391C55A3EBAF2D1A6F528848F73249C /* Parser.swift */,
 			);
-			name = Pod;
+			name = Core;
+			path = Jsonful/Classes/Core;
 			sourceTree = "<group>";
 		};
 		3A0215C23B97C5A36609C0DCC43EF347 /* Pods-Jsonful_Tests */ = {
@@ -170,19 +163,13 @@
 			path = "Target Support Files/Pods-Jsonful_Tests";
 			sourceTree = "<group>";
 		};
-		63EBD7AB11BCE3B6DE2A574658133698 /* Jsonful */ = {
+		6FA8FF93B0E982A78AB0C41E8E152E4A /* Jsonful */ = {
 			isa = PBXGroup;
 			children = (
-				5B45731510BAA91D709AC0A35CA88043 /* As.swift */,
-				C40490FC8B3B46F7CC6CFB622D654289 /* Containable.swift */,
-				75531EE9281681542384C48E61B8A1CE /* Jsonful.swift */,
-				56BF2397D7F8682DBA34ADE19184FFCA /* Keyble.swift */,
-				C4329B6EF48E58DB3012EC62682EDC43 /* Parser.swift */,
-				455563F2C9A15CDA66621B0CA561EFF7 /* Result.swift */,
-				DD89B0430A7554373A60DBD357AE9D2C /* Filtration.swift */,
-				F681D07053816082025CAEA67793E3E9 /* Unwrap.swift */,
-				39FB06799FE7597AB0253A5B4E1DDB39 /* Pod */,
-				F5A8681AC832C9A382930C6CF58A2D29 /* Support Files */,
+				2B61A352605C3FB3A09C45E3F0A6CD72 /* Core */,
+				CDCDD12E6D4D92942814E1469CC5AF49 /* Pod */,
+				AE1BDB45EF4E769C4D1CA2BD92E0C386 /* Support Files */,
+				8C7877F57D3BC4C755DCAE6217211D47 /* Unwrap */,
 			);
 			name = Jsonful;
 			path = ../..;
@@ -198,6 +185,27 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
+		8C7877F57D3BC4C755DCAE6217211D47 /* Unwrap */ = {
+			isa = PBXGroup;
+			children = (
+				87920310714A0B97A860D4009040B4F2 /* As.swift */,
+				5665C0D0AE184FC0044870D028ECABCD /* Filter.swift */,
+				1C84C820DBC8381417AFCF5D3250B9CF /* Result.swift */,
+				1CF1E8EFE3C50F9212073D8FF1F2676F /* Unwrap.swift */,
+				FCE425424F7FAC1F3DD479BCB55830F6 /* Containable.swift */,
+			);
+			name = Unwrap;
+			path = Jsonful/Classes/Unwrap;
+			sourceTree = "<group>";
+		};
+		A1227A1F41B8D694808BD0F37478B6A2 /* Development Pods */ = {
+			isa = PBXGroup;
+			children = (
+				6FA8FF93B0E982A78AB0C41E8E152E4A /* Jsonful */,
+			);
+			name = "Development Pods";
+			sourceTree = "<group>";
+		};
 		ABE8076CBFEE71A3B199C34F20F66745 /* iOS */ = {
 			isa = PBXGroup;
 			children = (
@@ -208,11 +216,35 @@
 			name = iOS;
 			sourceTree = "<group>";
 		};
+		AE1BDB45EF4E769C4D1CA2BD92E0C386 /* Support Files */ = {
+			isa = PBXGroup;
+			children = (
+				86D2E013EBD04C07BBF473BDAF8F63BF /* Jsonful.modulemap */,
+				E9C53D5ED2CAEC581AE9CDC25AB2D354 /* Jsonful.xcconfig */,
+				4E37B58FF93B2F4BA2E053580890A512 /* Jsonful-dummy.m */,
+				139B587B749325F61CB8ECD2D97E1026 /* Jsonful-Info.plist */,
+				C3AEEA973EC8433B577FB350A2FA9FDD /* Jsonful-prefix.pch */,
+				C3274166EA08544440B74E8CBCEEF6C6 /* Jsonful-umbrella.h */,
+			);
+			name = "Support Files";
+			path = "Example/Pods/Target Support Files/Jsonful";
+			sourceTree = "<group>";
+		};
+		CDCDD12E6D4D92942814E1469CC5AF49 /* Pod */ = {
+			isa = PBXGroup;
+			children = (
+				D1318CB6FD0706D3DF5250A7CC102E96 /* Jsonful.podspec */,
+				B08BCD6E50BDD3E4E6809EE8A7155509 /* LICENSE */,
+				ADB1795B1616D46C9FECA35D6EBB8A23 /* README.md */,
+			);
+			name = Pod;
+			sourceTree = "<group>";
+		};
 		CF1408CF629C7361332E53B88F7BD30C = {
 			isa = PBXGroup;
 			children = (
 				9D940727FF8FB9C785EB98E56350EF41 /* Podfile */,
-				04F9DEBC6C578994C6E71F2D6002958D /* Development Pods */,
+				A1227A1F41B8D694808BD0F37478B6A2 /* Development Pods */,
 				03C5C200A0787E300053CFA8F53CA094 /* Frameworks */,
 				886B4FF54FC90B00DE352DF17776806B /* Products */,
 				09C427622BD0A0BF82C9204B5806701E /* Targets Support Files */,
@@ -234,20 +266,6 @@
 			);
 			name = "Pods-Jsonful_Example";
 			path = "Target Support Files/Pods-Jsonful_Example";
-			sourceTree = "<group>";
-		};
-		F5A8681AC832C9A382930C6CF58A2D29 /* Support Files */ = {
-			isa = PBXGroup;
-			children = (
-				33246C27BFDB43D1AEA0A239E067E2B7 /* Jsonful.modulemap */,
-				5BEA4DC38E9FB65FB3F38BFE93D7EBF5 /* Jsonful.xcconfig */,
-				F79FDD992C79744F1EACB9BE70143DA7 /* Jsonful-dummy.m */,
-				9047502B180CFF3CBADA644D9B62CE8C /* Jsonful-Info.plist */,
-				48E209059C861EEF14163DC13C79D2A5 /* Jsonful-prefix.pch */,
-				FE1309A5F39C8121576CD9D410712632 /* Jsonful-umbrella.h */,
-			);
-			name = "Support Files";
-			path = "Example/Pods/Target Support Files/Jsonful";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -285,7 +303,7 @@
 			buildConfigurationList = 3E738301E092720F9684F2D9F80FE510 /* Build configuration list for PBXNativeTarget "Jsonful" */;
 			buildPhases = (
 				BBC23D70049F8CB7BF73C0067C49879A /* Headers */,
-				875D35FD96C590A32A6D51DCF9C97922 /* Sources */,
+				F112AC257D5599AE5B5E6CDF916FBBB3 /* Sources */,
 				90406AF2812E3D124881CC98C3ED0719 /* Frameworks */,
 				7797CB41E11806DFC50DADAEA1D83ED6 /* Resources */,
 			);
@@ -398,27 +416,27 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		875D35FD96C590A32A6D51DCF9C97922 /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				403C71B058E4C1CD5347F53FA2E268B3 /* As.swift in Sources */,
-				18C9C332354F950076B233370B4CC4C1 /* Containable.swift in Sources */,
-				C6ED13AAAFD2D31AF27D7F447B19A533 /* Jsonful-dummy.m in Sources */,
-				D776A73BFBD22B9E00D806F929DDC698 /* Jsonful.swift in Sources */,
-				EC48701BE00BCAF7844889C549159868 /* Keyble.swift in Sources */,
-				77A06488F91D4764810E85016AB53F11 /* Parser.swift in Sources */,
-				5A7E97A813381FE76CE1EDD39B15D17B /* Result.swift in Sources */,
-				6D3AAF1FC0C4AF3CC7173B1ECD8368B3 /* Filtration.swift in Sources */,
-				27A655F7D9A8A8BA04F081A16303724D /* Unwrap.swift in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		A0038EE2D165F427021F076A42120AF7 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 				41EAA4DBAFCE7049CE3E222D5A41FAD3 /* Pods-Jsonful_Tests-dummy.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		F112AC257D5599AE5B5E6CDF916FBBB3 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				947E2D2523ACB164001C9E43 /* Filter.swift in Sources */,
+				376745F584D50624594C96F5AFB6705C /* As.swift in Sources */,
+				7D7B02D46298F7E4CB3ECC0CD2FC2958 /* Containable.swift in Sources */,
+				7A2A7F4D7A0AA41438A1C41D3BA708B5 /* Jsonful-dummy.m in Sources */,
+				0E081247A725ECED334620CEF16D50E1 /* Jsonful.swift in Sources */,
+				3CEA66794DEB0CE4F512FFF59B992C6A /* Keyble.swift in Sources */,
+				468D96BF471C1FA63ADAE65D0F5D8291 /* Parser.swift in Sources */,
+				572FDD91481DE0ABD34522DFE0FCF412 /* Result.swift in Sources */,
+				E610BEB13ACF72D017109F0F7C7BB24E /* Unwrap.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -476,7 +494,7 @@
 		};
 		54CA82A8F1F5FEABFF42CF7FC0AE7081 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 5BEA4DC38E9FB65FB3F38BFE93D7EBF5 /* Jsonful.xcconfig */;
+			baseConfigurationReference = E9C53D5ED2CAEC581AE9CDC25AB2D354 /* Jsonful.xcconfig */;
 			buildSettings = {
 				CODE_SIGN_IDENTITY = "";
 				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
@@ -574,7 +592,7 @@
 		};
 		7647C70F2DEC0F7FFC51813D2B31AC96 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 5BEA4DC38E9FB65FB3F38BFE93D7EBF5 /* Jsonful.xcconfig */;
+			baseConfigurationReference = E9C53D5ED2CAEC581AE9CDC25AB2D354 /* Jsonful.xcconfig */;
 			buildSettings = {
 				CODE_SIGN_IDENTITY = "";
 				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";

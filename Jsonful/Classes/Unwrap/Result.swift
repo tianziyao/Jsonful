@@ -34,7 +34,7 @@ extension Unwrap {
             }
         }
         
-        public init(value: Optional<T>, id: String, rule: Filtration = .all, file: String = #file, line: Int = #line) {
+        public init(value: Optional<T>, id: String, rule: Filter = .exception, file: String = #file, line: Int = #line) {
             let identity = Unwrap.debug { () -> String in
                 let cls = String(describing: object_getClass(value))
                 return "-----\(file):\(line)-----\nid: \(id)\nrawType: <\(cls)>\n"
@@ -73,9 +73,14 @@ extension Unwrap {
             }
         }
         
-        public func `as`() -> As<T> {
+        public var `as`: As<T> {
             return As(result: self)
         }
+        
+        
+//        public func `as`() -> As<T> {
+//            return As(result: self)
+//        }
         
         //        public func `as`<O>(closure: (Result<O>.Success) -> Result<O> = {.success($0)}) -> Result<O> {
         //            return map { (arg) -> Unwrap.Result<O> in
