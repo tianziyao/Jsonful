@@ -34,12 +34,13 @@ extension Unwrap {
             }
         }
         
-        public init(value: Optional<T>, id: String, rule: Filter = .exception, file: String = #file, line: Int = #line) {
+        public init(value: Optional<T>, id: String, filter: Filter = .exception, file: String = #file, line: Int = #line) {
             let identity = Unwrap.debug { () -> String in
+                let id = id.isEmpty ? "unknow" : id
                 let cls = String(describing: object_getClass(value))
                 return "-----\(file):\(line)-----\nid: \(id)\nrawType: <\(cls)>\n"
             }
-            self = rule.result(value: value, identity: identity)
+            self = filter.result(value: value, identity: identity)
         }
         
         internal static func failure(value: Any?, identity: String, reason: String) -> Result<T> {
@@ -76,33 +77,6 @@ extension Unwrap {
         public var `as`: As<T> {
             return As(result: self)
         }
-        
-        
-//        public func `as`() -> As<T> {
-//            return As(result: self)
-//        }
-        
-        //        public func `as`<O>(closure: (Result<O>.Success) -> Result<O> = {.success($0)}) -> Result<O> {
-        //            return map { (arg) -> Unwrap.Result<O> in
-        //                if let data = arg.value as? O {
-        //                    return closure((data, arg.identity))
-        //                }
-        //                else {
-        //                    return .failure(identity: arg.identity, value: arg.value, reason: "this data is not <\(O.self)>")
-        //                }
-        //            }
-        //        }
-        //
-        //        public func `as`<O: Containable>() -> Result<O> {
-        //            return `as`(closure: { (arg) -> Result<O> in
-        //                if arg.value.isEmpty {
-        //                    return .failure(identity: arg.identity, value: nil, reason: "this data is empty")
-        //                }
-        //                else {
-        //                    return .success(arg)
-        //                }
-        //            })
-        //        }
         
         public func then(success: (T) -> (), failure: ((String) -> ())? = nil) {
             switch self {

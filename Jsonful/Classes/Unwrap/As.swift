@@ -9,7 +9,7 @@ import Foundation
 
 public extension Unwrap {
     
-    public struct As<T> {
+    struct As<T> {
         
         private let result: Result<T>
         
@@ -42,10 +42,6 @@ public extension Unwrap {
         //MARK: ---字符串---
         
         var string: Result<String> {
-            return that()
-        }
-        
-        var cfString: Result<CFString> {
             return that()
         }
         
@@ -113,6 +109,10 @@ public extension Unwrap {
             return that()
         }
         
+        var nsMutableData: Result<NSMutableData> {
+            return that()
+        }
+        
         var range: Result<Range<Int>> {
             return that()
         }
@@ -125,7 +125,7 @@ public extension Unwrap {
             return that()
         }
         
-        var asNSURL: Result<NSURL> {
+        var nsURL: Result<NSURL> {
             return that()
         }
         
@@ -187,6 +187,10 @@ public extension Unwrap {
         }
         
         var cgImage: Result<CGImage> {
+            return that()
+        }
+        
+        var cgColor: Result<CGColor> {
             return that()
         }
         

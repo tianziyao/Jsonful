@@ -131,34 +131,31 @@ public extension Unwrap.As {
     
     //MARK: ---集合---
 
-    func set<T: Hashable>(_ type: T.Type = T.self, filtered: Unwrap.Filtered = .exception) -> Unwrap.Result<Set<T>> {
-        if "\(type)".contains("Optional") {
-            return self.that()
-        }
-        else {
-            let result: Unwrap.Result<Set<T?>> = self.that()
-            return self.that()
-        }
+    func set<T: Hashable>(_ type: T.Type = T.self, filter: Unwrap.Filter = .exception) -> Unwrap.Result<Set<T>> {
+        let result: Unwrap.Result<Set<T?>> = self.that()
+        return result.map({filter.set(value: $0)}).as.that()
     }
 
+    func nsSet(filter: Unwrap.Filter = .exception) -> Unwrap.Result<NSSet> {
+        return self.set(AnyHashable.self, filter: filter).as.that()
+    }
+    
+    func nsMutableSet(filtered: Unwrap.Filtered = .exception) -> Unwrap.Result<NSMutableSet> {
+        return self.that().map({filtered.nsMutableSet(value: $0)})
+    }
+    
+    func nsOrderSet(filter: Unwrap.Filter = .exception) -> Unwrap.Result<NSOrderedSet> {
+        
+        return self.set(AnyHashable.self, filter: filter).as.that()
+    }
 
+    var nsHashTable: Unwrap.Result<NSHashTable<AnyObject>> {
+        return self.that()
+    }
 
-
-
-
-    //
-    //    var asNSSet: Unwrap.Result<NSSet> {
-    //        return self.as
-    //    }
-    //
-    //    var asNSMutableSet: Unwrap.Result<NSMutableSet> {
-    //        return self.as
-    //    }
-    //
-    //    var asNSHashTable: Unwrap.Result<NSHashTable<AnyObject>> {
-    //        return self.as
-    //    }
-    //
+    var nsHashTable2: Unwrap.Result<NSHashTable<AnyObject>> {        
+        return self.that()
+    }
     
     
     
@@ -169,7 +166,7 @@ public extension Unwrap.As {
 
 public extension Unwrap.Filter {
     
-    public func array<T>(value: [T?]) -> [T?] {
+    func array<T>(value: [T?]) -> [T?] {
         if self.contains(.none) {
             return value
         }
@@ -178,7 +175,7 @@ public extension Unwrap.Filter {
         }
     }
     
-    public func dictionary<T>(value: [AnyHashable: T?]) -> [AnyHashable: T?] {
+    func dictionary<T>(value: [AnyHashable: T?]) -> [AnyHashable: T?] {
         if self.contains(.none) {
             return value
         }
@@ -187,7 +184,7 @@ public extension Unwrap.Filter {
         }
     }
     
-    public func set<T>(value: Set<T?>) -> Set<T?> {
+    func set<T>(value: Set<T?>) -> Set<T?> {
         if self.contains(.none) {
             return value
         }
@@ -197,7 +194,7 @@ public extension Unwrap.Filter {
             return value
         }
     }
-    
+          
 }
 
 public extension Unwrap.Filtered {
@@ -223,4 +220,13 @@ public extension Unwrap.Filtered {
         }
     }
     
+    func nsMutableSet(value: NSMutableSet) -> NSMutableSet {
+        if self.contains(.none) {
+            return value
+        }
+        else {
+            value.filter(using: .init(block: { (item, _) in self.element(value: item).data != nil }))
+            return value
+        }
+    }
 }

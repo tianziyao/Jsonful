@@ -10,9 +10,9 @@ import Foundation
 
 public extension Unwrap {
     
-    public typealias Filtered = Filter
+    typealias Filtered = Filter
     
-    public struct Filter: OptionSet {
+    struct Filter: OptionSet {
         
         public var rawValue: Int
 

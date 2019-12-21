@@ -9,53 +9,7 @@
 import Foundation
 
 public struct Unwrap {
-    
-//    public struct Rule: OptionSet {
-//
-//        public var rawValue: Int
-//
-//        public init(rawValue: Int) {
-//            self.rawValue = rawValue
-//        }
-//
-//        public static let notNil: Rule = .init(rawValue: 1 << 0)
-//        public static let notNull: Rule = .init(rawValue: 1 << 1)
-//        public static let notEmpty: Rule = .init(rawValue: 1 << 2)
-//        public static let all: Rule = [.notNil, .notNull, .notEmpty]
-//
-//        public func result<T>(value: Optional<T>, identity: String) -> Result<T> {
-//            let validate = self.validate(value: value)
-//            if let data = validate.data {
-//                return .success((data, identity))
-//            }
-//            else {
-//                return .failure(value: value, identity: identity, reason: validate.reason)
-//            }
-//        }
-//
-//        public func validate<T>(value: Optional<T>) -> (data: Optional<T>, reason: String) {
-//            let value = Mirror.unwrap(value: value)
-//            if value == nil && self.contains(.notNil) {
-//                return (nil, "this data is nil")
-//            }
-//            if value is NSNull && self.contains(.notNull) {
-//                return (nil, "this data is null")
-//            }
-//            if let data = value as? Containable, self.contains(.notEmpty), data.isEmpty {
-//                return (nil, "this data is empty")
-//            }
-//            if let data = value {
-//                return (data, "success")
-//            }
-//            else {
-//                return (nil, "this data is exception")
-//            }
-//        }
-//
-//    }
-//
-   
-    
+
     public static func merge<O1, O2>(_ r1: Result<O1>, _ r2: Result<O2>) -> Result<(O1, O2)> {
         guard let v1 = r1.value else { return .failure(r1.info ?? "") }
         guard let v2 = r2.value else { return .failure(r2.info ?? "") }
@@ -94,63 +48,55 @@ internal extension String {
 
 public extension Unwrap.Result {
 
-//    var string: Unwrap.Result<String> {
-//        return self.map({ (value) -> String in
-//            return String(describing: value)
-//        })
-//    }
-//
-//    var number: Unwrap.Result<NSNumber> {
-//        return self.string.map({ (arg) -> Unwrap.Result<NSNumber> in
-//            let number = arg.value.decimalNumber
-//            if number == NSDecimalNumber.notANumber {
-//                return .failure(identity: arg.identity, value: arg.value, reason: "this data is not a number")
-//            }
-//            else {
-//                return .success((number, arg.identity))
-//            }
-//        })
-//    }
-//
-//    var int: Unwrap.Result<Int> {
-//        return self.number.map({ (value) -> Int in
-//            return value.intValue
-//        })
-//    }
-//
-//    var double: Unwrap.Result<Double> {
-//        return self.number.map({ (value) -> Double in
-//            return value.doubleValue
-//        })
-//    }
-//
-//    var bool: Unwrap.Result<Bool> {
-//        return self.number.map({ (value) -> Bool in
-//            return value.boolValue
-//        })
-//    }
-//
-//    var array: Unwrap.Result<[Jsonful]> {
-//        return asArray(Any?.self).map({ (data) -> [Jsonful] in
-//            return data.map({Jsonful.reference($0)})
-//        })
-//    }
-//
-//    var dictionary: Unwrap.Result<[AnyHashable: Jsonful]> {
-//        return asDictionary(Any?.self).map({ (data) -> [AnyHashable: Jsonful] in
-//            return data.mapValues({Jsonful.reference($0)})
-//        })
-//    }
+    var string: Unwrap.Result<String> {
+        return self.map({ (value) -> String in
+            return String(describing: value)
+        })
+    }
+
+    var number: Unwrap.Result<NSNumber> {
+        return self.string.map({ (arg) -> Unwrap.Result<NSNumber> in
+            let number = arg.value.decimalNumber
+            if number == NSDecimalNumber.notANumber {
+                return .failure(value: arg.value, identity: arg.identity, reason: "this data is not a number")
+            }
+            else {
+                return .success((number, arg.identity))
+            }
+        })
+    }
+
+    var int: Unwrap.Result<Int> {
+        return self.number.map({ (value) -> Int in
+            return value.intValue
+        })
+    }
+
+    var double: Unwrap.Result<Double> {
+        return self.number.map({ (value) -> Double in
+            return value.doubleValue
+        })
+    }
+
+    var bool: Unwrap.Result<Bool> {
+        return self.number.map({ (value) -> Bool in
+            return value.boolValue
+        })
+    }
+
+    var array: Unwrap.Result<[Jsonful]> {
+        return self.as.array(Any.self, filter: .none).map({$0.map({Jsonful.reference($0)})})
+    }
+
+    var jsonful: Unwrap.Result<Jsonful> {
+        return self.map({Jsonful.reference($0)})
+    }
     
 }
 
+public extension Optional {
 
-
-
-
-//public extension Optional {
-//
-//    func unwrap(file: String = #file, line: Int = #line, id: String = "") -> Unwrap.Result<Wrapped> {
-//        return .init(value: self, id: id, rule: Unwrap.Filter<Wrapped>(), file: file, line: line)
-//    }
-//}
+    func unwrap(id: String = "", filter: Unwrap.Filter = .exception, file: String = #file, line: Int = #line) -> Unwrap.Result<Wrapped> {
+        return .init(value: self, id: id, filter: filter, file: file, line: line)
+    }
+}
