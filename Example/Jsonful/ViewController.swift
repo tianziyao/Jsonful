@@ -9,22 +9,12 @@
 import UIKit
 import Jsonful
 
-extension NSMutableDictionary {
-    
-    func filted() {
-        
-    }
-}
-
 class ViewController: UIViewController {
-
-
-    
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        let arr = Set<AnyHashable?>()
         
-
     }
  
     override func didReceiveMemoryWarning() {
@@ -32,10 +22,6 @@ class ViewController: UIViewController {
         // Dispose of any resources that can be recreated.
     }
     
-    
-
 }
 
-extension UIViewController {
-    
-}
+

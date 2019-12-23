@@ -20,7 +20,7 @@
 		6B33BF1BD14708827DA6AEB946B22C37 /* Pods-Jsonful_Tests-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = DC6E2A68923E0AD1C219D531EFE51553 /* Pods-Jsonful_Tests-umbrella.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		7A2A7F4D7A0AA41438A1C41D3BA708B5 /* Jsonful-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = 4E37B58FF93B2F4BA2E053580890A512 /* Jsonful-dummy.m */; };
 		7D7B02D46298F7E4CB3ECC0CD2FC2958 /* Containable.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCE425424F7FAC1F3DD479BCB55830F6 /* Containable.swift */; };
-		947E2D2523ACB164001C9E43 /* Filter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5665C0D0AE184FC0044870D028ECABCD /* Filter.swift */; };
+		947E2D2523ACB164001C9E43 /* Predicate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5665C0D0AE184FC0044870D028ECABCD /* Predicate.swift */; };
 		9AFE7F6757A601523A15A8AA3B7E0733 /* Jsonful-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = C3274166EA08544440B74E8CBCEEF6C6 /* Jsonful-umbrella.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		9D7E8F6E44226F0C1507E8D78AFD02EE /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FD608BCCF279B1277BB911F33106997F /* Foundation.framework */; };
 		C4A3E9E9F47823F9F3D822FCAEBF05AB /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FD608BCCF279B1277BB911F33106997F /* Foundation.framework */; };
@@ -61,7 +61,7 @@
 		4391C55A3EBAF2D1A6F528848F73249C /* Parser.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = Parser.swift; sourceTree = "<group>"; };
 		4E37B58FF93B2F4BA2E053580890A512 /* Jsonful-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "Jsonful-dummy.m"; sourceTree = "<group>"; };
 		526A8FB4176763496E94107BE136EE67 /* Pods-Jsonful_Tests-acknowledgements.markdown */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; path = "Pods-Jsonful_Tests-acknowledgements.markdown"; sourceTree = "<group>"; };
-		5665C0D0AE184FC0044870D028ECABCD /* Filter.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = Filter.swift; sourceTree = "<group>"; };
+		5665C0D0AE184FC0044870D028ECABCD /* Predicate.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = Predicate.swift; sourceTree = "<group>"; };
 		6F22CD95AA5FC8E1B0E82E558CFC01A2 /* Pods-Jsonful_Tests.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.module; path = "Pods-Jsonful_Tests.modulemap"; sourceTree = "<group>"; };
 		7606498828DE7A04984DFAA1A4BB5E8F /* Pods-Jsonful_Example-acknowledgements.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "Pods-Jsonful_Example-acknowledgements.plist"; sourceTree = "<group>"; };
 		7DB5F6919F9FFE8725C344E610345A54 /* Pods-Jsonful_Tests-Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "Pods-Jsonful_Tests-Info.plist"; sourceTree = "<group>"; };
@@ -188,9 +188,9 @@
 		8C7877F57D3BC4C755DCAE6217211D47 /* Unwrap */ = {
 			isa = PBXGroup;
 			children = (
-				87920310714A0B97A860D4009040B4F2 /* As.swift */,
-				5665C0D0AE184FC0044870D028ECABCD /* Filter.swift */,
+				5665C0D0AE184FC0044870D028ECABCD /* Predicate.swift */,
 				1C84C820DBC8381417AFCF5D3250B9CF /* Result.swift */,
+				87920310714A0B97A860D4009040B4F2 /* As.swift */,
 				1CF1E8EFE3C50F9212073D8FF1F2676F /* Unwrap.swift */,
 				FCE425424F7FAC1F3DD479BCB55830F6 /* Containable.swift */,
 			);
@@ -428,7 +428,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				947E2D2523ACB164001C9E43 /* Filter.swift in Sources */,
+				947E2D2523ACB164001C9E43 /* Predicate.swift in Sources */,
 				376745F584D50624594C96F5AFB6705C /* As.swift in Sources */,
 				7D7B02D46298F7E4CB3ECC0CD2FC2958 /* Containable.swift in Sources */,
 				7A2A7F4D7A0AA41438A1C41D3BA708B5 /* Jsonful-dummy.m in Sources */,

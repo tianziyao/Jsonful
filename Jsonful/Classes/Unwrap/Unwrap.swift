@@ -85,7 +85,7 @@ public extension Unwrap.Result {
     }
 
     var array: Unwrap.Result<[Jsonful]> {
-        return self.as.array(Any.self, filter: .none).map({$0.map({Jsonful.reference($0)})})
+        return self.as.array(Any.self, predicate: nil).map({$0.map({Jsonful.reference($0)})})
     }
 
     var jsonful: Unwrap.Result<Jsonful> {
@@ -96,7 +96,7 @@ public extension Unwrap.Result {
 
 public extension Optional {
 
-    func unwrap(id: String = "", filter: Unwrap.Filter = .exception, file: String = #file, line: Int = #line) -> Unwrap.Result<Wrapped> {
+    func unwrap(id: String = "", filter: Unwrap.Predicate = .exception, file: String = #file, line: Int = #line) -> Unwrap.Result<Wrapped> {
         return .init(value: self, id: id, filter: filter, file: file, line: line)
     }
 }

@@ -25,55 +25,61 @@ extension Range: Containable {}
 
 extension NSString: Containable {
     public var isEmpty: Bool {
-        return length <= 0
+        return length == 0
     }
 }
 
 extension NSAttributedString: Containable {
     public var isEmpty: Bool {
-        return length <= 0
+        return length == 0
     }
 }
 
 extension NSArray: Containable {
     public var isEmpty: Bool {
-        return count <= 0
+        return count == 0
     }
 }
 
 extension NSPointerArray: Containable {
     public var isEmpty: Bool {
-        return count <= 0
+        return count == 0
     }
 }
 
 extension NSDictionary: Containable {
     public var isEmpty: Bool {
-        return count <= 0
+        return count == 0
     }
 }
 
 @objc extension NSMapTable: Containable {
     public var isEmpty: Bool {
-        return count <= 0
+        return count == 0
     }
 }
 
 extension NSSet: Containable {
     public var isEmpty: Bool {
-        return count <= 0
+        return count == 0
+    }
+}
+
+extension NSOrderedSet: Containable {
+    public var isEmpty: Bool {
+        return count == 0
     }
 }
 
 @objc extension NSHashTable: Containable {
     public var isEmpty: Bool {
-        return count <= 0
+        return count == 0
     }
 }
 
 extension NSData: Containable {
     public var isEmpty: Bool {
-        return length <= 0
+        return length == 0
     }
 }
 
@@ -86,24 +92,45 @@ extension NSRange: Containable {
 public extension Unwrap.As {
     
     //MARK: ---数组---
-
-    func array<T>(_ type: T.Type = T.self, filter: Unwrap.Filter = .exception) -> Unwrap.Result<[T]> {
-        // 使用T的可选类型解包，如果解包不成功，说明给定的类型不可直接转换
-        let result: Unwrap.Result<[T?]> = self.that()
-        // T有可能本身就是可选类型，所以可能会多次嵌套可选
-        // 多次嵌套的可选如转为Any时，会被认为是Optional枚举本身，不会被判断为nil
-        // 所以需要依次将数组元素进行嵌套解包
-        // 解包过程中根据过滤规则去除异常元素
-        // 将可选解包为非可选，如果解包不成功，说明有nil存在
-        return result.map({filter.array(value: $0)}).as.that()
+    func array<T>(_ type: T.Type = T.self, predicate: Unwrap.Predicate? = nil) -> Unwrap.Result<[T]> {
+        if let predicate = predicate {
+            // 使用T的可选类型解包，如果解包不成功，说明给定的类型不可直接转换
+            let result: Unwrap.Result<[T?]> = that()
+            // T有可能本身就是可选类型，所以可能会多次嵌套可选
+            // 多次嵌套的可选如转为Any时，会被认为是Optional枚举本身，不会被判断为nil
+            // 所以需要依次将数组元素进行嵌套解包
+            // 解包后根据过滤规则去除异常元素
+            // 将可选解包为非可选，如果解包不成功，说明有nil存在
+            return result.map({$0.map({predicate.validate(value: $0).data}).filter({$0 != nil})}).as.that()
+        }
+        else {
+            return that()
+        }
     }
 
-    func nsArray(filter: Unwrap.Filter = .exception) -> Unwrap.Result<NSArray> {
-        return array(Any.self, filter: filter).as.that()
+    func nsArray(predicate: Unwrap.Predicate? = nil) -> Unwrap.Result<NSArray> {
+        if let predicate = predicate {
+            let result: Unwrap.Result<NSArray> = that()
+            return result.map({$0.filtered(using: .init(block: { element, _ in predicate.validate(value: element).data != nil}))}).as.that()
+        }
+        else {
+            return that()
+        }
     }
     
-    func nsMutableArray(filtered: Unwrap.Filtered = .exception) -> Unwrap.Result<NSMutableArray> {
-        return self.that().map({filtered.nsMutableArray(value: $0)})
+    func nsMutableArray(predicate: Unwrap.Predicate? = nil) -> Unwrap.Result<NSMutableArray> {
+        if let predicate = predicate {
+            let result: Unwrap.Result<NSMutableArray> = that()
+            return result.map({ array -> NSMutableArray in
+                array.filter(using: .init(block: { element, _ in
+                    return predicate.validate(value: element).data != nil
+                }))
+                return array
+            }).as.that()
+        }
+        else {
+            return that()
+        }
     }
 
     var nsPointerArray: Unwrap.Result<NSPointerArray> {
@@ -112,121 +139,151 @@ public extension Unwrap.As {
     
     //MARK: ---字典---
 
-    func dictionary<T>(_ type: T.Type = T.self, filter: Unwrap.Filter = .exception) -> Unwrap.Result<[AnyHashable: T]> {
-        let result: Unwrap.Result<[AnyHashable: T?]> = self.that()
-        return result.map({filter.dictionary(value: $0)}).as.that()
+    func dictionary<T>(_ type: T.Type = T.self, predicate: Unwrap.Predicate? = nil) -> Unwrap.Result<[AnyHashable: T]> {
+        if let predicate = predicate {
+            let result: Unwrap.Result<[AnyHashable: T?]> = that()
+            return result.map({$0.mapValues({predicate.validate(value: $0).data}).filter({$0.value != nil})}).as.that()
+        }
+        else {
+            return that()
+        }
     }
 
-    func nsDictionary(filter: Unwrap.Filter = .exception) ->  Unwrap.Result<NSDictionary> {
-        return dictionary(Any.self, filter: filter).as.that()
+    func nsDictionary(predicate: Unwrap.Predicate? = nil) ->  Unwrap.Result<NSDictionary> {
+        if let predicate = predicate {
+            let result: Unwrap.Result<NSDictionary> = that()
+            return result.map({$0.filter({predicate.validate(value: $0.value).data != nil})}).as.that()
+        }
+        else {
+            return that()
+        }
     }
-    
-    func nsMutableDictionary(filtered: Unwrap.Filter = .exception) ->  Unwrap.Result<NSMutableDictionary> {
-        return self.that().map({filtered.nsMutableDictionary(value: $0)})
+
+    func nsMutableDictionary(predicate: Unwrap.Predicate? = nil) ->  Unwrap.Result<NSMutableDictionary> {
+        if let predicate = predicate {
+            let result: Unwrap.Result<NSMutableDictionary> = that()
+            return result.map({ dictionary -> NSMutableDictionary in
+                dictionary.filter({predicate.validate(value: $0.value).data == nil}).forEach({dictionary.removeObject(forKey: $0.key)})
+                return dictionary
+            }).as.that()
+        }
+        else {
+            return that()
+        }
     }
-    
+
     var asNSMapTable: Unwrap.Result<NSMapTable<AnyObject, AnyObject>> {
         return self.that()
     }
-    
+
     //MARK: ---集合---
 
-    func set<T: Hashable>(_ type: T.Type = T.self, filter: Unwrap.Filter = .exception) -> Unwrap.Result<Set<T>> {
-        let result: Unwrap.Result<Set<T?>> = self.that()
-        return result.map({filter.set(value: $0)}).as.that()
+    func set<T: Hashable>(_ type: T.Type = T.self, predicate: Unwrap.Predicate? = nil) -> Unwrap.Result<Set<T>> {
+        if let predicate = predicate {
+            let result: Unwrap.Result<Set<T?>> = self.that()
+            return result.map({ (set) -> Set<T?> in
+                let array = set.map({predicate.validate(value: $0).data}).filter({$0 != nil})
+                return Set(array)
+            }).as.that()
+        }
+        else {
+            return that()
+        }
     }
 
-    func nsSet(filter: Unwrap.Filter = .exception) -> Unwrap.Result<NSSet> {
-        return self.set(AnyHashable.self, filter: filter).as.that()
+    func nsSet(predicate: Unwrap.Predicate? = nil) -> Unwrap.Result<NSSet> {
+        if let predicate = predicate {
+            let result: Unwrap.Result<NSSet> = that()
+            return result.map({$0.filtered(using: .init(block: { element, _ in predicate.validate(value: element).data != nil}))}).as.that()
+        }
+        else {
+            return that()
+        }
+    }
+
+    func nsMutableSet(predicate: Unwrap.Predicate? = nil) -> Unwrap.Result<NSMutableSet> {
+        if let predicate = predicate {
+            let result: Unwrap.Result<NSMutableSet> = that()
+            return result.map({ set -> NSMutableSet in
+                set.filter(using: .init(block: { element, _ in
+                    return predicate.validate(value: element).data != nil
+                }))
+                return set
+            })
+        }
+        else {
+            return that()
+        }
+    }
+
+    func nsOrderSet(predicate: Unwrap.Predicate? = nil) -> Unwrap.Result<NSOrderedSet> {
+        if let predicate = predicate {
+            let result: Unwrap.Result<NSOrderedSet> = that()
+            return result.map({$0.filtered(using: .init(block: {element, _ in predicate.validate(value: element).data != nil}))}).as.that()
+        }
+        else {
+            return that()
+        }
     }
     
-    func nsMutableSet(filtered: Unwrap.Filtered = .exception) -> Unwrap.Result<NSMutableSet> {
-        return self.that().map({filtered.nsMutableSet(value: $0)})
-    }
-    
-    func nsOrderSet(filter: Unwrap.Filter = .exception) -> Unwrap.Result<NSOrderedSet> {
-        
-        return self.set(AnyHashable.self, filter: filter).as.that()
+    func nsMutableOrderedSet(predicate: Unwrap.Predicate? = nil) -> Unwrap.Result<NSMutableOrderedSet> {
+        if let predicate = predicate {
+            let result: Unwrap.Result<NSMutableOrderedSet> = that()
+            return result.map({ set -> NSMutableOrderedSet in
+                set.filter(using: .init(block: { element, _ in
+                    return predicate.validate(value: element).data != nil
+                }))
+                return set
+            })
+        }
+        else {
+            return that()
+        }
     }
 
     var nsHashTable: Unwrap.Result<NSHashTable<AnyObject>> {
         return self.that()
     }
-
-    var nsHashTable2: Unwrap.Result<NSHashTable<AnyObject>> {        
-        return self.that()
-    }
-    
-    
-    
-    
-
-    
 }
 
-public extension Unwrap.Filter {
-    
-    func array<T>(value: [T?]) -> [T?] {
-        if self.contains(.none) {
-            return value
-        }
-        else {
-            return value.map({element(value: $0).data}).filter({$0 != nil})
-        }
-    }
-    
-    func dictionary<T>(value: [AnyHashable: T?]) -> [AnyHashable: T?] {
-        if self.contains(.none) {
-            return value
-        }
-        else {
-            return value.mapValues({element(value: $0).data}).filter({$0.value != nil})
-        }
-    }
-    
-    func set<T>(value: Set<T?>) -> Set<T?> {
-        if self.contains(.none) {
-            return value
-        }
-        else {
-            var data = Set(value.map({element(value: $0).data}))
-            data.remove(nil)
-            return value
-        }
-    }
-          
-}
-
-public extension Unwrap.Filtered {
-    
-    func nsMutableArray(value: NSMutableArray) -> NSMutableArray {
-        if self.contains(.none) {
-            return value
-        }
-        else {
-            value.filter(using: .init(block: { (value, _) in self.element(value: value).data != nil }))
-            return value
-        }
-    }
-    
-    func nsMutableDictionary(value: NSMutableDictionary) -> NSMutableDictionary {
-        if self.contains(.none) {
-            return value
-        }
-        else {
-            // 解包后删除不符合规则的数据
-            value.filter({element(value: $0.value).data == nil}).forEach({value.removeObject(forKey: $0.key)})
-            return value
-        }
-    }
-    
-    func nsMutableSet(value: NSMutableSet) -> NSMutableSet {
-        if self.contains(.none) {
-            return value
-        }
-        else {
-            value.filter(using: .init(block: { (item, _) in self.element(value: item).data != nil }))
-            return value
-        }
-    }
-}
+//public extension Unwrap.Filter {
+//
+//    func array<T>(value: [T?]) -> [T?] {
+//        return value.map({element(value: $0).data}).filter({$0 != nil})
+//    }
+//
+//    func dictionary<T>(value: [AnyHashable: T?]) -> [AnyHashable: T?] {
+//        return value.mapValues({element(value: $0).data}).filter({$0.value != nil})
+//    }
+//
+//    func set<T>(value: Set<T?>) -> Set<T?> {
+//        var data = Set(value.map({element(value: $0).data}))
+//        data.remove(nil)
+//        return value
+//    }
+//
+//    func nsOrderedSet(value: NSOrderedSet) -> NSOrderedSet {
+//        return NSOrderedSet(array: value.filter({self.element(value: $0).data != nil}))
+//    }
+//
+//}
+//
+//public extension Unwrap.Filtered {
+//
+//    func nsMutableArray(value: NSMutableArray) -> NSMutableArray {
+//        value.filter(using: .init(block: { (value, _) in self.element(value: value).data != nil }))
+//        return value
+//    }
+//
+//    func nsMutableDictionary(value: NSMutableDictionary) -> NSMutableDictionary {
+//        value.filter({element(value: $0.value).data == nil}).forEach({value.removeObject(forKey: $0.key)})
+//        return value
+//    }
+//
+//    func nsMutableSet(value: NSMutableSet) -> NSMutableSet {
+//        value.filter(using: .init(block: { (item, _) in self.element(value: item).data != nil }))
+//        return value
+//    }
+//
+//
+//}

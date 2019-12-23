@@ -34,7 +34,7 @@ extension Unwrap {
             }
         }
         
-        public init(value: Optional<T>, id: String, filter: Filter = .exception, file: String = #file, line: Int = #line) {
+        public init(value: Optional<T>, id: String, filter: Predicate = .exception, file: String = #file, line: Int = #line) {
             let identity = Unwrap.debug { () -> String in
                 let id = id.isEmpty ? "unknow" : id
                 let cls = String(describing: object_getClass(value))
@@ -73,23 +73,22 @@ extension Unwrap {
                 return .success((closure(arg.value), arg.identity))
             }
         }
-        
+
         public var `as`: As<T> {
             return As(result: self)
         }
         
-        public func then(success: (T) -> (), failure: ((String) -> ())? = nil) {
+        public func then(success: (T) -> (), failure: (String) -> () = { _ in }) {
             switch self {
             case .success(let value, _):
-                success(value)
+                return success(value)
             case .failure(let reason):
                 #if DEBUG
                 dump(reason)
                 #endif
-                failure?(reason)
+                return failure(reason)
             }
         }
-        
     }
     
 }
