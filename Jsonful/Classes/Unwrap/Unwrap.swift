@@ -11,15 +11,15 @@ import Foundation
 public struct Unwrap {
 
     public static func merge<O1, O2>(_ r1: Result<O1>, _ r2: Result<O2>) -> Result<(O1, O2)> {
-        guard let v1 = r1.value else { return .failure(r1.info ?? "") }
-        guard let v2 = r2.value else { return .failure(r2.info ?? "") }
+        guard let v1 = r1.value else { return .failure(r1.message ?? "") }
+        guard let v2 = r2.value else { return .failure(r2.message ?? "") }
         return .success(((v1, v2), ""))
     }
     
     public static func merge<O1, O2, O3>(_ r1: Result<O1>, _ r2: Result<O2>, _ r3: Result<O3>) -> Result<(O1, O2, O3)> {
-        guard let v1 = r1.value else { return .failure(r1.info ?? "") }
-        guard let v2 = r2.value else { return .failure(r2.info ?? "") }
-        guard let v3 = r3.value else { return .failure(r3.info ?? "") }
+        guard let v1 = r1.value else { return .failure(r1.message ?? "") }
+        guard let v2 = r2.value else { return .failure(r2.message ?? "") }
+        guard let v3 = r3.value else { return .failure(r3.message ?? "") }
         return .success(((v1, v2, v3), ""))
     }
     

@@ -101,7 +101,7 @@ public extension Unwrap.As {
             // 所以需要依次将数组元素进行嵌套解包
             // 解包后根据过滤规则去除异常元素
             // 将可选解包为非可选，如果解包不成功，说明有nil存在
-            return result.map({$0.map({predicate.validate(value: $0).data}).filter({$0 != nil})}).as.that()
+            return result.map({$0.map({predicate.validate(value: $0).value}).filter({$0 != nil})}).as.that()
         }
         else {
             return that()
@@ -111,7 +111,7 @@ public extension Unwrap.As {
     func nsArray(predicate: Unwrap.Predicate? = nil) -> Unwrap.Result<NSArray> {
         if let predicate = predicate {
             let result: Unwrap.Result<NSArray> = that()
-            return result.map({$0.filtered(using: .init(block: { element, _ in predicate.validate(value: element).data != nil}))}).as.that()
+            return result.map({$0.filtered(using: .init(block: { element, _ in predicate.validate(value: element).value != nil}))}).as.that()
         }
         else {
             return that()
@@ -123,7 +123,7 @@ public extension Unwrap.As {
             let result: Unwrap.Result<NSMutableArray> = that()
             return result.map({ array -> NSMutableArray in
                 array.filter(using: .init(block: { element, _ in
-                    return predicate.validate(value: element).data != nil
+                    return predicate.validate(value: element).value != nil
                 }))
                 return array
             }).as.that()
@@ -142,7 +142,7 @@ public extension Unwrap.As {
     func dictionary<T>(_ type: T.Type = T.self, predicate: Unwrap.Predicate? = nil) -> Unwrap.Result<[AnyHashable: T]> {
         if let predicate = predicate {
             let result: Unwrap.Result<[AnyHashable: T?]> = that()
-            return result.map({$0.mapValues({predicate.validate(value: $0).data}).filter({$0.value != nil})}).as.that()
+            return result.map({$0.mapValues({predicate.validate(value: $0).value}).filter({$0.value != nil})}).as.that()
         }
         else {
             return that()
@@ -152,7 +152,7 @@ public extension Unwrap.As {
     func nsDictionary(predicate: Unwrap.Predicate? = nil) ->  Unwrap.Result<NSDictionary> {
         if let predicate = predicate {
             let result: Unwrap.Result<NSDictionary> = that()
-            return result.map({$0.filter({predicate.validate(value: $0.value).data != nil})}).as.that()
+            return result.map({$0.filter({predicate.validate(value: $0.value).value != nil})}).as.that()
         }
         else {
             return that()
@@ -163,7 +163,7 @@ public extension Unwrap.As {
         if let predicate = predicate {
             let result: Unwrap.Result<NSMutableDictionary> = that()
             return result.map({ dictionary -> NSMutableDictionary in
-                dictionary.filter({predicate.validate(value: $0.value).data == nil}).forEach({dictionary.removeObject(forKey: $0.key)})
+                dictionary.filter({predicate.validate(value: $0.value).value == nil}).forEach({dictionary.removeObject(forKey: $0.key)})
                 return dictionary
             }).as.that()
         }
@@ -182,7 +182,7 @@ public extension Unwrap.As {
         if let predicate = predicate {
             let result: Unwrap.Result<Set<T?>> = self.that()
             return result.map({ (set) -> Set<T?> in
-                let array = set.map({predicate.validate(value: $0).data}).filter({$0 != nil})
+                let array = set.map({predicate.validate(value: $0).value}).filter({$0 != nil})
                 return Set(array)
             }).as.that()
         }
@@ -194,7 +194,7 @@ public extension Unwrap.As {
     func nsSet(predicate: Unwrap.Predicate? = nil) -> Unwrap.Result<NSSet> {
         if let predicate = predicate {
             let result: Unwrap.Result<NSSet> = that()
-            return result.map({$0.filtered(using: .init(block: { element, _ in predicate.validate(value: element).data != nil}))}).as.that()
+            return result.map({$0.filtered(using: .init(block: { element, _ in predicate.validate(value: element).value != nil}))}).as.that()
         }
         else {
             return that()
@@ -206,7 +206,7 @@ public extension Unwrap.As {
             let result: Unwrap.Result<NSMutableSet> = that()
             return result.map({ set -> NSMutableSet in
                 set.filter(using: .init(block: { element, _ in
-                    return predicate.validate(value: element).data != nil
+                    return predicate.validate(value: element).value != nil
                 }))
                 return set
             })
@@ -219,7 +219,7 @@ public extension Unwrap.As {
     func nsOrderSet(predicate: Unwrap.Predicate? = nil) -> Unwrap.Result<NSOrderedSet> {
         if let predicate = predicate {
             let result: Unwrap.Result<NSOrderedSet> = that()
-            return result.map({$0.filtered(using: .init(block: {element, _ in predicate.validate(value: element).data != nil}))}).as.that()
+            return result.map({$0.filtered(using: .init(block: {element, _ in predicate.validate(value: element).value != nil}))}).as.that()
         }
         else {
             return that()
@@ -231,7 +231,7 @@ public extension Unwrap.As {
             let result: Unwrap.Result<NSMutableOrderedSet> = that()
             return result.map({ set -> NSMutableOrderedSet in
                 set.filter(using: .init(block: { element, _ in
-                    return predicate.validate(value: element).data != nil
+                    return predicate.validate(value: element).value != nil
                 }))
                 return set
             })

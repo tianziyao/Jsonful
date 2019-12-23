@@ -25,12 +25,12 @@ extension Unwrap {
             }
         }
         
-        public var info: String? {
+        public var message: String? {
             switch self {
             case .success:
                 return nil
-            case .failure(let info):
-                return info
+            case .failure(let message):
+                return message
             }
         }
         
@@ -44,7 +44,7 @@ extension Unwrap {
         }
         
         internal static func failure(value: Any?, identity: String, reason: String) -> Result<T> {
-            let info = Unwrap.debug { () -> String in
+            let message = Unwrap.debug { () -> String in
                 var string: String = ""
                 string.append(contentsOf: identity)
                 if let value = value {
@@ -53,13 +53,13 @@ extension Unwrap {
                 string.append(contentsOf: "reason: \(reason).\n")
                 return string
             }
-            return .failure(info)
+            return .failure(message)
         }
         
         public func map<O>(_ closure: (Result<T>.Success) -> Result<O>) -> Result<O> {
             switch self {
-            case .failure(let reason):
-                return .failure(reason)
+            case .failure(let message):
+                return .failure(message)
             case .success(let arg):
                 return closure(arg)
             }
@@ -67,8 +67,8 @@ extension Unwrap {
         
         public func map<O>(_ closure: (T) -> O) -> Result<O> {
             switch self {
-            case .failure(let reason):
-                return .failure(reason)
+            case .failure(let message):
+                return .failure(message)
             case .success(let arg):
                 return .success((closure(arg.value), arg.identity))
             }
@@ -78,15 +78,23 @@ extension Unwrap {
             return As(result: self)
         }
         
-        public func then(success: (T) -> (), failure: (String) -> () = { _ in }) {
+        public func success(closure: (T) -> ()) {
+            then(success: closure)
+        }
+        
+        public func failure(closure: () -> ()) {
+            then(success: { _ in }, failure: closure)
+        }
+        
+        public func then(success: (T) -> (), failure: () -> () = {}) {
             switch self {
             case .success(let value, _):
                 return success(value)
-            case .failure(let reason):
+            case .failure(let message):
                 #if DEBUG
-                dump(reason)
+                dump(message)
                 #endif
-                return failure(reason)
+                return failure()
             }
         }
     }

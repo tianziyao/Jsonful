@@ -25,15 +25,15 @@ public extension Unwrap {
 
         public func result<T>(value: Optional<T>, identity: String) -> Result<T> {
             let validate = self.validate(value: value)
-            if let data = validate.data {
-                return .success((data, identity))
+            if let value = validate.value {
+                return .success((value, identity))
             }
             else {
                 return .failure(value: value, identity: identity, reason: validate.reason)
             }
         }
         
-        public func validate<T>(value: Optional<T>) -> (data: Optional<T>, reason: String) {
+        public func validate<T>(value: Optional<T>) -> (value: Optional<T>, reason: String) {
             let value = Mirror.unwrap(value: value)
             if value == nil && self.contains(.nil) {
                 return (nil, "this data is nil")
