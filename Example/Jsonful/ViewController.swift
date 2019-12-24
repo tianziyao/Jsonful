@@ -14,10 +14,14 @@ class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        let s: String = ""
-        
-        
-        
+//        let mock = Jsonful.snapshot(Mock())
+//        print(mock.raw)
+//        let tuple = mock.tuple
+//        print(tuple.0.unwrap())
+////        print(tuple.1.unwrap().as.int.value == 200)
+//
+        var s: String???? = "3"
+        print(s.unwrap().value)
     }
  
     override func didReceiveMemoryWarning() {

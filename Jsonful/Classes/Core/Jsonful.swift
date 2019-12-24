@@ -13,7 +13,7 @@ public struct Jsonful {
     
     public typealias Maper = (String) -> String
     
-    private let raw: Any?
+    public let raw: Any?
     
     private let tokens: [JsonfulKeyble]
     

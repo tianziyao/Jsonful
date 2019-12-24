@@ -51,7 +51,12 @@ public extension Unwrap.Result {
 
     var string: Unwrap.Result<String> {
         return self.map({ (value) -> String in
-            return String(describing: value)
+            if let value = Mirror.unwrap(value: value) {
+                return String(describing: value)
+            }
+            else {
+                return String(describing: value)
+            }
         })
     }
 
@@ -96,7 +101,6 @@ public extension Unwrap.Result {
 }
 
 public extension Optional {
-
     func unwrap(id: String = "", predicate: Unwrap.Predicate = .exception, file: String = #file, line: Int = #line) -> Unwrap.Result<Wrapped> {
         return .init(value: self, id: id, predicate: predicate, file: file, line: line)
     }

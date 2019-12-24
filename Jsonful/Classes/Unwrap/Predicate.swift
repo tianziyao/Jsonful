@@ -44,7 +44,7 @@ public extension Unwrap {
             if let data = value as? Containable, self.contains(.empty), data.isEmpty {
                 return (nil, "this data is empty")
             }
-            if let data = value {
+            if let data = value as? T {
                 return (data, "success")
             }
             else {

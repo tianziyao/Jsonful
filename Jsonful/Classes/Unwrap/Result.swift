@@ -7,7 +7,7 @@
 
 import Foundation
 
-extension Unwrap {
+public extension Unwrap {
     
     public enum Result<T> {
         
