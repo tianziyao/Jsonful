@@ -32,18 +32,19 @@ public struct Unwrap {
     }
 }
 
-internal extension String {
+public extension String {
     
-    var decimalNumber: NSDecimalNumber {
-        let set = Set(["false", "null", "<null>", "nil", "nan", "undefined", "", "true"])
+    internal var decimalNumber: NSDecimalNumber {
         let text = self.lowercased()
-        if set.contains(text)  {
+        if String.invalidSet.contains(text)  {
             return NSDecimalNumber(string: text == "true" ? "1" : "0")
         }
         else {
             return NSDecimalNumber(string: self)
         }
     }
+    
+    public static var invalidSet: Set = Set(["false", "null", "<null>", "nil", "nan", "undefined", "true"])
 }
 
 public extension Unwrap.Result {
@@ -96,7 +97,7 @@ public extension Unwrap.Result {
 
 public extension Optional {
 
-    func unwrap(id: String = "", filter: Unwrap.Predicate = .exception, file: String = #file, line: Int = #line) -> Unwrap.Result<Wrapped> {
-        return .init(value: self, id: id, filter: filter, file: file, line: line)
+    func unwrap(id: String = "", predicate: Unwrap.Predicate = .exception, file: String = #file, line: Int = #line) -> Unwrap.Result<Wrapped> {
+        return .init(value: self, id: id, predicate: predicate, file: file, line: line)
     }
 }

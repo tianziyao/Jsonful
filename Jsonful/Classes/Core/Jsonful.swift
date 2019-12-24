@@ -33,9 +33,9 @@ public struct Jsonful {
         return .init(Mirror.parse(value: raw, depth: depth), tokens: [], maper: maper)
     }
     
-    public func unwrap(filter: Unwrap.Predicate = .exception, file: String = #file, line: Int = #line) -> Unwrap.Result<Any> {
+    public func unwrap(predicate: Unwrap.Predicate = .exception, file: String = #file, line: Int = #line) -> Unwrap.Result<Any> {
         let (result, members) = value(for: tokens)
-        return result.unwrap(id: members.joined(), filter: filter, file: file, line: line)
+        return result.unwrap(id: members.joined(), predicate: predicate, file: file, line: line)
     }
     
     private func value(for tokens: [JsonfulKeyble]) -> (Optional<Any>, [String]) {

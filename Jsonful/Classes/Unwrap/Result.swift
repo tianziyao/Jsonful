@@ -7,6 +7,16 @@
 
 import Foundation
 
+public extension Optional {
+    
+    public enum Result<Wrapped> {
+        public typealias Success = (value: Wrapped, identity: String)
+        case success(Success)
+        case failure(String)
+    }
+    
+}
+
 extension Unwrap {
     
     public enum Result<T> {
@@ -34,13 +44,13 @@ extension Unwrap {
             }
         }
         
-        public init(value: Optional<T>, id: String, filter: Predicate = .exception, file: String = #file, line: Int = #line) {
+        public init(value: Optional<T>, id: String, predicate: Predicate = .exception, file: String = #file, line: Int = #line) {
             let identity = Unwrap.debug { () -> String in
                 let id = id.isEmpty ? "unknow" : id
                 let cls = String(describing: object_getClass(value))
                 return "-----\(file):\(line)-----\nid: \(id)\nrawType: <\(cls)>\n"
             }
-            self = filter.result(value: value, identity: identity)
+            self = predicate.result(value: value, identity: identity)
         }
         
         internal static func failure(value: Any?, identity: String, reason: String) -> Result<T> {
