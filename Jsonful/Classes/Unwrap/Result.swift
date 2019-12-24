@@ -7,16 +7,6 @@
 
 import Foundation
 
-public extension Optional {
-    
-    public enum Result<Wrapped> {
-        public typealias Success = (value: Wrapped, identity: String)
-        case success(Success)
-        case failure(String)
-    }
-    
-}
-
 extension Unwrap {
     
     public enum Result<T> {

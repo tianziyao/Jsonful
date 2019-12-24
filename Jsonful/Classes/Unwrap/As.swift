@@ -46,7 +46,7 @@ public extension Unwrap.As {
     
     //MARK: ---字符串---
     
-    var string: Unwrap.Result<String> {
+    var string: Unwrap.Result<String> {    
         return that()
     }
     
