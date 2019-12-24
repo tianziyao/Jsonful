@@ -172,7 +172,7 @@ public extension Unwrap.As {
         }
     }
 
-    var asNSMapTable: Unwrap.Result<NSMapTable<AnyObject, AnyObject>> {
+    var nsMapTable: Unwrap.Result<NSMapTable<AnyObject, AnyObject>> {
         return self.that()
     }
 

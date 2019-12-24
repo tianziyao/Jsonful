@@ -17,24 +17,30 @@ class Mock {
     var dictionary: [AnyHashable: Any]
     var dictionaryOrNil: [AnyHashable: Any??]?
 
-    var nsDictionary: NSDictionary
-    var nsDictionaryOrNil: NSDictionary?
+    let nsDictionary: NSDictionary
+    let nsDictionaryOrNil: NSDictionary?
     let nsMutableDictionary: NSMutableDictionary
 
     var array: [Any]
     var arrayOrNil: [Any???]
 
-    var nsArray: NSArray
-    var nsArrayOrNil: NSArray?
+    let nsArray: NSArray
+    let nsArrayOrNil: NSArray?
     let nsMutableArray: NSMutableArray
 
     var set: Set<AnyHashable>
     var setOrNil: Set<AnyHashable??>?
 
-    var nsSet: NSSet
-    var nsSetOrNil: NSSet?
+    let nsSet: NSSet
+    let nsSetOrNil: NSSet?
     let nsMutableSet: NSMutableSet
-
+    
+    var string: String
+    
+    var nsString: NSString
+    
+    let nsMutableString: NSMutableString
+    
     init() {
         self.tuple = ("success", 200)
         self.tupleWithPropertyName = ("success", 200)
@@ -60,5 +66,9 @@ class Mock {
         self.nsSet = .init(array: [500, 501, 502])
         self.nsSetOrNil = .init(array: [NSNull(), 501, 502])
         self.nsMutableSet = .init(array: self.array)
+        
+        self.string = "success"
+        self.nsString = "success"
+        self.nsMutableString = "success"
     }
 }
