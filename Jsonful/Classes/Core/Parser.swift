@@ -49,6 +49,18 @@ extension Mirror {
         return set
     }
     
+    static func root(value: Any) -> Any? {
+        // snapshot 不可以有可变类型
+        switch value {
+        case let string as NSMutableString:
+            return NSString(string: string)
+        case let string as NSMutableAttributedString:
+            return NSAttributedString(attributedString: string)
+        default:
+            return value
+        }
+    }
+    
     public static func parse(value: Any?, depth: Int = 1000) -> Any? {
         guard let value = value, depth >= 0 else {
             return nil
@@ -60,7 +72,9 @@ extension Mirror {
             return value
         case .some(let style):
             // 没有子节点的数据 不需要解析
-            guard mirror.children.count != 0 else { return value }
+            guard mirror.children.count != 0 else {
+                return root(value: value)
+            }
             switch style {
             case .set:
                 return mirror.set(value: value, depth: depth - 1)

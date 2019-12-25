@@ -7,12 +7,6 @@
 
 import Foundation
 
-
-public protocol Asable {
-    associatedtype T
-    var `ass`: Unwrap.As<T> { get }
-}
-
 public extension Unwrap {
     
     struct As<T> {

@@ -166,32 +166,28 @@ class Tests: XCTestCase {
     
     func testText() {
         
-//        let mock = Mock()
-//
-//        let reference = Jsonful.reference(mock)
-//        let snapshot = Jsonful.snapshot(mock)
-//
-//        mock.string = "fail"
-//        XCTAssert(snapshot.string.unwrap().as.string.value == "success")
-//        XCTAssert(reference.string.unwrap().as.string.value == "fail")
-//
-//        mock.nsString = ""
-//        XCTAssert(snapshot.nsString.unwrap().as.nsString.value == "success")
-//        XCTAssert(reference.nsString.unwrap().as.nsString.value == nil)
-//
-//        mock.nsMutableString.append("200")
-//        snapshot.nsMutableString.unwrap().as.nsMutableString.success { (value) in
-//            XCTAssert(value == "success")
-//            value.deleteCharacters(in: .init(location: 0, length: value.length))
-//            XCTAssert(mock.nsMutableString == "success200")
-//        }
-//
-//        reference.nsMutableString.unwrap().as.nsMutableString.success { (value) in
-//            XCTAssert(value == "success200")
-//            value.deleteCharacters(in: .init(location: 0, length: value.length))
-//            XCTAssert(mock.nsMutableString == "")
-//        }
+        let mock = Mock()
+        let reference = Jsonful.reference(mock)
+        let snapshot = Jsonful.snapshot(mock)
         
+        mock.string = "fail"
+        XCTAssert(snapshot.string.unwrap().as.string.value == "success")
+        XCTAssert(reference.string.unwrap().as.string.value == "fail")
+        
+        mock.nsString = ""
+        XCTAssert(snapshot.nsString.unwrap().as.nsString.value == "success")
+        XCTAssert(reference.nsString.unwrap().as.nsString.value == nil)
+        
+        mock.nsMutableString.append("200")
+        
+        XCTAssert(snapshot.nsMutableString.unwrap().as.nsMutableString.value == nil)
+        XCTAssert(snapshot.nsMutableString.unwrap().as.nsString.value == "success")
+
+        reference.nsMutableString.unwrap().as.nsMutableString.success { (value) in
+            XCTAssert(value == "success200")
+            value.deleteCharacters(in: NSRange.init(location: 0, length: value.length))
+        }
+        XCTAssert(mock.nsMutableString == "")
     }
     
 }

@@ -36,10 +36,11 @@ class Mock {
     let nsMutableSet: NSMutableSet
     
     var string: String
-    
     var nsString: NSString
-    
     let nsMutableString: NSMutableString
+    
+    var nsAttributedString: NSAttributedString
+    let nsMutableAttributedString: NSMutableAttributedString
     
     init() {
         self.tuple = ("success", 200)
@@ -70,5 +71,8 @@ class Mock {
         self.string = "success"
         self.nsString = "success"
         self.nsMutableString = "success"
+        
+        self.nsAttributedString = .init(string: "success")
+        self.nsMutableAttributedString = .init(string: "success")
     }
 }
