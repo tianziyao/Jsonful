@@ -19,64 +19,72 @@ class Tests: XCTestCase {
         let mock = Jsonful.snapshot(value)
 
         let tuple = mock.tuple
-        XCTAssert(tuple.0.unwrap().as.string.value == "success")
-        XCTAssert(tuple.1.unwrap().as.int.value == 200)
+        XCTAssert(tuple.0.lint().as.string.value == "success")
+        XCTAssert(tuple.1.lint().as.int.value == 200)
 
         let tupleWithPropertyName = mock.tupleWithPropertyName
-        XCTAssert(tupleWithPropertyName.status.unwrap().as.string.value == "success")
-        XCTAssert(tupleWithPropertyName.code.unwrap().as.int.value == 200)
+        XCTAssert(tupleWithPropertyName.status.lint().as.string.value == "success")
+        XCTAssert(tupleWithPropertyName.code.lint().as.int.value == 200)
 
         let tupleOrNil = mock.tupleOrNil
-        XCTAssert(tupleOrNil.status.unwrap().value == nil)
-        XCTAssert(tupleOrNil.code.unwrap().as.int.value == 404)
-
+        XCTAssert(tupleOrNil.status.lint().value == nil)
+        XCTAssert(tupleOrNil.code.lint().as.int.value == 404)
+        
+        let enums = mock.enum
+        XCTAssert(enums.a.lint().map(Text.self).value?.rawValue == Text.a.rawValue)
+        XCTAssert(enums.zero.lint().map(Number.self).value?.rawValue == Number.zero.rawValue)
+        XCTAssert(enums.tuple.tuple.0.lint().as.string.value == "success")
+        XCTAssert(enums.tuple.tuple.1.lint().as.int.value == 200)
+        XCTAssert(enums.tupleWithPropertyName.tupleWithPropertyName.status.lint().as.string.value == "success")
+        XCTAssert(enums.tupleWithPropertyName.tupleWithPropertyName.code.lint().as.int.value == 200)
+        
         let dictionary = mock.dictionary
-        XCTAssert(dictionary.key.unwrap().as.string.value == "value")
+        XCTAssert(dictionary.key.lint().as.string.value == "value")
 
         let dictionaryOrNil = mock.dictionaryOrNil
-        XCTAssert(dictionaryOrNil.nil.unwrap().value == nil)
+        XCTAssert(dictionaryOrNil.nil.lint().value == nil)
 
         let nsDictionary = mock.nsDictionary
-        XCTAssert(nsDictionary.key.unwrap().as.string.value == "value")
+        XCTAssert(nsDictionary.key.lint().as.string.value == "value")
 
         let nsDictionaryOrNil = mock.nsDictionaryOrNil
-        XCTAssert(nsDictionaryOrNil.null.unwrap().value == nil)
+        XCTAssert(nsDictionaryOrNil.null.lint().value == nil)
 
         let nsMutableDictionary = mock.nsMutableDictionary
-        XCTAssert(nsMutableDictionary.unwrap().as.dictionary(AnyHashable.self).value != nil)
-        XCTAssert(nsMutableDictionary.unwrap().as.nsMutableDictionary().value == nil)
+        XCTAssert(nsMutableDictionary.lint().as.dictionary(AnyHashable.self).value != nil)
+        XCTAssert(nsMutableDictionary.lint().as.nsMutableDictionary().value == nil)
 
         let array = mock.array
-        XCTAssert(array[0].unwrap().as.int.value == 500)
+        XCTAssert(array[0].lint().as.int.value == 500)
 
         let arrayOrNil = mock.arrayOrNil
-        XCTAssert(arrayOrNil[0].unwrap().value == nil)
+        XCTAssert(arrayOrNil[0].lint().value == nil)
 
         let nsArray = mock.nsArray
-        XCTAssert(nsArray[0].unwrap().as.int.value == 500)
+        XCTAssert(nsArray[0].lint().as.int.value == 500)
 
         let nsArrayOrNil = mock.nsArrayOrNil
-        XCTAssert(nsArrayOrNil[0].unwrap().value == nil)
+        XCTAssert(nsArrayOrNil[0].lint().value == nil)
 
         let nsMutableArray = mock.nsMutableArray
-        XCTAssert(nsMutableArray.unwrap().as.array(Any.self).value != nil)
-        XCTAssert(nsMutableArray.unwrap().as.nsMutableArray().value == nil)
+        XCTAssert(nsMutableArray.lint().as.array(Any.self).value != nil)
+        XCTAssert(nsMutableArray.lint().as.nsMutableArray().value == nil)
 
         let set = mock.set
-        XCTAssert(set.unwrap().as.set(AnyHashable.self).value?.count == 3)
+        XCTAssert(set.lint().as.set(AnyHashable.self).value?.count == 3)
 
         let setOrNil = mock.setOrNil
-        XCTAssert(setOrNil.unwrap().as.set(AnyHashable.self, predicate: .exception).value?.count == 2)
+        XCTAssert(setOrNil.lint().as.set(AnyHashable.self, predicate: .exception).value?.count == 2)
 
         let nsSet = mock.nsSet
-        XCTAssert(nsSet.unwrap().as.nsSet().value?.count == 3)
+        XCTAssert(nsSet.lint().as.nsSet().value?.count == 3)
 
         let nsSetOrNil = mock.nsSetOrNil
-        XCTAssert(nsSetOrNil.unwrap().as.nsSet(predicate: .exception).value?.count == 2)
+        XCTAssert(nsSetOrNil.lint().as.nsSet(predicate: .exception).value?.count == 2)
 
         let nsMutableSet = mock.nsMutableSet
-        XCTAssert(nsMutableSet.unwrap().as.set(AnyHashable.self).value != nil)
-        XCTAssert(nsMutableSet.unwrap().as.nsMutableSet().value == nil)
+        XCTAssert(nsMutableSet.lint().as.set(AnyHashable.self).value != nil)
+        XCTAssert(nsMutableSet.lint().as.nsMutableSet().value == nil)
 
     }
     
@@ -88,79 +96,87 @@ class Tests: XCTestCase {
         let tuple = mock.tuple
         value.tuple = ("fail", 404)
 
-        XCTAssert(tuple.0.unwrap().as.string.value == "fail")
-        XCTAssert(tuple.1.unwrap().as.int.value == 404)
+        XCTAssert(tuple.0.lint().as.string.value == "fail")
+        XCTAssert(tuple.1.lint().as.int.value == 404)
 
         let tupleWithPropertyName = mock.tupleWithPropertyName
         value.tupleWithPropertyName = ("fail", 404)
 
-        XCTAssert(tupleWithPropertyName.status.unwrap().as.string.value == "fail")
-        XCTAssert(tupleWithPropertyName.code.unwrap().as.int.value == 404)
+        XCTAssert(tupleWithPropertyName.status.lint().as.string.value == "fail")
+        XCTAssert(tupleWithPropertyName.code.lint().as.int.value == 404)
 
         let tupleOrNil = mock.tupleOrNil
         value.tupleOrNil = ("fail", nil)
 
-        XCTAssert(tupleOrNil.status.unwrap().as.string.value == "fail")
-        XCTAssert(tupleOrNil.code.unwrap().value == nil)
+        XCTAssert(tupleOrNil.status.lint().as.string.value == "fail")
+        XCTAssert(tupleOrNil.code.lint().value == nil)
+        
+        let enums = mock.enum
+        XCTAssert(enums.a.lint().map(Text.self).value?.rawValue == Text.a.rawValue)
+        XCTAssert(enums.zero.lint().map(Number.self).value?.rawValue == Number.zero.rawValue)
+        XCTAssert(enums.tuple.tuple.0.lint().as.string.value == "success")
+        XCTAssert(enums.tuple.tuple.1.lint().as.int.value == 200)
+        XCTAssert(enums.tupleWithPropertyName.tupleWithPropertyName.status.lint().as.string.value == "success")
+        XCTAssert(enums.tupleWithPropertyName.tupleWithPropertyName.code.lint().as.int.value == 200)
 
         let dictionary = mock.dictionary
         value.dictionary["key"] = ""
-        XCTAssert(dictionary.key.unwrap().value == nil)
+        XCTAssert(dictionary.key.lint().value == nil)
 
         let dictionaryOrNil = mock.dictionaryOrNil
         value.dictionaryOrNil?["nil"] = "value"
-        XCTAssert(dictionaryOrNil.nil.unwrap().as.string.value == "value")
+        XCTAssert(dictionaryOrNil.nil.lint().as.string.value == "value")
 
         let nsDictionary = mock.nsDictionary
-        XCTAssert(nsDictionary.key.unwrap().as.string.value == "value")
+        XCTAssert(nsDictionary.key.lint().as.string.value == "value")
         
         let nsDictionaryOrNil = mock.nsDictionaryOrNil
-        XCTAssert(nsDictionaryOrNil.null.unwrap().value == nil)
+        XCTAssert(nsDictionaryOrNil.null.lint().value == nil)
 
         let nsMutableDictionary = mock.nsMutableDictionary
-        nsMutableDictionary.unwrap().as.nsMutableDictionary().success { (dic) in
+        nsMutableDictionary.lint().as.nsMutableDictionary().success { (dic) in
             XCTAssert(dic.count == 1)
             dic.removeAllObjects()
         }
-        XCTAssert(nsMutableDictionary.unwrap().value == nil)
+        XCTAssert(nsMutableDictionary.lint().value == nil)
 
         let array = mock.array
-        XCTAssert(array[0].unwrap().as.int.value == 500)
+        XCTAssert(array[0].lint().as.int.value == 500)
 
         let arrayOrNil = mock.arrayOrNil
-        XCTAssert(arrayOrNil[0].unwrap().value == nil)
+        XCTAssert(arrayOrNil[0].lint().value == nil)
 
         let nsArray = mock.nsArray
-        XCTAssert(nsArray[0].unwrap().as.int.value == 500)
+        XCTAssert(nsArray[0].lint().as.int.value == 500)
 
         let nsArrayOrNil = mock.nsArrayOrNil
-        XCTAssert(nsArrayOrNil[0].unwrap().value == nil)
+        XCTAssert(nsArrayOrNil[0].lint().value == nil)
 
         let nsMutableArray = mock.nsMutableArray
-        nsMutableArray.unwrap().as.nsMutableArray().success { (arr) in
+        nsMutableArray.lint().as.nsMutableArray().success { (arr) in
             XCTAssert(arr.count == 3)
             arr.removeAllObjects()
         }
-        XCTAssert(nsMutableArray.unwrap().value == nil)
+        XCTAssert(nsMutableArray.lint().value == nil)
 
         let set = mock.set
-        XCTAssert(set.unwrap().as.set(AnyHashable.self).value?.count == 3)
+        XCTAssert(set.lint().as.set(AnyHashable.self).value?.count == 3)
 
         let setOrNil = mock.setOrNil
-        XCTAssert(setOrNil.unwrap().as.set(AnyHashable.self, predicate: .exception).value?.count == 2)
+        XCTAssert(setOrNil.lint().as.set(AnyHashable.self, predicate: .exception).value?.count == 2)
 
         let nsSet = mock.nsSet
-        XCTAssert(nsSet.unwrap().as.nsSet().value?.count == 3)
+        XCTAssert(nsSet.lint().as.nsSet().value?.count == 3)
 
         let nsSetOrNil = mock.nsSetOrNil
-        XCTAssert(nsSetOrNil.unwrap().as.nsSet(predicate: .exception).value?.count == 2)
+        XCTAssert(nsSetOrNil.lint().as.nsSet(predicate: .exception).value?.count == 2)
 
         let nsMutableSet = mock.nsMutableSet
-        nsMutableSet.unwrap().as.nsMutableSet().success { (set) in
+        nsMutableSet.lint().as.nsMutableSet().success { (set) in
             XCTAssert(set.count == 3)
             set.removeAllObjects()
         }
-        XCTAssert(nsMutableSet.unwrap().value == nil)
+        XCTAssert(nsMutableSet.lint().value == nil)
 
     }
     
@@ -171,23 +187,33 @@ class Tests: XCTestCase {
         let snapshot = Jsonful.snapshot(mock)
         
         mock.string = "fail"
-        XCTAssert(snapshot.string.unwrap().as.string.value == "success")
-        XCTAssert(reference.string.unwrap().as.string.value == "fail")
+        XCTAssert(snapshot.string.lint().as.string.value == "success")
+        XCTAssert(reference.string.lint().as.string.value == "fail")
         
         mock.nsString = ""
-        XCTAssert(snapshot.nsString.unwrap().as.nsString.value == "success")
-        XCTAssert(reference.nsString.unwrap().as.nsString.value == nil)
+        XCTAssert(snapshot.nsString.lint().as.nsString.value == "success")
+        XCTAssert(reference.nsString.lint().as.nsString.value == nil)
+        
+        mock.nsAttributedString = .init(string: "fail")
+        XCTAssert(snapshot.nsAttributedString.lint().as.nsAttributedString.value?.string == "success")
+        XCTAssert(reference.nsAttributedString.lint().as.nsAttributedString.value?.string == "fail")
         
         mock.nsMutableString.append("200")
-        
-        XCTAssert(snapshot.nsMutableString.unwrap().as.nsMutableString.value == nil)
-        XCTAssert(snapshot.nsMutableString.unwrap().as.nsString.value == "success")
-
-        reference.nsMutableString.unwrap().as.nsMutableString.success { (value) in
+        XCTAssert(snapshot.nsMutableString.lint().as.nsMutableString.value == "success")
+        reference.nsMutableString.lint().as.nsMutableString.success { (value) in
             XCTAssert(value == "success200")
             value.deleteCharacters(in: NSRange.init(location: 0, length: value.length))
         }
         XCTAssert(mock.nsMutableString == "")
+        
+        mock.nsMutableAttributedString.append(.init(string: "200"))
+        XCTAssert(snapshot.nsMutableAttributedString.lint().as.nsMutableAttributedString.value?.string == "success")
+        reference.nsMutableAttributedString.lint().as.nsMutableAttributedString.success { (value) in
+            XCTAssert(value.string == "success200")
+            value.deleteCharacters(in: NSRange.init(location: 0, length: value.length))
+        }
+        XCTAssert(mock.nsMutableAttributedString.string == "")
+    
     }
     
 }

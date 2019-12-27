@@ -34,16 +34,7 @@ public extension Unwrap {
             }
         }
         
-        public init(value: Optional<T>, id: String, predicate: Predicate = .exception, file: String = #file, line: Int = #line) {
-            let identity = Unwrap.debug { () -> String in
-                let id = id.isEmpty ? "unknow" : id
-                let cls = String(describing: object_getClass(value))
-                return "-----\(file):\(line)-----\nid: \(id)\nrawType: <\(cls)>\n"
-            }
-            self = predicate.result(value: value, identity: identity)
-        }
-        
-        internal static func failure(value: Any?, identity: String, reason: String) -> Result<T> {
+        public static func failure(value: Any?, identity: String, reason: String) -> Result<T> {
             let message = Unwrap.debug { () -> String in
                 var string: String = ""
                 string.append(contentsOf: identity)
@@ -73,7 +64,11 @@ public extension Unwrap {
                 return .success((closure(arg.value), arg.identity))
             }
         }
-
+        
+        public func map<O>(_ type: O.Type) -> Result<O> {
+            return self.as.that()
+        }
+        
         public var `as`: As<T> {
             return As(result: self)
         }

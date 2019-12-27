@@ -9,7 +9,16 @@
 import Foundation
 
 public struct Unwrap {
-
+    
+    public static func lint<T>(value: Optional<T>, id: String, predicate: Predicate = .exception, file: String = #file, line: Int = #line) -> Result<T> {
+        let identity = Unwrap.debug { () -> String in
+            let id = id.isEmpty ? "unknow" : id
+            let cls = String(describing: object_getClass(value))
+            return "-----\(file):\(line)-----\nid: \(id)\nrawType: <\(cls)>\n"
+        }
+        return predicate.result(value: value, identity: identity)
+    }
+    
     public static func merge<O1, O2>(_ r1: Result<O1>, _ r2: Result<O2>) -> Result<(O1, O2)> {
         guard let v1 = r1.value else { return .failure(r1.message ?? "") }
         guard let v2 = r2.value else { return .failure(r2.message ?? "") }
@@ -101,7 +110,9 @@ public extension Unwrap.Result {
 }
 
 public extension Optional {
-    func unwrap(id: String = "", predicate: Unwrap.Predicate = .exception, file: String = #file, line: Int = #line) -> Unwrap.Result<Wrapped> {
-        return .init(value: self, id: id, predicate: predicate, file: file, line: line)
+    
+    func lint(id: String = "", predicate: Unwrap.Predicate = .exception, file: String = #file, line: Int = #line) -> Unwrap.Result<Wrapped> {
+        return Unwrap.lint(value: self, id: id, predicate: predicate, file: file, line: line)
     }
+
 }

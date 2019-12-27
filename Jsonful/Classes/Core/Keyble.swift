@@ -89,7 +89,9 @@ extension String: JsonfulKeyble {
             
             let child = children.filter({ keys.contains($0.label ?? "") })
             
-            guard let value = child.first?.value else { return nil }
+            guard let value = child.first?.value else {
+                return nil
+            }
             
             let mirror = Mirror(reflecting: value)
             

@@ -134,15 +134,23 @@ public extension Unwrap.As {
         return that()
     }
     
+    var urlRequest: Unwrap.Result<URLRequest> {
+        return that()
+    }
+    
+    var nsURLRequest: Unwrap.Result<NSURLRequest> {
+        return that()
+    }
+    
+    var nsMutableURLRequest: Unwrap.Result<NSMutableURLRequest> {
+        return that()
+    }
+    
     var anyObject: Unwrap.Result<AnyObject> {
         return that()
     }
     
     var nsObject: Unwrap.Result<NSObject> {
-        return that()
-    }
-    
-    var error: Unwrap.Result<Error> {
         return that()
     }
     

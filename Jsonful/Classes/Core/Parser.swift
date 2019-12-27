@@ -10,23 +10,37 @@ import Foundation
 
 extension Mirror {
     
-    func object(value: Any, depth: Int) -> [String: Any?] {
+    public static var ignore = Set<String>(["NS", "UI", "CG", "CF", "CA", "CV", "CT", "JS"])
+    
+    func ignore(value: Any, ignore: Set<String>, depth: Int) -> Any {
+        let cls = String(cString: class_getName(object_getClass(value)))
+        let prefix = (cls.replacingOccurrences(of: "_", with: "") as NSString).substring(to: 2)
+        // 过滤标准库对象
+        if ignore.contains(prefix) {
+            return mutableErased(value: value)
+        }
+        else {
+            return object(value: value, ignore: ignore, depth: depth)
+        }
+    }
+    
+    func object(value: Any, ignore: Set<String>, depth: Int) -> [String: Any?] {
         var dictionary = [String: Any?]()
         for child in self.children {
-            dictionary[child.label ?? ""] = Mirror.parse(value: child.value, depth: depth)
+            dictionary[child.label ?? ""] = Mirror.parse(value: child.value, ignore: ignore, depth: depth)
         }
         return dictionary
     }
     
-    func array(depth: Int) -> [Any?] {
+    func array(value: Any, ignore: Set<String>, depth: Int) -> [Any?] {
         var array = [Any?]()
         for child in self.children {
-            array.append(Mirror.parse(value: child.value, depth: depth))
+            array.append(Mirror.parse(value: child.value, ignore: ignore, depth: depth))
         }
         return array
     }
     
-    func dictionary(depth: Int) -> [AnyHashable: Any?] {
+    func dictionary(value: Any, ignore: Set<String>, depth: Int) -> [AnyHashable: Any?] {
         var dictionary = [AnyHashable: Any]()
         for child in self.children {
             let children = Mirror(reflecting: child.value).children.map({$0})
@@ -37,31 +51,44 @@ extension Mirror {
         return dictionary
     }
     
-    func enmu(value: Any, depth: Int) -> Any {
-        return object(value: value, depth: depth)
-    }
-    
-    func set(value: Any, depth: Int) -> Set<AnyHashable?> {
+    func set(value: Any, ignore: Set<String>, depth: Int) -> Set<AnyHashable?> {
         var set = Set<AnyHashable?>()
         for child in self.children {
-            set.update(with: Mirror.parse(value: child.value, depth: depth) as? AnyHashable)
+            set.update(with: Mirror.parse(value: child.value, ignore: ignore, depth: depth) as? AnyHashable)
         }
         return set
     }
     
-    static func root(value: Any) -> Any? {
-        // snapshot 不可以有可变类型
+    func `enum`(value: Any, ignore: Set<String>, depth: Int) -> Any {
+        if children.count == 0 {
+            return value
+        }
+        else {
+            return object(value: value, ignore: ignore, depth: depth)
+        }
+    }
+    
+    // 擦除可变类型，snapshot 不可以修改之前的实例
+    func mutableErased(value: Any) -> Any {
+//        guard let obj = value as? NSObject else { return value }
+//        guard let cls = object_getClass(obj) else { return value }
+//        guard "\(cls)".contains("Mutable") else { return value }
+//        return obj.mutableCopy()
         switch value {
-        case let string as NSMutableString:
-            return NSString(string: string)
-        case let string as NSMutableAttributedString:
-            return NSAttributedString(attributedString: string)
+        case let data as NSMutableString:
+            return data.mutableCopy()
+        case let data as NSMutableAttributedString:
+            return data.mutableCopy()
+        case let data as NSMutableData:
+            return data.mutableCopy()
+        case let data as NSMutableURLRequest:
+            return data.mutableCopy()
         default:
             return value
         }
     }
     
-    public static func parse(value: Any?, depth: Int = 1000) -> Any? {
+    public static func parse(value: Any?, ignore: Set<String> = ignore, depth: Int = 1000) -> Any? {
         guard let value = value, depth >= 0 else {
             return nil
         }
@@ -71,25 +98,23 @@ extension Mirror {
             // 基本类型
             return value
         case .some(let style):
-            // 没有子节点的数据 不需要解析
-            guard mirror.children.count != 0 else {
-                return root(value: value)
-            }
             switch style {
             case .set:
-                return mirror.set(value: value, depth: depth - 1)
+                return mirror.set(value: value, ignore: ignore, depth: depth - 1)
             case .collection:
-                return mirror.array(depth: depth - 1)
+                return mirror.array(value: value, ignore: ignore, depth: depth - 1)
             case .dictionary:
-                return mirror.dictionary(depth: depth - 1)
+                return mirror.dictionary(value: value, ignore: ignore, depth: depth - 1)
             case .enum:
-                return mirror.enmu(value: value, depth: depth - 1)
-            case .struct, .class, .tuple:
-                return mirror.object(value: value, depth: depth - 1)
+                return mirror.enum(value: value, ignore: ignore, depth: depth - 1)
+            case .tuple:
+                return mirror.object(value: value, ignore: ignore, depth: depth - 1)
+            case .struct, .class:
+                return mirror.ignore(value: value, ignore: ignore, depth: depth - 1)
             case .optional:
                 // 尝试解析.some，如获取不到则是nil
                 if let value = mirror.children.first?.value {
-                    return parse(value: value, depth: depth)
+                    return parse(value: value, ignore: ignore, depth: depth)
                 }
                 else {
                     return nil

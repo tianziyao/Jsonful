@@ -18,7 +18,7 @@ public struct Jsonful {
     private let tokens: [JsonfulKeyble]
     
     private let maper: Maper
-    
+        
     private init(_ raw: Any?, tokens: [JsonfulKeyble], maper: @escaping Maper) {
         self.raw = raw
         self.tokens = tokens
@@ -29,13 +29,14 @@ public struct Jsonful {
         return .init(raw, tokens: [], maper: maper)
     }
     
-    public static func snapshot(_ raw: Any?, depth: Int = 10, maper: @escaping Maper = {$0}) -> Jsonful {
-        return .init(Mirror.parse(value: raw, depth: depth), tokens: [], maper: maper)
+    public static func snapshot(_ raw: Any?, ignore: Set<String> = Mirror.ignore, depth: Int = 10, maper: @escaping Maper = {$0}) -> Jsonful {
+        let raw = Mirror.parse(value: raw, ignore: ignore, depth: depth)
+        return .init(raw, tokens: [], maper: maper)
     }
     
-    public func unwrap(predicate: Unwrap.Predicate = .exception, file: String = #file, line: Int = #line) -> Unwrap.Result<Any> {
+    public func lint(predicate: Unwrap.Predicate = .exception, file: String = #file, line: Int = #line) -> Unwrap.Result<Any> {
         let (result, members) = value(for: tokens)
-        return result.unwrap(id: members.joined(), predicate: predicate, file: file, line: line)
+        return result.lint(id: members.joined(), predicate: predicate, file: file, line: line)
     }
     
     private func value(for tokens: [JsonfulKeyble]) -> (Optional<Any>, [String]) {
@@ -46,7 +47,7 @@ public struct Jsonful {
             subscripts.append(token.describe)
             switch token.fetch(from: current) {
             case .none:
-                return (current, subscripts)
+                return (nil, subscripts)
             case .some(let result):
                 current = Mirror.unwrap(value: result)
             }

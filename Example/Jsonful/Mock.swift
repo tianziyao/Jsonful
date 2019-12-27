@@ -8,15 +8,37 @@
 
 import Foundation
 
+enum Raw {
+    case tuple(String, Int)
+    case tupleWithPropertyName(status: String, code: Int)
+}
+
+enum Number: Int {
+    case zero, one, two
+}
+
+enum Text: String {
+    case a, b, c
+}
+
+struct Enum {
+    let a: Text = .a
+    let zero: Number = .zero
+    let tuple: Raw = .tuple("success", 200)
+    let tupleWithPropertyName: Raw = .tupleWithPropertyName(status: "success", code: 200)
+}
+
 class Mock {
     
     var tuple: (String, Int)
     var tupleWithPropertyName: (status: String, code: Int)
     var tupleOrNil: (status: String???, code: Int?)?
-
+    
+    let `enum` = Enum()
+    
     var dictionary: [AnyHashable: Any]
     var dictionaryOrNil: [AnyHashable: Any??]?
-
+    
     let nsDictionary: NSDictionary
     let nsDictionaryOrNil: NSDictionary?
     let nsMutableDictionary: NSMutableDictionary
@@ -42,6 +64,9 @@ class Mock {
     var nsAttributedString: NSAttributedString
     let nsMutableAttributedString: NSMutableAttributedString
     
+    var date: Date
+    var nsDate: NSDate
+
     init() {
         self.tuple = ("success", 200)
         self.tupleWithPropertyName = ("success", 200)
@@ -74,5 +99,8 @@ class Mock {
         
         self.nsAttributedString = .init(string: "success")
         self.nsMutableAttributedString = .init(string: "success")
+        
+        self.date = Date(timeIntervalSince1970: 0)
+        self.nsDate = NSDate(timeIntervalSince1970: 0)
     }
 }
