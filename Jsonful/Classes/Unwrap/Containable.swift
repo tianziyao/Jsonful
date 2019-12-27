@@ -23,6 +23,8 @@ extension Data: Containable {}
 
 extension Range: Containable {}
 
+extension ClosedRange: Containable {}
+
 extension NSString: Containable {
     public var isEmpty: Bool {
         return length == 0

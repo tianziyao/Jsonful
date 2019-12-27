@@ -7,6 +7,22 @@
 //
 
 import Foundation
+import UIKit
+
+
+extension UIImage {
+    
+    static func from(color: UIColor, size: CGSize) -> UIImage {
+        let rect = CGRect(x: 0, y: 0, width: size.width, height: size.height)
+        UIGraphicsBeginImageContext(rect.size)
+        let context = UIGraphicsGetCurrentContext()
+        context!.setFillColor(color.cgColor)
+        context!.fill(rect)
+        let img = UIGraphicsGetImageFromCurrentImageContext()
+        UIGraphicsEndImageContext()
+        return img!
+    }
+}
 
 enum Raw {
     case tuple(String, Int)
@@ -57,15 +73,93 @@ class Mock {
     let nsSetOrNil: NSSet?
     let nsMutableSet: NSMutableSet
     
+    //MARK: ---字符串---
+    
     var string: String
+    
     var nsString: NSString
-    let nsMutableString: NSMutableString
+    
+    var nsMutableString: NSMutableString
+    
+    //MARK: ---属性字符串---
     
     var nsAttributedString: NSAttributedString
-    let nsMutableAttributedString: NSMutableAttributedString
+    
+    var nsMutableAttributedString: NSMutableAttributedString
+    
+    //MARK: ---数字---
+    
+    var int: Int
+    
+    var double: Double
+    
+    var float: Float
+    
+    var nsNumber: NSNumber
+    
+    //MARK: ---布尔---
+    
+    var bool: Bool
+    
+    var objcBool: ObjCBool
+    
+    //MARK: ---对象---
     
     var date: Date
+    
     var nsDate: NSDate
+    
+    var data: Data
+    
+    var nsData: NSData
+    
+    var nsMutableData: NSMutableData
+    
+    var range: Range<Int>
+    
+    var closedRange: ClosedRange<Int>
+
+    var nsRange: NSRange
+    
+    var url: URL
+    
+    var nsURL: NSURL
+    
+    var urlRequest: URLRequest
+    
+    var nsURLRequest: NSURLRequest
+    
+    var nsMutableURLRequest: NSMutableURLRequest
+    
+    var anyObject: AnyObject
+    
+    var nsObject: NSObject
+    
+    var nsError: NSError
+    
+    var nsValue: NSValue
+    
+    
+    //MARK: ---UIKit对象---
+    
+    var image: UIImage
+    
+    var color: UIColor
+    
+    var font: UIFont
+    
+    //MARK: ---CoreGraphics对象---
+    
+    var cgFloat: CGFloat
+    
+    var cgSize: CGSize
+    
+    var cgPoint: CGPoint
+    
+    var cgRect: CGRect
+
+    var cgPath: CGPath
+
 
     init() {
         self.tuple = ("success", 200)
@@ -100,7 +194,50 @@ class Mock {
         self.nsAttributedString = .init(string: "success")
         self.nsMutableAttributedString = .init(string: "success")
         
+        self.int = 0
+        self.double = 0.0
+        self.float = 0.0
+        self.nsNumber = NSNumber(value: 0)
+        
+        self.bool = true
+        self.objcBool = true
+        
         self.date = Date(timeIntervalSince1970: 0)
         self.nsDate = NSDate(timeIntervalSince1970: 0)
+        
+        self.data = Data(repeating: 0, count: 10)
+        self.nsData = NSData(bytes: nil, length: 10)
+        self.nsMutableData = NSMutableData(bytes: nil, length: 10)
+        
+        self.nsRange = NSRange(location: 10, length: 10)
+        self.range = Range(self.nsRange)!
+        self.closedRange = 0 ... 100
+        
+        self.url = URL(fileURLWithPath: "mock")
+        self.nsURL = NSURL(fileURLWithPath: "mock")
+        
+        self.urlRequest = URLRequest(url: url)
+        self.nsURLRequest = NSURLRequest(url: nsURL as URL)
+        self.nsMutableURLRequest = NSMutableURLRequest(url: url)
+        
+        self.anyObject = NSObject()
+        self.nsObject = NSObject()
+        
+        self.nsError = NSError()
+        
+        var value = Enum()
+        self.nsValue = NSValue(pointer: &value)
+        
+        self.image = .from(color: .red, size: .zero)
+        self.color = .red
+        self.font = .systemFont(ofSize: 16)
+        
+        self.cgFloat = 100
+        self.cgSize = .zero
+        self.cgPoint = .zero
+        self.cgRect = .zero
+        self.cgPath = .init(rect: .zero, transform: nil)
     }
 }
+
+

@@ -39,17 +39,29 @@ class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         let mock = Mock()
-//        let reference = Jsonful.reference(mock)
-//        let snapshot = Jsonful.snapshot(mock)
-//        // NS UI CG CF CA CV CT JS
-//
-//        mock.date = Date(timeIntervalSince1970: 100)
-//        print(snapshot.date.lint().as.date.value?.timeIntervalSince1970 == 0)
-//        print(reference.date.lint().as.date.value?.timeIntervalSince1970 == 100)
-//
-//        mock.nsDate = NSDate(timeIntervalSince1970: 100)
-//        print(snapshot.nsDate.lint().as.nsDate.value?.timeIntervalSince1970 == 0)
-//        print(reference.nsDate.lint().as.nsDate.value?.timeIntervalSince1970 == 100)
+        let reference = Jsonful.reference(mock)
+        let snapshot = Jsonful.snapshot(mock)
+        
+        print(snapshot.int.lint().as.int.value == 0)
+        print(snapshot.double.lint().as.double.value == 0)
+        print(snapshot.float.lint().as.float.value == 0)
+        print(snapshot.nsNumber.lint().as.nsNumber.value == 0)
+        
+        print(snapshot.bool.lint().as.bool.value == true)
+        print(snapshot.objcBool.lint().as.objcBool.value?.boolValue == true)
+        
+        print(snapshot.date.lint().as.date.value?.timeIntervalSince1970 == 0)
+        print(snapshot.nsDate.lint().as.nsDate.value?.timeIntervalSince1970 == 0)
+
+        print(snapshot.data.lint().as.data.value?.count == 10)
+        print(snapshot.nsData.lint().as.nsData.value?.length == 10)
+        print(snapshot.nsMutableData.lint().as.nsMutableData.value?.length == 10)
+
+        mock.date = Date(timeIntervalSince1970: 100)
+        print(reference.date.lint().as.date.value?.timeIntervalSince1970 == 100)
+
+        mock.nsDate = NSDate(timeIntervalSince1970: 100)
+        print(reference.nsDate.lint().as.nsDate.value?.timeIntervalSince1970 == 100)
 
 
         

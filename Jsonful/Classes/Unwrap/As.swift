@@ -31,7 +31,7 @@ public extension Unwrap {
         public func that<O: Containable>() -> Result<O> {
             return that(closure: { (arg) -> Result<O> in
                 if arg.value.isEmpty {
-                    return .failure(value: nil, identity: arg.identity, reason: "this data is empty")
+                    return .failure(value: arg.value, identity: arg.identity, reason: "this data is empty")
                 }
                 else {
                     return .success(arg)
@@ -122,6 +122,10 @@ public extension Unwrap.As {
         return that()
     }
     
+    var closedRange: Unwrap.Result<ClosedRange<Int>> {
+        return that()
+    }
+    
     var nsRange: Unwrap.Result<NSRange> {
         return that()
     }
@@ -192,18 +196,6 @@ public extension Unwrap.As {
     }
     
     var cgRect: Unwrap.Result<CGRect> {
-        return that()
-    }
-    
-    var cgFont: Unwrap.Result<CGFont> {
-        return that()
-    }
-    
-    var cgImage: Unwrap.Result<CGImage> {
-        return that()
-    }
-    
-    var cgColor: Unwrap.Result<CGColor> {
         return that()
     }
     
