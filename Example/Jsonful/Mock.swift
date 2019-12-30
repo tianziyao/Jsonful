@@ -158,8 +158,6 @@ class Mock {
     
     var cgRect: CGRect
 
-    var cgPath: CGPath
-
 
     init() {
         self.tuple = ("success", 200)
@@ -206,8 +204,8 @@ class Mock {
         self.nsDate = NSDate(timeIntervalSince1970: 0)
         
         self.data = Data(repeating: 0, count: 10)
-        self.nsData = NSData(bytes: nil, length: 10)
-        self.nsMutableData = NSMutableData(bytes: nil, length: 10)
+        self.nsData = NSData()
+        self.nsMutableData = NSMutableData()
         
         self.nsRange = NSRange(location: 10, length: 10)
         self.range = Range(self.nsRange)!
@@ -225,10 +223,9 @@ class Mock {
         
         self.nsError = NSError()
         
-        var value = Enum()
-        self.nsValue = NSValue(pointer: &value)
+        self.nsValue = NSValue(cgSize: .zero)
         
-        self.image = .from(color: .red, size: .zero)
+        self.image = UIImage(named: "icon")!
         self.color = .red
         self.font = .systemFont(ofSize: 16)
         
@@ -236,7 +233,7 @@ class Mock {
         self.cgSize = .zero
         self.cgPoint = .zero
         self.cgRect = .zero
-        self.cgPath = .init(rect: .zero, transform: nil)
+
     }
 }
 

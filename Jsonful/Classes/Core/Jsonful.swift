@@ -34,9 +34,9 @@ public struct Jsonful {
         return .init(raw, tokens: [], maper: maper)
     }
     
-    public func lint(predicate: Unwrap.Predicate = .exception, file: String = #file, line: Int = #line) -> Unwrap.Result<Any> {
+    public func lint(_ predicate: Unwrap.Predicate = .exception, _ file: String = #file, _ line: Int = #line) -> Unwrap.Result<Any> {
         let (result, members) = value(for: tokens)
-        return result.lint(id: members.joined(), predicate: predicate, file: file, line: line)
+        return result.lint(predicate, members.joined(), file, line)
     }
     
     private func value(for tokens: [JsonfulKeyble]) -> (Optional<Any>, [String]) {

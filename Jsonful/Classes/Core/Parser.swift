@@ -13,11 +13,14 @@ extension Mirror {
     public static var ignore = Set<String>(["NS", "UI", "CG", "CF", "CA", "CV", "CT", "JS"])
     
     func ignore(value: Any, ignore: Set<String>, depth: Int) -> Any {
-        let cls = String(cString: class_getName(object_getClass(value)))
+        let cls = String(cString: class_getName(object_getClass(value))).components(separatedBy: ".").last ?? ""
+        guard cls.count >= 2 else {
+            return object(value: value, ignore: ignore, depth: depth)
+        }
         let prefix = (cls.replacingOccurrences(of: "_", with: "") as NSString).substring(to: 2)
         // 过滤标准库对象
         if ignore.contains(prefix) {
-            return mutableErased(value: value)
+            return value
         }
         else {
             return object(value: value, ignore: ignore, depth: depth)
@@ -61,30 +64,11 @@ extension Mirror {
     
     func `enum`(value: Any, ignore: Set<String>, depth: Int) -> Any {
         if children.count == 0 {
+            // 没有关联值的枚举
             return value
         }
         else {
             return object(value: value, ignore: ignore, depth: depth)
-        }
-    }
-    
-    // 擦除可变类型，snapshot 不可以修改之前的实例
-    func mutableErased(value: Any) -> Any {
-//        guard let obj = value as? NSObject else { return value }
-//        guard let cls = object_getClass(obj) else { return value }
-//        guard "\(cls)".contains("Mutable") else { return value }
-//        return obj.mutableCopy()
-        switch value {
-        case let data as NSMutableString:
-            return data.mutableCopy()
-        case let data as NSMutableAttributedString:
-            return data.mutableCopy()
-        case let data as NSMutableData:
-            return data.mutableCopy()
-        case let data as NSMutableURLRequest:
-            return data.mutableCopy()
-        default:
-            return value
         }
     }
     

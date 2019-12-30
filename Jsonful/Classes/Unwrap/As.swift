@@ -16,28 +16,11 @@ public extension Unwrap {
         public init(result: Unwrap.Result<T>) {
             self.result = result
         }
-                
-        public func that<O>(closure: (Result<O>.Success) -> Result<O> = {.success($0)}) -> Result<O> {
-            return result.map({ (arg) -> Result<O> in
-                if let data = arg.value as? O {
-                    return closure((data, arg.identity))
-                }
-                else {
-                    return .failure(value: arg.value, identity: arg.identity, reason: "this data is not <\(O.self)>")
-                }
-            })
+        
+        public func that<O>() -> Result<O> {
+            return result.map(O.self)
         }
         
-        public func that<O: Containable>() -> Result<O> {
-            return that(closure: { (arg) -> Result<O> in
-                if arg.value.isEmpty {
-                    return .failure(value: arg.value, identity: arg.identity, reason: "this data is empty")
-                }
-                else {
-                    return .success(arg)
-                }
-            })
-        }
     }
 
 }
@@ -199,9 +182,6 @@ public extension Unwrap.As {
         return that()
     }
     
-    var cgPath: Unwrap.Result<CGPath> {
-        return that()
-    }
 }
 
 

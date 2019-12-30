@@ -11,7 +11,7 @@ public extension Unwrap {
     
     public enum Result<T> {
         
-        public typealias Success = (value: T, identity: String)
+        public typealias Success = (value: T, identity: String, predicate: Predicate)
         
         case success(Success)
         case failure(String)
@@ -47,26 +47,18 @@ public extension Unwrap {
             return .failure(message)
         }
         
-        public func map<O>(_ closure: (Result<T>.Success) -> Result<O>) -> Result<O> {
+        public func map<O>(_ closure: (T) -> O?) -> Result<O> {
             switch self {
             case .failure(let message):
                 return .failure(message)
             case .success(let arg):
-                return closure(arg)
-            }
-        }
-        
-        public func map<O>(_ closure: (T) -> O) -> Result<O> {
-            switch self {
-            case .failure(let message):
-                return .failure(message)
-            case .success(let arg):
-                return .success((closure(arg.value), arg.identity))
+                let value = closure(arg.value)
+                return arg.predicate.result(value: value, identity: arg.identity)
             }
         }
         
         public func map<O>(_ type: O.Type) -> Result<O> {
-            return self.as.that()
+            return map({ $0 as? O})
         }
         
         public var `as`: As<T> {
@@ -83,7 +75,7 @@ public extension Unwrap {
         
         public func then(success: (T) -> (), failure: () -> () = {}) {
             switch self {
-            case .success(let value, _):
+            case .success(let value, _, _):
                 return success(value)
             case .failure(let message):
                 #if DEBUG

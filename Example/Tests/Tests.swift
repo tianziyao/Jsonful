@@ -199,21 +199,99 @@ class Tests: XCTestCase {
         XCTAssert(reference.nsAttributedString.lint().as.nsAttributedString.value?.string == "fail")
         
         mock.nsMutableString.append("200")
-        XCTAssert(snapshot.nsMutableString.lint().as.nsMutableString.value == "success")
-        reference.nsMutableString.lint().as.nsMutableString.success { (value) in
-            XCTAssert(value == "success200")
-            value.deleteCharacters(in: NSRange.init(location: 0, length: value.length))
-        }
-        XCTAssert(mock.nsMutableString == "")
+        XCTAssert(snapshot.nsMutableString.lint().as.nsMutableString.value == "success200")
         
         mock.nsMutableAttributedString.append(.init(string: "200"))
-        XCTAssert(snapshot.nsMutableAttributedString.lint().as.nsMutableAttributedString.value?.string == "success")
-        reference.nsMutableAttributedString.lint().as.nsMutableAttributedString.success { (value) in
-            XCTAssert(value.string == "success200")
-            value.deleteCharacters(in: NSRange.init(location: 0, length: value.length))
-        }
-        XCTAssert(mock.nsMutableAttributedString.string == "")
+        XCTAssert(snapshot.nsMutableAttributedString.lint().as.nsMutableAttributedString.value?.string == "success200")
     
     }
     
+    func testNumber() {
+        
+        let mock = Mock()
+        let reference = Jsonful.reference(mock)
+        let snapshot = Jsonful.snapshot(mock)
+    
+        XCTAssert(snapshot.int.lint().as.int.value == 0)
+        XCTAssert(snapshot.double.lint().as.double.value == 0)
+        XCTAssert(snapshot.float.lint().as.float.value == 0)
+        XCTAssert(snapshot.nsNumber.lint().as.nsNumber.value == 0)
+        
+        XCTAssert(reference.int.lint().as.int.value == 0)
+        XCTAssert(reference.double.lint().as.double.value == 0)
+        XCTAssert(reference.float.lint().as.float.value == 0)
+        XCTAssert(reference.nsNumber.lint().as.nsNumber.value == 0)
+    }
+    
+    
+    func testBool() {
+        
+        let mock = Mock()
+        let reference = Jsonful.reference(mock)
+        let snapshot = Jsonful.snapshot(mock)
+        
+        XCTAssert(snapshot.bool.lint().as.bool.value == true)
+        XCTAssert(snapshot.objcBool.lint().as.objcBool.value?.boolValue == true)
+        
+        XCTAssert(reference.bool.lint().as.bool.value == true)
+        XCTAssert(reference.objcBool.lint().as.objcBool.value?.boolValue == true)
+    }
+    
+    func testObject() {
+        
+        let mock = Mock()
+        let reference = Jsonful.reference(mock)
+        let snapshot = Jsonful.snapshot(mock)
+        
+        XCTAssert(snapshot.date.lint().as.date.value?.timeIntervalSince1970 == 0)
+        XCTAssert(snapshot.nsDate.lint().as.nsDate.value?.timeIntervalSince1970 == 0)
+        
+        XCTAssert(snapshot.data.lint().as.data.value?.count == 10)
+        XCTAssert(snapshot.nsData.lint(.nil).as.nsData.value?.length == 0)
+        XCTAssert(snapshot.nsMutableData.lint(.nil).as.nsMutableData.value?.length == 0)
+        
+        XCTAssert(snapshot.nsRange.lint().as.nsRange.value?.length == 10)
+        XCTAssert(snapshot.range.lint().as.range.value?.count == 10)
+        XCTAssert(snapshot.closedRange.lint().map(ClosedRange<Int>.self).value?.count == 101)
+        
+        XCTAssert(snapshot.url.lint().as.url.value?.path == "/mock")
+        XCTAssert(snapshot.nsURL.lint().as.nsURL.value?.path == "/mock")
+        
+        XCTAssert(snapshot.urlRequest.lint().as.urlRequest.value?.url?.path == "/mock")
+        XCTAssert(snapshot.nsURLRequest.lint().as.nsURLRequest.value?.url?.path == "/mock")
+        XCTAssert(snapshot.nsMutableURLRequest.lint().as.nsMutableURLRequest.value?.url?.path == "/mock")
+        
+        XCTAssert(snapshot.anyObject.lint().as.anyObject.value?.hash == mock.anyObject.hash)
+        XCTAssert(snapshot.nsObject.lint().as.nsObject.value?.hash == mock.nsObject.hash)
+        
+        XCTAssert(snapshot.nsError.lint().as.nsError.value?.code == 0)
+        
+        XCTAssert(snapshot.nsValue.lint().as.nsValue.value?.cgSizeValue == .zero)
+    
+        
+        XCTAssert(reference.date.lint().as.date.value?.timeIntervalSince1970 == 0)
+        XCTAssert(reference.nsDate.lint().as.nsDate.value?.timeIntervalSince1970 == 0)
+        
+        XCTAssert(reference.data.lint().as.data.value?.count == 10)
+        XCTAssert(reference.nsData.lint(.nil).as.nsData.value?.length == 0)
+        XCTAssert(reference.nsMutableData.lint(.nil).as.nsMutableData.value?.length == 0)
+        
+        XCTAssert(reference.nsRange.lint().as.nsRange.value?.length == 10)
+        XCTAssert(reference.range.lint().as.range.value?.count == 10)
+        XCTAssert(reference.closedRange.lint().map(ClosedRange<Int>.self).value?.count == 101)
+        
+        XCTAssert(reference.url.lint().as.url.value?.path == "/mock")
+        XCTAssert(reference.nsURL.lint().as.nsURL.value?.path == "/mock")
+        
+        XCTAssert(reference.urlRequest.lint().as.urlRequest.value?.url?.path == "/mock")
+        XCTAssert(reference.nsURLRequest.lint().as.nsURLRequest.value?.url?.path == "/mock")
+        XCTAssert(reference.nsMutableURLRequest.lint().as.nsMutableURLRequest.value?.url?.path == "/mock")
+        
+        XCTAssert(reference.anyObject.lint().as.anyObject.value?.hash == mock.anyObject.hash)
+        XCTAssert(reference.nsObject.lint().as.nsObject.value?.hash == mock.nsObject.hash)
+        
+        XCTAssert(reference.nsError.lint().as.nsError.value?.code == 0)
+        
+        XCTAssert(reference.nsValue.lint().as.nsValue.value?.cgSizeValue == .zero)
+    }
 }

@@ -26,7 +26,7 @@ public extension Unwrap {
         public func result<T>(value: Optional<T>, identity: String) -> Result<T> {
             let validate = self.validate(value: value)
             if let value = validate.value {
-                return .success((value, identity))
+                return .success((value, identity, self))
             }
             else {
                 return .failure(value: value, identity: identity, reason: validate.reason)
