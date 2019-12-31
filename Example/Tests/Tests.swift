@@ -13,173 +13,194 @@ class Tests: XCTestCase {
         super.tearDown()
     }
     
-    func testSnapshot() {
+    func testTuple() {
+        let mock = Mock()
+        /*
+         self.tuple = ("success", 200)
+         self.tupleWithPropertyName = ("success", 200)
+         self.tupleOrNil = (nil, 404)
+         */
+        let snapshot = Jsonful.snapshot(mock)
+        let reference = Jsonful.reference(mock)
         
-        let value = Mock()
-        let mock = Jsonful.snapshot(value)
-
-        let tuple = mock.tuple
-        XCTAssert(tuple.0.lint().as.string.value == "success")
-        XCTAssert(tuple.1.lint().as.int.value == 200)
-
-        let tupleWithPropertyName = mock.tupleWithPropertyName
-        XCTAssert(tupleWithPropertyName.status.lint().as.string.value == "success")
-        XCTAssert(tupleWithPropertyName.code.lint().as.int.value == 200)
-
-        let tupleOrNil = mock.tupleOrNil
-        XCTAssert(tupleOrNil.status.lint().value == nil)
-        XCTAssert(tupleOrNil.code.lint().as.int.value == 404)
+        mock.tuple = ("fail", 404)
+        XCTAssert(snapshot.tuple.0.lint().as.string.value == "success")
+        XCTAssert(snapshot.tuple.1.lint().as.int.value == 200)
+        XCTAssert(reference.tuple.0.lint().as.string.value == "fail")
+        XCTAssert(reference.tuple.1.lint().as.int.value == 404)
         
-        let enums = mock.enum
-        XCTAssert(enums.a.lint().map(Text.self).value?.rawValue == Text.a.rawValue)
-        XCTAssert(enums.zero.lint().map(Number.self).value?.rawValue == Number.zero.rawValue)
-        XCTAssert(enums.tuple.tuple.0.lint().as.string.value == "success")
-        XCTAssert(enums.tuple.tuple.1.lint().as.int.value == 200)
-        XCTAssert(enums.tupleWithPropertyName.tupleWithPropertyName.status.lint().as.string.value == "success")
-        XCTAssert(enums.tupleWithPropertyName.tupleWithPropertyName.code.lint().as.int.value == 200)
+        mock.tupleWithPropertyName = ("fail", 404)
+        XCTAssert(snapshot.tupleWithPropertyName.status.lint().as.string.value == "success")
+        XCTAssert(snapshot.tupleWithPropertyName.code.lint().as.int.value == 200)
+        XCTAssert(reference.tupleWithPropertyName.status.lint().as.string.value == "fail")
+        XCTAssert(reference.tupleWithPropertyName.code.lint().as.int.value == 404)
         
-        let dictionary = mock.dictionary
-        XCTAssert(dictionary.key.lint().as.string.value == "value")
-
-        let dictionaryOrNil = mock.dictionaryOrNil
-        XCTAssert(dictionaryOrNil.nil.lint().value == nil)
-
-        let nsDictionary = mock.nsDictionary
-        XCTAssert(nsDictionary.key.lint().as.string.value == "value")
-
-        let nsDictionaryOrNil = mock.nsDictionaryOrNil
-        XCTAssert(nsDictionaryOrNil.null.lint().value == nil)
-
-        let nsMutableDictionary = mock.nsMutableDictionary
-        XCTAssert(nsMutableDictionary.lint().as.dictionary(AnyHashable.self).value != nil)
-        XCTAssert(nsMutableDictionary.lint().as.nsMutableDictionary().value == nil)
-
-        let array = mock.array
-        XCTAssert(array[0].lint().as.int.value == 500)
-
-        let arrayOrNil = mock.arrayOrNil
-        XCTAssert(arrayOrNil[0].lint().value == nil)
-
-        let nsArray = mock.nsArray
-        XCTAssert(nsArray[0].lint().as.int.value == 500)
-
-        let nsArrayOrNil = mock.nsArrayOrNil
-        XCTAssert(nsArrayOrNil[0].lint().value == nil)
-
-        let nsMutableArray = mock.nsMutableArray
-        XCTAssert(nsMutableArray.lint().as.array(Any.self).value != nil)
-        XCTAssert(nsMutableArray.lint().as.nsMutableArray().value == nil)
-
-        let set = mock.set
-        XCTAssert(set.lint().as.set(AnyHashable.self).value?.count == 3)
-
-        let setOrNil = mock.setOrNil
-        XCTAssert(setOrNil.lint().as.set(AnyHashable.self, predicate: .exception).value?.count == 2)
-
-        let nsSet = mock.nsSet
-        XCTAssert(nsSet.lint().as.nsSet().value?.count == 3)
-
-        let nsSetOrNil = mock.nsSetOrNil
-        XCTAssert(nsSetOrNil.lint().as.nsSet(predicate: .exception).value?.count == 2)
-
-        let nsMutableSet = mock.nsMutableSet
-        XCTAssert(nsMutableSet.lint().as.set(AnyHashable.self).value != nil)
-        XCTAssert(nsMutableSet.lint().as.nsMutableSet().value == nil)
+        mock.tupleOrNil = ("fail", nil)
+        XCTAssert(snapshot.tupleOrNil.status.lint().value == nil)
+        XCTAssert(snapshot.tupleOrNil.code.lint().as.int.value == 404)
+        XCTAssert(reference.tupleOrNil.status.lint().as.string.value == "fail")
+        XCTAssert(reference.tupleOrNil.code.lint().value == nil)
+    }
+    
+    
+    func testEnum() {
+        
+        let mock = Mock()
+        /*
+         var a: Text = .a
+         var zero: Number = .zero
+         var tuple: Raw = .tuple("success", 200)
+         var tupleWithPropertyName: Raw = .tupleWithPropertyName(status: "success", code: 200)
+         */
+        let snapshot = Jsonful.snapshot(mock)
+        let reference = Jsonful.reference(mock)
+        
+        mock.enum.a = .b
+        XCTAssert(snapshot.enum.a.lint().map(Text.self).value?.rawValue == Text.a.rawValue)
+        XCTAssert(reference.enum.a.lint().map(Text.self).value?.rawValue == Text.b.rawValue)
+        
+        mock.enum.zero = .one
+        XCTAssert(snapshot.enum.zero.lint().map(Number.self).value?.rawValue == Number.zero.rawValue)
+        XCTAssert(reference.enum.zero.lint().map(Number.self).value?.rawValue == Number.one.rawValue)
+        
+        mock.enum.tuple = .tuple("fail", 404)
+        XCTAssert(snapshot.enum.tuple.tuple.0.lint().as.string.value == "success")
+        XCTAssert(snapshot.enum.tuple.tuple.1.lint().as.int.value == 200)
+        XCTAssert(reference.enum.tuple.tuple.0.lint().as.string.value == "fail")
+        XCTAssert(reference.enum.tuple.tuple.1.lint().as.int.value == 404)
+        
+        mock.enum.tupleWithPropertyName = .tupleWithPropertyName(status: "fail", code: 404)
+        XCTAssert(snapshot.enum.tupleWithPropertyName.tupleWithPropertyName.status.lint().as.string.value == "success")
+        XCTAssert(snapshot.enum.tupleWithPropertyName.tupleWithPropertyName.code.lint().as.int.value == 200)
+        XCTAssert(reference.enum.tupleWithPropertyName.tupleWithPropertyName.status.lint().as.string.value == "fail")
+        XCTAssert(reference.enum.tupleWithPropertyName.tupleWithPropertyName.code.lint().as.int.value == 404)
 
     }
     
-    func testReference() {
+    func testDictionary() {
+        let mock = Mock()
+        /*
+         self.dictionary = ["status": "success"]
+         self.dictionaryOrNil = ["status": "success", "code": nil]
+         
+         self.nsDictionary = .init(dictionary: ["status": "success"])
+         self.nsDictionaryOrNil = .init(dictionary: ["status": "success", "code": NSNull()])
+         self.nsMutableDictionary = .init(dictionary: self.nsDictionary)
+         */
+        let snapshot = Jsonful.snapshot(mock)
+        let reference = Jsonful.reference(mock)
         
-        let value = Mock()
-        let mock = Jsonful.reference(value)
+        mock.dictionary["status"] = ""
+        XCTAssert(snapshot.dictionary.status.lint().as.string.value == "success")
+        XCTAssert(reference.dictionary.status.lint().value == nil)
+
+        mock.dictionaryOrNil?["code"] = 200
+        XCTAssert(snapshot.dictionaryOrNil.code.lint().value == nil)
+        XCTAssert(reference.dictionaryOrNil.code.lint().as.int.value == 200)
         
-        let tuple = mock.tuple
-        value.tuple = ("fail", 404)
-
-        XCTAssert(tuple.0.lint().as.string.value == "fail")
-        XCTAssert(tuple.1.lint().as.int.value == 404)
-
-        let tupleWithPropertyName = mock.tupleWithPropertyName
-        value.tupleWithPropertyName = ("fail", 404)
-
-        XCTAssert(tupleWithPropertyName.status.lint().as.string.value == "fail")
-        XCTAssert(tupleWithPropertyName.code.lint().as.int.value == 404)
-
-        let tupleOrNil = mock.tupleOrNil
-        value.tupleOrNil = ("fail", nil)
-
-        XCTAssert(tupleOrNil.status.lint().as.string.value == "fail")
-        XCTAssert(tupleOrNil.code.lint().value == nil)
+        XCTAssert(snapshot.nsDictionary.status.lint().as.string.value == "success")
+        XCTAssert(reference.nsDictionary.status.lint().as.string.value == "success")
         
-        let enums = mock.enum
-        XCTAssert(enums.a.lint().map(Text.self).value?.rawValue == Text.a.rawValue)
-        XCTAssert(enums.zero.lint().map(Number.self).value?.rawValue == Number.zero.rawValue)
-        XCTAssert(enums.tuple.tuple.0.lint().as.string.value == "success")
-        XCTAssert(enums.tuple.tuple.1.lint().as.int.value == 200)
-        XCTAssert(enums.tupleWithPropertyName.tupleWithPropertyName.status.lint().as.string.value == "success")
-        XCTAssert(enums.tupleWithPropertyName.tupleWithPropertyName.code.lint().as.int.value == 200)
+        XCTAssert(snapshot.nsDictionary.lint().as.nsDictionary().value !== mock.nsDictionary)
+        XCTAssert(reference.nsDictionary.lint().as.nsDictionary().value === mock.nsDictionary)
 
-        let dictionary = mock.dictionary
-        value.dictionary["key"] = ""
-        XCTAssert(dictionary.key.lint().value == nil)
-
-        let dictionaryOrNil = mock.dictionaryOrNil
-        value.dictionaryOrNil?["nil"] = "value"
-        XCTAssert(dictionaryOrNil.nil.lint().as.string.value == "value")
-
-        let nsDictionary = mock.nsDictionary
-        XCTAssert(nsDictionary.key.lint().as.string.value == "value")
+        XCTAssert(snapshot.nsDictionaryOrNil.code.lint().value == nil)
+        XCTAssert(reference.nsDictionaryOrNil.code.lint().value == nil)
         
-        let nsDictionaryOrNil = mock.nsDictionaryOrNil
-        XCTAssert(nsDictionaryOrNil.null.lint().value == nil)
+        XCTAssert(snapshot.nsDictionaryOrNil.lint().as.nsDictionary().value !== mock.nsDictionaryOrNil)
+        XCTAssert(reference.nsDictionaryOrNil.lint().as.nsDictionary().value === mock.nsDictionaryOrNil)
+        
+        mock.nsMutableDictionary.setObject(200, forKey: "code" as NSCopying)
+        XCTAssert(snapshot.nsMutableDictionary.lint().as.nsMutableDictionary().value?.count == 1)
+        XCTAssert(reference.nsMutableDictionary.lint().as.nsMutableDictionary().value?.count == 2)
+        
+        XCTAssert(snapshot.nsMutableDictionary.lint().as.nsMutableDictionary().value !== mock.nsMutableDictionary)
+        XCTAssert(reference.nsMutableDictionary.lint().as.nsMutableDictionary().value === mock.nsMutableDictionary)
 
-        let nsMutableDictionary = mock.nsMutableDictionary
-        nsMutableDictionary.lint().as.nsMutableDictionary().success { (dic) in
-            XCTAssert(dic.count == 1)
-            dic.removeAllObjects()
-        }
-        XCTAssert(nsMutableDictionary.lint().value == nil)
+    }
+    
+    func testArray() {
+        
+        let mock = Mock()
+        /*
+         self.array = [500, 501, 502]
+         self.arrayOrNil = [nil, 501, 502]
+         
+         self.nsArray = .init(array: [500, 501, 502])
+         self.nsArrayOrNil = .init(array: [NSNull(), 501, 502])
+         self.nsMutableArray = .init(array: self.array)
+         */
+        let snapshot = Jsonful.snapshot(mock)
+        let reference = Jsonful.reference(mock)
+        
+        mock.array[0] = 200
+        XCTAssert(snapshot.array[0].lint().as.int.value == 500)
+        XCTAssert(reference.array[0].lint().as.int.value == 200)
+        
+        mock.arrayOrNil[0] = 200
+        XCTAssert(snapshot.arrayOrNil[0].lint().value == nil)
+        XCTAssert(reference.arrayOrNil[0].lint().as.int.value == 200)
+        
+        XCTAssert(snapshot.nsArray[0].lint().as.int.value == 500)
+        XCTAssert(reference.nsArray[0].lint().as.int.value == 500)
+        
+        XCTAssert(snapshot.nsArray.lint().as.nsArray().value !== mock.nsArray)
+        XCTAssert(reference.nsArray.lint().as.nsArray().value === mock.nsArray)
 
-        let array = mock.array
-        XCTAssert(array[0].lint().as.int.value == 500)
+        XCTAssert(snapshot.nsArrayOrNil[0].lint().value == nil)
+        XCTAssert(reference.nsArrayOrNil[0].lint().value == nil)
+        
+        XCTAssert(snapshot.nsArrayOrNil[10].lint().value == nil)
+        XCTAssert(reference.nsArrayOrNil[10].lint().value == nil)
+        
+        XCTAssert(snapshot.nsArrayOrNil.lint().as.nsArray().value !== mock.nsArrayOrNil)
+        XCTAssert(reference.nsArrayOrNil.lint().as.nsArray().value === mock.nsArrayOrNil)
+        
+        mock.nsMutableArray.add(503)
+        XCTAssert(snapshot.nsMutableArray.lint().as.nsMutableArray().value?.count == 3)
+        XCTAssert(reference.nsMutableArray.lint().as.nsMutableArray().value?.count == 4)
+        
+        XCTAssert(snapshot.nsMutableArray.lint().as.nsMutableArray().value !== mock.nsMutableArray)
+        XCTAssert(reference.nsMutableArray.lint().as.nsMutableArray().value === mock.nsMutableArray)
 
-        let arrayOrNil = mock.arrayOrNil
-        XCTAssert(arrayOrNil[0].lint().value == nil)
+    }
+    
+    func testSet() {
+        
+        let mock = Mock()
+        /*
+         self.set = .init([500, 501, 502])
+         self.setOrNil = .init([NSNull(), 501, 502])
+         
+         self.nsSet = .init(array: [500, 501, 502])
+         self.nsSetOrNil = .init(array: [NSNull(), 501, 502])
+         self.nsMutableSet = .init(array: self.array)
+         */
+        let snapshot = Jsonful.snapshot(mock)
+        let reference = Jsonful.reference(mock)
+        
+        XCTAssert(snapshot.set.lint().as.set(AnyHashable.self).value?.count == 3)
+        XCTAssert(reference.set.lint().as.set(AnyHashable.self).value?.count == 3)
 
-        let nsArray = mock.nsArray
-        XCTAssert(nsArray[0].lint().as.int.value == 500)
+        XCTAssert(snapshot.setOrNil.lint().as.set(AnyHashable.self, filter: .exception).value?.count == 2)
+        XCTAssert(reference.setOrNil.lint().as.set(AnyHashable.self, filter: .exception).value?.count == 2)
 
-        let nsArrayOrNil = mock.nsArrayOrNil
-        XCTAssert(nsArrayOrNil[0].lint().value == nil)
+        XCTAssert(snapshot.nsSet.lint().as.nsSet().value?.count == 3)
+        XCTAssert(reference.nsSet.lint().as.nsSet().value?.count == 3)
 
-        let nsMutableArray = mock.nsMutableArray
-        nsMutableArray.lint().as.nsMutableArray().success { (arr) in
-            XCTAssert(arr.count == 3)
-            arr.removeAllObjects()
-        }
-        XCTAssert(nsMutableArray.lint().value == nil)
+        XCTAssert(snapshot.nsSetOrNil.lint().as.nsSet(filter: .exception).value?.count == 2)
+        XCTAssert(reference.nsSetOrNil.lint().as.nsSet(filter: .exception).value?.count == 2)
 
-        let set = mock.set
-        XCTAssert(set.lint().as.set(AnyHashable.self).value?.count == 3)
-
-        let setOrNil = mock.setOrNil
-        XCTAssert(setOrNil.lint().as.set(AnyHashable.self, predicate: .exception).value?.count == 2)
-
-        let nsSet = mock.nsSet
-        XCTAssert(nsSet.lint().as.nsSet().value?.count == 3)
-
-        let nsSetOrNil = mock.nsSetOrNil
-        XCTAssert(nsSetOrNil.lint().as.nsSet(predicate: .exception).value?.count == 2)
-
-        let nsMutableSet = mock.nsMutableSet
-        nsMutableSet.lint().as.nsMutableSet().success { (set) in
+        XCTAssert(snapshot.nsMutableSet.lint().as.set(AnyHashable.self).value != nil)
+        XCTAssert(snapshot.nsMutableSet.lint().as.nsMutableSet().value != nil)
+        
+        reference.nsMutableSet.lint().as.nsMutableSet().success { (set) in
             XCTAssert(set.count == 3)
             set.removeAllObjects()
         }
-        XCTAssert(nsMutableSet.lint().value == nil)
-
+        XCTAssert(reference.nsMutableSet.lint().value == nil)
     }
-    
+        
     func testText() {
         
         let mock = Mock()

@@ -35,15 +35,25 @@ extension Mirror {
         return dictionary
     }
     
-    func array(value: Any, ignore: Set<String>, depth: Int) -> [Any?] {
-        var array = [Any?]()
-        for child in self.children {
-            array.append(Mirror.parse(value: child.value, ignore: ignore, depth: depth))
+    func array(value: Any, ignore: Set<String>, depth: Int) -> Any {
+        if value is NSMutableArray {
+            let array = NSMutableArray(array: [])
+            for child in self.children {
+                let element = Mirror.parse(value: child.value, ignore: ignore, depth: depth)
+                array.add(element ?? NSNull())
+            }
+            return array
         }
-        return array
+        else {
+            var array = [Any?]()
+            for child in self.children {
+                array.append(Mirror.parse(value: child.value, ignore: ignore, depth: depth))
+            }
+            return array
+        }
     }
     
-    func dictionary(value: Any, ignore: Set<String>, depth: Int) -> [AnyHashable: Any?] {
+    func dictionary(value: Any, ignore: Set<String>, depth: Int) -> Any {
         var dictionary = [AnyHashable: Any]()
         for child in self.children {
             let children = Mirror(reflecting: child.value).children.map({$0})
@@ -51,15 +61,30 @@ extension Mirror {
                 dictionary[key] = children.last?.value
             }
         }
-        return dictionary
+        if value is NSMutableDictionary {
+            return NSMutableDictionary(dictionary: dictionary)
+        }
+        else {
+            return dictionary
+        }
     }
     
-    func set(value: Any, ignore: Set<String>, depth: Int) -> Set<AnyHashable?> {
-        var set = Set<AnyHashable?>()
-        for child in self.children {
-            set.update(with: Mirror.parse(value: child.value, ignore: ignore, depth: depth) as? AnyHashable)
+    func set(value: Any, ignore: Set<String>, depth: Int) -> Any {
+        if value is NSMutableSet {
+            let set = NSMutableSet(array: [])
+            for child in self.children {
+                let element = Mirror.parse(value: child.value, ignore: ignore, depth: depth)
+                set.add(element ?? NSNull())
+            }
+            return set
         }
-        return set
+        else {
+            var set = Set<AnyHashable?>()
+            for child in self.children {
+                set.update(with: Mirror.parse(value: child.value, ignore: ignore, depth: depth) as? AnyHashable)
+            }
+            return set
+        }
     }
     
     func `enum`(value: Any, ignore: Set<String>, depth: Int) -> Any {

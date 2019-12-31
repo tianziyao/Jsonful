@@ -34,7 +34,7 @@ public struct Jsonful {
         return .init(raw, tokens: [], maper: maper)
     }
     
-    public func lint(_ predicate: Unwrap.Predicate = .exception, _ file: String = #file, _ line: Int = #line) -> Unwrap.Result<Any> {
+    public func lint(_ predicate: Unwrap.Filter = .exception, _ file: String = #file, _ line: Int = #line) -> Unwrap.Result<Any> {
         let (result, members) = value(for: tokens)
         return result.lint(predicate, members.joined(), file, line)
     }

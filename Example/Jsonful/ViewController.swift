@@ -36,10 +36,13 @@ class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        let ss = "U2"
+        let mock = Mock().nsMutableDictionary
+        let data = Mirror.parse(value: mock) as? NSMutableDictionary
         
-        print((ss as NSString).substring(to: 2))
+        print(data === mock)
         
+        mock.map({$0}).filter({true})
+        //0x0000600002f6eb00 0x0000600002f32b40
 //        let mock = Mock()
 //
 //        let reference = Jsonful.reference(mock)

@@ -10,13 +10,13 @@ import Foundation
 
 public struct Unwrap {
     
-    public static func lint<T>(_ value: Optional<T>, _ predicate: Predicate = .exception, _ id: String = "", _ file: String = #file, _ line: Int = #line) -> Result<T> {
+    public static func lint<T>(_ value: Optional<T>, _ filter: Filter = .exception, _ id: String = "", _ file: String = #file, _ line: Int = #line) -> Result<T> {
         let identity = Unwrap.debug { () -> String in
             let id = id.isEmpty ? "unknow" : id
             let cls = String(describing: object_getClass(value))
             return "-----\(file):\(line)-----\nid: \(id)\nrawType: <\(cls)>\n"
         }
-        return predicate.result(value: value, identity: identity)
+        return filter.result(value: value, identity: identity).as.that()
     }
     
 //    public static func merge<O1, O2>(_ r1: Result<O1>, _ r2: Result<O2>) -> Result<(O1, O2)> {
@@ -111,8 +111,8 @@ public extension Unwrap.Result {
 
 public extension Optional {
     
-    func lint(_ predicate: Unwrap.Predicate = .exception, _ id: String = "", _ file: String = #file, _ line: Int = #line) -> Unwrap.Result<Wrapped> {
-        return Unwrap.lint(self, predicate, id, file, line)
+    func lint(_ filter: Unwrap.Filter = .exception, _ id: String = "", _ file: String = #file, _ line: Int = #line) -> Unwrap.Result<Wrapped> {
+        return Unwrap.lint(self, filter, id, file, line)
     }
 
 }

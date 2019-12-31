@@ -11,7 +11,7 @@ public extension Unwrap {
     
     public enum Result<T> {
         
-        public typealias Success = (value: T, identity: String, predicate: Predicate)
+        public typealias Success = (value: T, identity: String, filter: Filter)
         
         case success(Success)
         case failure(String)
@@ -52,13 +52,17 @@ public extension Unwrap {
             case .failure(let message):
                 return .failure(message)
             case .success(let arg):
-                let value = closure(arg.value)
-                return arg.predicate.result(value: value, identity: arg.identity)
+                if let value = closure(arg.value) {
+                    return arg.filter.result(value: value, identity: arg.identity)
+                }
+                else {
+                    return .failure(value: arg.value, identity: arg.identity, reason: "this data is not \(O.self)")
+                }
             }
         }
         
         public func map<O>(_ type: O.Type) -> Result<O> {
-            return map({ $0 as? O})
+            return map({ $0 as? O })
         }
         
         public var `as`: As<T> {

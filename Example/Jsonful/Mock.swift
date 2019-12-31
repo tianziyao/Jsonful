@@ -38,10 +38,10 @@ enum Text: String {
 }
 
 struct Enum {
-    let a: Text = .a
-    let zero: Number = .zero
-    let tuple: Raw = .tuple("success", 200)
-    let tupleWithPropertyName: Raw = .tupleWithPropertyName(status: "success", code: 200)
+    var a: Text = .a
+    var zero: Number = .zero
+    var tuple: Raw = .tuple("success", 200)
+    var tupleWithPropertyName: Raw = .tupleWithPropertyName(status: "success", code: 200)
 }
 
 class Mock {
@@ -50,7 +50,7 @@ class Mock {
     var tupleWithPropertyName: (status: String, code: Int)
     var tupleOrNil: (status: String???, code: Int?)?
     
-    let `enum` = Enum()
+    var `enum` = Enum()
     
     var dictionary: [AnyHashable: Any]
     var dictionaryOrNil: [AnyHashable: Any??]?
@@ -164,11 +164,11 @@ class Mock {
         self.tupleWithPropertyName = ("success", 200)
         self.tupleOrNil = (nil, 404)
         
-        self.dictionary = ["key": "value"]
-        self.dictionaryOrNil = ["key": "value", "nil": nil]
+        self.dictionary = ["status": "success"]
+        self.dictionaryOrNil = ["status": "success", "code": nil]
         
-        self.nsDictionary = .init(dictionary: ["key": "value"])
-        self.nsDictionaryOrNil = .init(dictionary: ["key": "value", "null": NSNull()])
+        self.nsDictionary = .init(dictionary: ["status": "success"])
+        self.nsDictionaryOrNil = .init(dictionary: ["status": "success", "code": NSNull()])
         self.nsMutableDictionary = .init(dictionary: self.nsDictionary)
         
         self.array = [500, 501, 502]
