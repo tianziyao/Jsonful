@@ -118,7 +118,11 @@ public extension Unwrap.As {
             return result.map({$0.map({Mirror.unwrap(value: $0)}).filter({filter.validate(value: $0).result})}).as.that()
         })
     }
-
+    
+    func array(filter: Unwrap.Filter = .none) -> Unwrap.Result<[Any]> {
+        return array(Any.self, filter: filter)
+    }
+    
     func nsArray(filter: Unwrap.Filter = .none) -> Unwrap.Result<NSArray> {
         return filter.result(value: self, closure: { value in
             let result: Unwrap.Result<NSArray> = that()
@@ -142,17 +146,24 @@ public extension Unwrap.As {
     
     //MARK: ---字典---
 
-    func dictionary<T>(_ type: T.Type = T.self, filter: Unwrap.Filter = .none) -> Unwrap.Result<[AnyHashable: T]> {
+    func dictionary<Key: Hashable, Value>(_ key: Key.Type = Key.self, _ value: Value.Type = Value.self, filter: Unwrap.Filter = .none) -> Unwrap.Result<[Key: Value]> {
         return filter.result(value: self, closure: { value in
-            let result: Unwrap.Result<[AnyHashable: T?]> = that()
+            let result: Unwrap.Result<[Key: Value?]> = that()
             return result.map({$0.mapValues({Mirror.unwrap(value: $0)}).filter({filter.validate(value: $0.value).result})}).as.that()
         })
+    }
+    
+    func dictionary<Value>(_ value: Value.Type = Value.self, filter: Unwrap.Filter = .none) -> Unwrap.Result<[AnyHashable: Value]> {
+        return dictionary(AnyHashable.self, value, filter: filter)
+    }
+    
+    func dictionary(filter: Unwrap.Filter = .none) -> Unwrap.Result<[String: Any]> {
+        return dictionary(String.self, Any.self, filter: filter)
     }
 
     func nsDictionary(filter: Unwrap.Filter = .none) ->  Unwrap.Result<NSDictionary> {
         return filter.result(value: self, closure: { value in
-            let result: Unwrap.Result<NSDictionary> = that()
-            return result.map({$0.filter({filter.validate(value: $0.value).result})}).as.that()
+            return dictionary(AnyHashable.self, Any.self, filter: filter).as.that()
         })
     }
 

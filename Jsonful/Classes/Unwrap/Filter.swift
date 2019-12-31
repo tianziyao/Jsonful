@@ -18,38 +18,37 @@ public extension Unwrap {
             self.rawValue = rawValue
         }
 
-        public static let `nil`: Filter = .init(rawValue: 1 << 0)
-        public static let null: Filter = .init(rawValue: 1 << 1)
+        public static let `nil`: Filter = .init(rawValue: 1 << 1)
         public static let empty: Filter = .init(rawValue: 1 << 2)
         public static let none: Filter = .init(rawValue: 1 << 3)
-        public static let exception: Filter = [.nil, .null, .empty]
+        public static let exception: Filter = [.nil, .empty]
 
         public func result<T>(value: T, identity: String) -> Result<T> {
-            let value = Mirror.unwrap(value: value)
             let validate = self.validate(value: value)
             guard validate.result == true else {
                 return .failure(value: value, identity: identity, reason: validate.reason)
             }
-            guard let data = value as? T else {
+            guard let data = validate.value as? T else {
                 return .failure(value: value, identity: identity, reason: "this data is not \(T.self)")
             }
             return .success((data, identity, self))
         }
                 
-        public func validate(value: Any?) -> (result: Bool, reason: String) {
+        public func validate(value: Any?) -> (result: Bool, reason: String, value: Any?) {
+            let value = Mirror.unwrap(value: value)
             if self.contains(.none) {
-                return (true, "success")
+                return (true, "success", value)
             }
             if value == nil && self.contains(.nil) {
-                return (false, "this data is nil")
+                return (false, "this data is nil", value)
             }
-            if value is NSNull && self.contains(.null) {
-                return (false, "this data is null")
+            if value is NSNull && self.contains(.nil) {
+                return (false, "this data is null", value)
             }
             if let data = value as? Containable, self.contains(.empty), data.isEmpty {
-                return (false, "this data is empty")
+                return (false, "this data is empty", value)
             }
-            return (true, "success")
+            return (true, "success", value)
         }
         
     }

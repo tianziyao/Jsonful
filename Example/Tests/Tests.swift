@@ -98,6 +98,12 @@ class Tests: XCTestCase {
         XCTAssert(snapshot.dictionaryOrNil.code.lint().value == nil)
         XCTAssert(reference.dictionaryOrNil.code.lint().as.int.value == 200)
         
+        XCTAssert(snapshot.dictionaryOrNil.lint().as.dictionary(Any.self).value?.count == 2)
+        XCTAssert(reference.dictionaryOrNil.lint().as.dictionary(Any.self).value?.count == 2)
+        
+        XCTAssert(snapshot.dictionaryOrNil.lint().as.dictionary(Any.self, filter: .nil).value?.count == 1)
+        XCTAssert(reference.dictionaryOrNil.lint().as.dictionary(Any.self, filter: .nil).value?.count == 2)
+        
         XCTAssert(snapshot.nsDictionary.status.lint().as.string.value == "success")
         XCTAssert(reference.nsDictionary.status.lint().as.string.value == "success")
         
@@ -106,6 +112,9 @@ class Tests: XCTestCase {
 
         XCTAssert(snapshot.nsDictionaryOrNil.code.lint().value == nil)
         XCTAssert(reference.nsDictionaryOrNil.code.lint().value == nil)
+        
+        XCTAssert(snapshot.nsDictionaryOrNil.lint().as.nsDictionary(filter: .nil).value?.count == 1)
+        XCTAssert(reference.nsDictionaryOrNil.lint().as.nsDictionary(filter: .nil).value?.count == 1)
         
         XCTAssert(snapshot.nsDictionaryOrNil.lint().as.nsDictionary().value !== mock.nsDictionaryOrNil)
         XCTAssert(reference.nsDictionaryOrNil.lint().as.nsDictionary().value === mock.nsDictionaryOrNil)
@@ -141,6 +150,12 @@ class Tests: XCTestCase {
         XCTAssert(snapshot.arrayOrNil[0].lint().value == nil)
         XCTAssert(reference.arrayOrNil[0].lint().as.int.value == 200)
         
+        XCTAssert(snapshot.arrayOrNil.lint().as.array(Any.self).value?.count == 3)
+        XCTAssert(reference.arrayOrNil.lint().as.array(Any.self).value?.count == 3)
+        
+        XCTAssert(snapshot.arrayOrNil.lint().as.array(Any.self, filter: .nil).value?.count == 2)
+        XCTAssert(reference.arrayOrNil.lint().as.array(Any.self, filter: .nil).value?.count == 3)
+        
         XCTAssert(snapshot.nsArray[0].lint().as.int.value == 500)
         XCTAssert(reference.nsArray[0].lint().as.int.value == 500)
         
@@ -152,6 +167,9 @@ class Tests: XCTestCase {
         
         XCTAssert(snapshot.nsArrayOrNil[10].lint().value == nil)
         XCTAssert(reference.nsArrayOrNil[10].lint().value == nil)
+        
+        XCTAssert(snapshot.nsArrayOrNil.lint().as.nsArray(filter: .nil).value?.count == 2)
+        XCTAssert(reference.nsArrayOrNil.lint().as.nsArray(filter: .nil).value?.count == 2)
         
         XCTAssert(snapshot.nsArrayOrNil.lint().as.nsArray().value !== mock.nsArrayOrNil)
         XCTAssert(reference.nsArrayOrNil.lint().as.nsArray().value === mock.nsArrayOrNil)
@@ -181,24 +199,33 @@ class Tests: XCTestCase {
         
         XCTAssert(snapshot.set.lint().as.set(AnyHashable.self).value?.count == 3)
         XCTAssert(reference.set.lint().as.set(AnyHashable.self).value?.count == 3)
-
-        XCTAssert(snapshot.setOrNil.lint().as.set(AnyHashable.self, filter: .exception).value?.count == 2)
-        XCTAssert(reference.setOrNil.lint().as.set(AnyHashable.self, filter: .exception).value?.count == 2)
+        
+        mock.setOrNil?.insert(503)
+        XCTAssert(snapshot.setOrNil.lint().as.set(AnyHashable.self, filter: .nil).value?.count == 2)
+        XCTAssert(reference.setOrNil.lint().as.set(AnyHashable.self, filter: .nil).value?.count == 3)
 
         XCTAssert(snapshot.nsSet.lint().as.nsSet().value?.count == 3)
         XCTAssert(reference.nsSet.lint().as.nsSet().value?.count == 3)
-
-        XCTAssert(snapshot.nsSetOrNil.lint().as.nsSet(filter: .exception).value?.count == 2)
-        XCTAssert(reference.nsSetOrNil.lint().as.nsSet(filter: .exception).value?.count == 2)
-
-        XCTAssert(snapshot.nsMutableSet.lint().as.set(AnyHashable.self).value != nil)
-        XCTAssert(snapshot.nsMutableSet.lint().as.nsMutableSet().value != nil)
         
-        reference.nsMutableSet.lint().as.nsMutableSet().success { (set) in
-            XCTAssert(set.count == 3)
-            set.removeAllObjects()
-        }
-        XCTAssert(reference.nsMutableSet.lint().value == nil)
+        XCTAssert(snapshot.nsSet.lint().as.nsSet().value !== mock.nsSet)
+        XCTAssert(reference.nsSet.lint().as.nsSet().value === mock.nsSet)
+        
+        XCTAssert(snapshot.nsSetOrNil.lint().as.nsSet(filter: .nil).value?.count == 2)
+        XCTAssert(reference.nsSetOrNil.lint().as.nsSet(filter: .nil).value?.count == 2)
+        
+        XCTAssert(snapshot.nsSetOrNil.lint().as.nsSet().value !== mock.nsSetOrNil)
+        XCTAssert(reference.nsSetOrNil.lint().as.nsSet().value === mock.nsSetOrNil)
+        
+        mock.nsMutableSet.add(NSNull())
+        mock.nsMutableSet.add(NSNull())
+        mock.nsMutableSet.add(NSNull())
+
+        XCTAssert(snapshot.nsMutableSet.lint().as.nsMutableSet().value?.count == 3)
+        XCTAssert(reference.nsMutableSet.lint().as.nsMutableSet().value?.count == 4)
+        
+        XCTAssert(snapshot.nsMutableSet.lint().as.nsMutableSet().value !== mock.nsMutableSet)
+        XCTAssert(reference.nsMutableSet.lint().as.nsMutableSet().value === mock.nsMutableSet)
+
     }
         
     func testText() {

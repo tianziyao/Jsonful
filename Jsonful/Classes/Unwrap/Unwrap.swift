@@ -58,54 +58,53 @@ public extension String {
 
 public extension Unwrap.Result {
 
-//    var string: Unwrap.Result<String> {
-//        return self.map({ (value) -> String in
-//            if let value = Mirror.unwrap(value: value) {
-//                return String(describing: value)
-//            }
-//            else {
-//                return String(describing: value)
-//            }
-//        })
-//    }
-//
-//    var number: Unwrap.Result<NSNumber> {
-//        return self.string.map({ (arg) -> Unwrap.Result<NSNumber> in
-//            let number = arg.value.decimalNumber
-//            if number == NSDecimalNumber.notANumber {
-//                return .failure(value: arg.value, identity: arg.identity, reason: "this data is not a number")
-//            }
-//            else {
-//                return .success((number, arg.identity, arg.predicate))
-//            }
-//        })
-//    }
-//
-//    var int: Unwrap.Result<Int> {
-//        return self.number.map({ (value) -> Int in
-//            return value.intValue
-//        })
-//    }
-//
-//    var double: Unwrap.Result<Double> {
-//        return self.number.map({ (value) -> Double in
-//            return value.doubleValue
-//        })
-//    }
-//
-//    var bool: Unwrap.Result<Bool> {
-//        return self.number.map({ (value) -> Bool in
-//            return value.boolValue
-//        })
-//    }
-//
-//    var array: Unwrap.Result<[Jsonful]> {
-//        return self.as.array(Any.self, predicate: nil).map({$0.map({Jsonful.reference($0)})})
-//    }
-//
-//    var jsonful: Unwrap.Result<Jsonful> {
-//        return self.map({Jsonful.reference($0)})
-//    }
+    var string: Unwrap.Result<String> {
+        return self.map({ (value) -> String in
+            if let value = Mirror.unwrap(value: value) {
+                return String(describing: value)
+            }
+            else {
+                return String(describing: value)
+            }
+        })
+    }
+
+    var number: Unwrap.Result<NSNumber> {
+        return self.string.map({ (value) -> NSNumber? in
+            let number = value.decimalNumber
+            return number == NSDecimalNumber.notANumber ? nil : number
+        })
+    }
+
+    var int: Unwrap.Result<Int> {
+        return self.number.map({ (value) -> Int in
+            return value.intValue
+        })
+    }
+
+    var double: Unwrap.Result<Double> {
+        return self.number.map({ (value) -> Double in
+            return value.doubleValue
+        })
+    }
+
+    var bool: Unwrap.Result<Bool> {
+        return self.number.map({ (value) -> Bool in
+            return value.boolValue
+        })
+    }
+
+    var array: Unwrap.Result<[Any]> {
+        return self.as.array()
+    }
+    
+    var dictionary: Unwrap.Result<[String: Any]> {
+        return self.as.dictionary()
+    }
+
+    var jsonful: Unwrap.Result<Jsonful> {
+        return self.map({Jsonful.reference($0)})
+    }
     
 }
 
