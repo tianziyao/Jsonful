@@ -79,25 +79,13 @@ public extension Unwrap.As {
         return that()
     }
     
-    //MARK: ---对象---
-    
-    var date: Unwrap.Result<Date> {
-        return that()
-    }
-    
-    var nsDate: Unwrap.Result<NSDate> {
-        return that()
-    }
+    //MARK: ---Foundation---
     
     var data: Unwrap.Result<Data> {
         return that()
     }
     
-    var nsData: Unwrap.Result<NSData> {
-        return that()
-    }
-    
-    var nsMutableData: Unwrap.Result<NSMutableData> {
+    var date: Unwrap.Result<Date> {
         return that()
     }
     
@@ -109,19 +97,31 @@ public extension Unwrap.As {
         return that()
     }
     
-    var nsRange: Unwrap.Result<NSRange> {
-        return that()
-    }
-    
     var url: Unwrap.Result<URL> {
         return that()
     }
     
-    var nsURL: Unwrap.Result<NSURL> {
+    var urlRequest: Unwrap.Result<URLRequest> {
         return that()
     }
     
-    var urlRequest: Unwrap.Result<URLRequest> {
+    var nsRange: Unwrap.Result<NSRange> {
+        return that()
+    }
+    
+    var nsData: Unwrap.Result<NSData> {
+        return that()
+    }
+    
+    var nsMutableData: Unwrap.Result<NSMutableData> {
+        return that()
+    }
+    
+    var nsDate: Unwrap.Result<NSDate> {
+        return that()
+    }
+    
+    var nsURL: Unwrap.Result<NSURL> {
         return that()
     }
     
@@ -179,6 +179,10 @@ public extension Unwrap.As {
     }
     
     var cgRect: Unwrap.Result<CGRect> {
+        return that()
+    }
+    
+    var cfString: Unwrap.Result<CFString> {
         return that()
     }
     

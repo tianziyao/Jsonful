@@ -14,17 +14,10 @@ extension Mirror {
     
     func ignore(value: Any, ignore: Set<String>, depth: Int) -> Any {
         let cls = String(cString: class_getName(object_getClass(value))).components(separatedBy: ".").last ?? ""
-        guard cls.count >= 2 else {
-            return object(value: value, ignore: ignore, depth: depth)
-        }
+        guard cls.count >= 2 else { return object(value: value, ignore: ignore, depth: depth) }
         let prefix = (cls.replacingOccurrences(of: "_", with: "") as NSString).substring(to: 2)
-        // 过滤标准库对象
-        if ignore.contains(prefix) {
-            return value
-        }
-        else {
-            return object(value: value, ignore: ignore, depth: depth)
-        }
+        guard ignore.contains(prefix) else { return object(value: value, ignore: ignore, depth: depth) }
+        return value
     }
     
     func object(value: Any, ignore: Set<String>, depth: Int) -> [String: Any?] {

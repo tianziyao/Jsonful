@@ -204,8 +204,8 @@ class Mock {
         self.nsDate = NSDate(timeIntervalSince1970: 0)
         
         self.data = Data(repeating: 0, count: 10)
-        self.nsData = NSData()
-        self.nsMutableData = NSMutableData()
+        self.nsData = NSData(data: data)
+        self.nsMutableData = NSMutableData(data: data)
         
         self.nsRange = NSRange(location: 10, length: 10)
         self.range = Range(self.nsRange)!
@@ -229,7 +229,7 @@ class Mock {
         self.color = .red
         self.font = .systemFont(ofSize: 16)
         
-        self.cgFloat = 100
+        self.cgFloat = 0
         self.cgSize = .zero
         self.cgPoint = .zero
         self.cgRect = .zero

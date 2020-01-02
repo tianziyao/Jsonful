@@ -8,41 +8,20 @@
 
 import UIKit
 import Jsonful
-import CoreData
-import CoreML
-import CoreNFC
-import CoreMIDI
-import CoreText
-import CoreAudio
-import CoreImage
-import CoreMedia
-import CoreMotion
-import CoreAudioKit
-import CoreLocation
-import CoreServices
-import CoreBluetooth
-import CoreSpotlight
-import CoreTelephony
-import MobileCoreServices
-import JavaScriptCore
-
-
-struct FFF {
-    
-}
 
 class ViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        let mock = Mock()
-        let snapshot = Jsonful.snapshot(mock)
-        let reference = Jsonful.reference(mock)
-        
-        print(snapshot.nsDictionaryOrNil.lint().as.nsDictionary(filter: .nil).value?.count == 1)
-        print(reference.nsDictionaryOrNil.lint().as.nsDictionary(filter: .nil).value?.count == 1)
 
+//        let mock = Mock()
+//        let snapshot = Jsonful.snapshot(mock)
+//        let reference = Jsonful.reference(mock)
+//
+//        print(snapshot.nsDictionaryOrNil.lint().as.nsDictionary(filter: .nil).value?.count == 1)
+//        print(reference.nsDictionaryOrNil.lint().as.nsDictionary(filter: .nil).value?.count == 1)
+//
+//
         //0x0000600002f6eb00 0x0000600002f32b40
 //        let mock = Mock()
 //
