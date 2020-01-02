@@ -22,7 +22,7 @@ pod 'Jsonful'
 
 ## Author
 
-tianziyao, tianziyao@jingdata.com
+tianziyao, ziyao.tian@gmail.com
 
 ## License
 
