@@ -26,10 +26,10 @@ public extension Unwrap {
         public func result<T>(value: T, identity: String) -> Result<T> {
             let validate = self.validate(value: value)
             guard validate.result == true else {
-                return .failure(value: value, identity: identity, reason: validate.reason)
+                return .failure(value: validate.value, identity: identity, reason: validate.reason)
             }
             guard let data = validate.value as? T else {
-                return .failure(value: value, identity: identity, reason: "this data is not \(T.self)")
+                return .failure(value: validate.value, identity: identity, reason: "this data is not \(T.self)")
             }
             return .success((data, identity, self))
         }
