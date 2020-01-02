@@ -181,11 +181,7 @@ public extension Unwrap.As {
     var cgRect: Unwrap.Result<CGRect> {
         return that()
     }
-    
-    var cfString: Unwrap.Result<CFString> {
-        return that()
-    }
-    
+
 }
 
 
