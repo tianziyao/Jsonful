@@ -9,7 +9,7 @@
 Pod::Spec.new do |s|
   s.name             = 'Jsonful'
   s.version          = '0.1.0'
-  s.summary          = 'Jsonful可以让你像JavaScript使用JSON一样使用Swift原生数据和模型.'
+  s.summary          = 'Jsonful可以让你像JavaScript使用JSON一样使用iOS原生数据和模型.'
 
   s.homepage         = 'https://github.com/tianziyao/Jsonful'
   s.license          = { :type => 'MIT', :file => 'LICENSE' }
@@ -20,6 +20,6 @@ Pod::Spec.new do |s|
   s.swift_version = '4.2'
   s.source_files = 'Jsonful/Classes/**/*'
   
-  s.ios.framework = ['UIKit', 'CoreGraphics']
+  s.ios.framework = ['Foundation', 'UIKit', 'CoreGraphics']
   
 end
