@@ -181,7 +181,10 @@ public extension Unwrap.As {
     var cgRect: Unwrap.Result<CGRect> {
         return that()
     }
-
+    
+    var cgColor: Unwrap.Result<CGColor> {
+        return that()
+    }
 }
 
 

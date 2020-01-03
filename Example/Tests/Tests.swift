@@ -364,12 +364,13 @@ class Tests: XCTestCase {
         
         XCTAssert(snapshot.image.lint().as.image.value === mock._image)
         XCTAssert(reference.image.lint().as.image.value === mock._image)
-        
+    
         XCTAssert(snapshot.color.lint().as.color.value === mock._color)
         XCTAssert(reference.color.lint().as.color.value === mock._color)
-        
+    
         XCTAssert(snapshot.font.lint().as.font.value === mock._font)
         XCTAssert(reference.font.lint().as.font.value === mock._font)
+        
     }
     
     func testCoreGraphics() {
