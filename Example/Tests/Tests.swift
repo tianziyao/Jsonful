@@ -85,7 +85,7 @@ class Tests: XCTestCase {
          
          self.nsDictionary = .init(dictionary: ["status": "success"])
          self.nsDictionaryOrNil = .init(dictionary: ["status": "success", "code": NSNull()])
-         self.nsMutableDictionary = .init(dictionary: self.nsDictionary)
+         self.nsMutableDictionary = .init(dictionary: self._nsDictionary)
          */
         let snapshot = Jsonful.snapshot(mock)
         let reference = Jsonful.reference(mock)
@@ -362,14 +362,14 @@ class Tests: XCTestCase {
         let reference = Jsonful.reference(mock)
         let snapshot = Jsonful.snapshot(mock)
         
-        XCTAssert(snapshot.image.lint().as.image.value === mock.image)
-        XCTAssert(reference.image.lint().as.image.value === mock.image)
+        XCTAssert(snapshot.image.lint().as.image.value === mock._image)
+        XCTAssert(reference.image.lint().as.image.value === mock._image)
         
-        XCTAssert(snapshot.color.lint().as.color.value === mock.color)
-        XCTAssert(reference.color.lint().as.color.value === mock.color)
+        XCTAssert(snapshot.color.lint().as.color.value === mock._color)
+        XCTAssert(reference.color.lint().as.color.value === mock._color)
         
-        XCTAssert(snapshot.font.lint().as.font.value === mock.font)
-        XCTAssert(reference.font.lint().as.font.value === mock.font)
+        XCTAssert(snapshot.font.lint().as.font.value === mock._font)
+        XCTAssert(reference.font.lint().as.font.value === mock._font)
     }
     
     func testCoreGraphics() {

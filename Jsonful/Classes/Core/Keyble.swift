@@ -9,19 +9,17 @@
 import Foundation
 
 internal protocol JsonfulKeyble {
-    
     var describe: String { get }
-    
-    func fetch(from any: Any?) -> Any?
+    func fetch(from any: Any?, prefixes: [String]) -> Any?
 }
 
 extension Int: JsonfulKeyble {
-    
+
     var describe: String {
         return "[\(self)]"
     }
     
-    func fetch(from any: Any?) -> Any? {
+    func fetch(from any: Any?, prefixes: [String]) -> Any? {
         guard let array = any as? [Any] else {
             return nil
         }
@@ -32,39 +30,19 @@ extension Int: JsonfulKeyble {
     }
 }
 
-internal extension NSObject {
-    
-    var ivarNameSet: Set<String> {
-        guard let cls = object_getClass(self) else { return [] }
-        var count: UInt32 = 0
-        guard let list = class_copyIvarList(cls, &count) else { return [] }
-        defer { free(list) }
-        var labels = Set<String>()
-        for i in 0 ..< count {
-            guard let name = ivar_getName(list[Int(i)]) else { continue }
-            labels.update(with: String(cString: name))
-        }
-        return labels
-    }
-}
-
-
 extension String: JsonfulKeyble {
-    
+
     var describe: String {
         return ".\(self)"
     }
     
-    var keys: Set<String> {
-        return Set([self, ".\(self)", "_\(self)"])
-    }
-        
-    func fetch(dic: [AnyHashable: Any]) -> Any? {
+    func fetch(dic: [AnyHashable: Any], keys: Set<String>) -> Any? {
         return dic.filter({ keys.contains($0.key as? String ?? "") }).first?.value
     }
     
     func fetch(obj: NSObject) -> Any? {
-        if obj.ivarNameSet.contains(where: { keys.contains($0) }) {
+        let sel = Selector(self)
+        if obj.responds(to: sel) {
             return obj.value(forKey: self)
         }
         else {
@@ -72,39 +50,31 @@ extension String: JsonfulKeyble {
         }
     }
     
-    func fetch(from any: Any?) -> Any? {
-        
+    func fetch(value: Any, keys: Set<String>) -> Any? {
+        let children = Mirror(reflecting: value).children
+        let child = children.filter({ keys.contains($0.label ?? "") })
+        guard let value = child.first?.value else { return nil }
+        let mirror = Mirror(reflecting: value)
+        if mirror.displayStyle != .optional { return value }
+        if mirror.children.count == 0 { return value }
+        return mirror.children.first?.value
+    }
+    
+    func fetch(from any: Any?, prefixes: [String]) -> Any? {
         guard let any = any else { return nil }
-        
-        if let dic = any as? [AnyHashable: Any], let result = fetch(dic: dic) {
+        var keys = Set(prefixes.map({"\($0)\(self)"}))
+        keys.update(with: self)
+        if let dic = any as? [AnyHashable: Any], let result = fetch(dic: dic, keys: keys) {
             return result
+        }
+        else if let value = fetch(value: any, keys: keys) {
+            return value
         }
         else if let obj = any as? NSObject, let result = fetch(obj: obj) {
             return result
         }
         else {
-            // 元组未声明key时，lable是 .0 .1 等
-            
-            let children = Mirror(reflecting: any).children
-            
-            let child = children.filter({ keys.contains($0.label ?? "") })
-            
-            guard let value = child.first?.value else {
-                return nil
-            }
-            
-            let mirror = Mirror(reflecting: value)
-            
-            if mirror.displayStyle != .optional {
-                return value
-            }
-            
-            if mirror.children.count == 0 {
-                return value
-            }
-
-            return mirror.children.first?.value
-
+            return nil
         }
     }
     

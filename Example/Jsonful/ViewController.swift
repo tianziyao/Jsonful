@@ -13,7 +13,7 @@ class ViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        Jsonful.reference(self, maper: nil)
     }
  
     override func didReceiveMemoryWarning() {

@@ -142,11 +142,11 @@ class Mock {
     
     //MARK: ---UIKit对象---
     
-    var image: UIImage
+    var _image: UIImage
     
-    var color: UIColor
+    var _color: UIColor
     
-    var font: UIFont
+    var _font: UIFont
     
     //MARK: ---CoreGraphics对象---
     
@@ -225,9 +225,9 @@ class Mock {
         
         self.nsValue = NSValue(cgSize: .zero)
         
-        self.image = UIImage(named: "icon")!
-        self.color = .red
-        self.font = .systemFont(ofSize: 16)
+        self._image = UIImage(named: "icon")!
+        self._color = .red
+        self._font = .systemFont(ofSize: 16)
         
         self.cgFloat = 0
         self.cgSize = .zero

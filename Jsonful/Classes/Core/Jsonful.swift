@@ -11,41 +11,55 @@ import Foundation
 @dynamicMemberLookup
 public struct Jsonful {
     
-    public typealias Maper = (String) -> String
+    public typealias MemberMaper = (String) -> String
     
     public let raw: Any?
     
     private let tokens: [JsonfulKeyble]
     
-    private let maper: Maper
+    private let maper: MemberMaper
         
-    private init(_ raw: Any?, tokens: [JsonfulKeyble], maper: @escaping Maper) {
+    private init(_ raw: Any?, tokens: [JsonfulKeyble], maper: MemberMaper?) {
         self.raw = raw
         self.tokens = tokens
-        self.maper = maper
+        self.maper = maper ?? {$0}
     }
     
-    public static func reference(_ raw: Any?, maper: @escaping Maper = {$0}) -> Jsonful {
+    /// - Parameters:
+    ///   - raw: 引入的数据
+    ///   - maper: 需要使用keyA取出KeyB的值，需要实现此闭包
+    public static func reference(_ raw: Any?, maper: MemberMaper? = nil) -> Jsonful {
         return .init(raw, tokens: [], maper: maper)
     }
     
-    public static func snapshot(_ raw: Any?, ignore: Set<String> = Mirror.ignore, depth: Int = 10, maper: @escaping Maper = {$0}) -> Jsonful {
+    /// - Parameters:
+    ///   - raw: 原始数据
+    ///   - ignore: 类型前缀，符合该前缀的对象不会分解为字典。默认忽略大部分标准库类型。
+    ///   - depth: 递归深度
+    ///   - maper: 需要使用keyA取出KeyB的值，需要实现此闭包
+    public static func snapshot(_ raw: Any?, ignore: Set<String> = Mirror.ignore, depth: Int = 10, maper: MemberMaper? = nil) -> Jsonful {
         let raw = Mirror.parse(value: raw, ignore: ignore, depth: depth)
         return .init(raw, tokens: [], maper: maper)
     }
     
-    public func lint(_ filter: Unwrap.Filter = .exception, _ file: String = #file, _ line: Int = #line) -> Unwrap.Result<Any> {
-        let (result, members) = value(for: tokens)
+    /// 根据指定路径获取数据
+    ///
+    /// - Parameters:
+    ///   - prefixes: 需要匹配的前缀，例如使用somekey取到_somekey的值
+    ///   - filter: 过滤条件，默认nil和empty取值失败
+    /// - Returns: 取值结果
+    public func lint(_ prefixes: [String] = [".", "_"], _ filter: Unwrap.Filter = .exception, _ file: String = #file, _ line: Int = #line) -> Unwrap.Result<Any> {
+        let (result, members) = value(for: tokens, prefixes: prefixes)
         return result.lint(filter, members.joined(), file, line)
     }
     
-    private func value(for tokens: [JsonfulKeyble]) -> (Optional<Any>, [String]) {
+    private func value(for tokens: [JsonfulKeyble], prefixes: [String]) -> (Optional<Any>, [String]) {
         var current: Any? = self.raw
         var subscripts = [String]()
         for token in tokens {
-            let token = tokenMap(token)
+            let token = memberMaper(token)
             subscripts.append(token.describe)
-            switch token.fetch(from: current) {
+            switch token.fetch(from: current, prefixes: prefixes) {
             case .none:
                 return (nil, subscripts)
             case .some(let result):
@@ -55,7 +69,7 @@ public struct Jsonful {
         return (current, subscripts)
     }
     
-    private func tokenMap(_ token: JsonfulKeyble) -> JsonfulKeyble {
+    private func memberMaper(_ token: JsonfulKeyble) -> JsonfulKeyble {
         if let string = token as? String {
             return maper(string)
         }
