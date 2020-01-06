@@ -40,7 +40,7 @@ extension String: JsonfulKeyble {
     }
     
     func fetch(value: Any, keys: Set<AnyHashable>) -> Any? {
-        let child = Mirror(reflecting: value).children.filter({ keys.contains($0.label ?? "") })
+        let child = Mirror(reflecting: value).children.filter({keys.contains($0.label ?? "")})
         guard let value = child.first?.value else { return nil }
         let mirror = Mirror(reflecting: value)
         guard mirror.displayStyle == .optional else { return value }
