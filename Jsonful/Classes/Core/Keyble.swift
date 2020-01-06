@@ -55,8 +55,8 @@ extension String: JsonfulKeyble {
         if let dic = any as? [AnyHashable: Any], let result = fetch(from: dic, keys: keys) {
             return Mirror.unwrap(value: result)
         }
-        else if let value = fetch(from: any, keys: keys) {
-            return value
+        else if let result = fetch(from: any, keys: keys) {
+            return Mirror.unwrap(value: result)
         }
         else if let obj = any as? NSObject, let result = fetch(from: obj) {
             return Mirror.unwrap(value: result)
