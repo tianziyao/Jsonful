@@ -31,15 +31,15 @@ extension String: JsonfulKeyble {
         return ".\(self)"
     }
     
-    func fetch(dic: [AnyHashable: Any], keys: Set<AnyHashable>) -> Any? {
+    func fetch(from dic: [AnyHashable: Any], keys: Set<AnyHashable>) -> Any? {
         return dic.filter({keys.contains($0.key)}).first?.value
     }
     
-    func fetch(obj: NSObject) -> Any? {
+    func fetch(from obj: NSObject) -> Any? {
         return obj.responds(to: Selector(self)) ? obj.value(forKey: self) : nil
     }
     
-    func fetch(value: Any, keys: Set<AnyHashable>) -> Any? {
+    func fetch(from value: Any, keys: Set<AnyHashable>) -> Any? {
         let child = Mirror(reflecting: value).children.filter({keys.contains($0.label ?? "")})
         guard let value = child.first?.value else { return nil }
         let mirror = Mirror(reflecting: value)
@@ -52,13 +52,13 @@ extension String: JsonfulKeyble {
         guard let any = any else { return nil }
         var keys = Set(prefixes.map({"\($0)\(self)"}))
         keys.update(with: self)
-        if let dic = any as? [AnyHashable: Any], let result = fetch(dic: dic, keys: keys) {
+        if let dic = any as? [AnyHashable: Any], let result = fetch(from: dic, keys: keys) {
             return result
         }
-        else if let value = fetch(value: any, keys: keys) {
+        else if let value = fetch(from: any, keys: keys) {
             return value
         }
-        else if let obj = any as? NSObject, let result = fetch(obj: obj) {
+        else if let obj = any as? NSObject, let result = fetch(from: obj) {
             return result
         }
         else {
