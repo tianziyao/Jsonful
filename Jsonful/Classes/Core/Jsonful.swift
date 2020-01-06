@@ -53,7 +53,7 @@ public struct Jsonful {
         return result.lint(filter, members.joined(), file, line)
     }
     
-    private func value(for tokens: [JsonfulKeyble], prefixes: [String]) -> (Optional<Any>, [String]) {
+    private func value(for tokens: [JsonfulKeyble], prefixes: [String]) -> (Any?, [String]) {
         var current: Any? = self.raw
         var subscripts = [String]()
         for token in tokens {
@@ -63,7 +63,7 @@ public struct Jsonful {
             case .none:
                 return (nil, subscripts)
             case .some(let result):
-                current = Mirror.unwrap(value: result)
+                current = result
             }
         }
         return (current, subscripts)

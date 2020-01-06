@@ -53,13 +53,13 @@ extension String: JsonfulKeyble {
         var keys = Set(prefixes.map({"\($0)\(self)"}))
         keys.update(with: self)
         if let dic = any as? [AnyHashable: Any], let result = fetch(from: dic, keys: keys) {
-            return result
+            return Mirror.unwrap(value: result)
         }
         else if let value = fetch(from: any, keys: keys) {
             return value
         }
         else if let obj = any as? NSObject, let result = fetch(from: obj) {
-            return result
+            return Mirror.unwrap(value: result)
         }
         else {
             return nil
