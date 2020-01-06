@@ -20,9 +20,7 @@ extension Int: JsonfulKeyble {
     }
     
     func fetch(from any: Any?, prefixes: [String]) -> Any? {
-        guard let array = any as? [Any] else {
-            return nil
-        }
+        guard let array = any as? [Any] else { return nil }
         return array.indices.contains(self) ? array[self] : nil
     }
 }
