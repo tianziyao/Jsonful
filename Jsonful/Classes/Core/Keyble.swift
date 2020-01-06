@@ -31,8 +31,7 @@ extension String: JsonfulKeyble {
         return ".\(self)"
     }
     
-    func fetch(dic: [AnyHashable: Any], keys: Set<String>) -> Any? {
-        let keys = keys as Set<AnyHashable>
+    func fetch(dic: [AnyHashable: Any], keys: Set<AnyHashable>) -> Any? {
         return dic.filter({keys.contains($0.key)}).first?.value
     }
     
@@ -40,7 +39,7 @@ extension String: JsonfulKeyble {
         return obj.responds(to: Selector(self)) ? obj.value(forKey: self) : nil
     }
     
-    func fetch(value: Any, keys: Set<String>) -> Any? {
+    func fetch(value: Any, keys: Set<AnyHashable>) -> Any? {
         let child = Mirror(reflecting: value).children.filter({ keys.contains($0.label ?? "") })
         guard let value = child.first?.value else { return nil }
         let mirror = Mirror(reflecting: value)
