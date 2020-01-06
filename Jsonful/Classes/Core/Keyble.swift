@@ -32,7 +32,8 @@ extension String: JsonfulKeyble {
     }
     
     func fetch(dic: [AnyHashable: Any], keys: Set<String>) -> Any? {
-        return dic.filter({ keys.contains($0.key as? String ?? "") }).first?.value
+        let keys = keys as Set<AnyHashable>
+        return dic.filter({keys.contains($0.key)}).first?.value
     }
     
     func fetch(obj: NSObject) -> Any? {
