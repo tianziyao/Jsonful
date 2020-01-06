@@ -90,7 +90,7 @@ extension Mirror {
         }
     }
     
-    public static func parse(value: Any?, ignore: Set<String> = ignore, depth: Int = 1000) -> Any? {
+    public static func parse(value: Any?, ignore: Set<String> = ignore, depth: Int) -> Any? {
         guard let value = value, depth >= 0 else {
             return nil
         }
