@@ -23,10 +23,7 @@ extension Int: JsonfulKeyble {
         guard let array = any as? [Any] else {
             return nil
         }
-        guard self < array.count else {
-            return nil
-        }
-        return array[self]
+        return array.indices.contains(self) ? array[self] : nil
     }
 }
 
@@ -41,22 +38,15 @@ extension String: JsonfulKeyble {
     }
     
     func fetch(obj: NSObject) -> Any? {
-        let sel = Selector(self)
-        if obj.responds(to: sel) {
-            return obj.value(forKey: self)
-        }
-        else {
-            return nil
-        }
+        return obj.responds(to: Selector(self)) ? obj.value(forKey: self) : nil
     }
     
     func fetch(value: Any, keys: Set<String>) -> Any? {
-        let children = Mirror(reflecting: value).children
-        let child = children.filter({ keys.contains($0.label ?? "") })
+        let child = Mirror(reflecting: value).children.filter({ keys.contains($0.label ?? "") })
         guard let value = child.first?.value else { return nil }
         let mirror = Mirror(reflecting: value)
-        if mirror.displayStyle != .optional { return value }
-        if mirror.children.count == 0 { return value }
+        guard mirror.displayStyle == .optional else { return value }
+        guard mirror.children.count != 0 else { return value }
         return mirror.children.first?.value
     }
     
