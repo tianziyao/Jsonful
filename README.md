@@ -42,7 +42,6 @@ class Mock {
         self.dictionary = ["status": "success"]
         self.array = [500, 501, 502]
         self.set = .init([500, 501, 502])
-        self.setOrNil = .init([NSNull(), 501, 502])
         self.string = "success"
         self.nsAttributedString = .init(string: "success")
         self.int = 0
