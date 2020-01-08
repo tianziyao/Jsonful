@@ -23,17 +23,17 @@ struct Enum {
 class Mock {    
     var tuple: (String, Int)
     var `enum` = Enum()
-		var dictionary: [AnyHashable: Any]
-		var array: [Any]
-		var set: Set<AnyHashable>
-		var string: String
-		var nsAttributedString: NSAttributedString
-		var int: Int
-		var bool: Bool
-		var date: Date
-		var data: Data
-		var url: URL
-		var _image: UIImage
+    var dictionary: [AnyHashable: Any]
+    var array: [Any]
+    var set: Set<AnyHashable>
+    var string: String
+    var nsAttributedString: NSAttributedString
+    var int: Int
+    var bool: Bool
+    var date: Date
+    var data: Data
+    var url: URL
+    var _image: UIImage
     var _color: UIColor
     var _font: UIFont
     
