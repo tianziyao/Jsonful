@@ -8,7 +8,7 @@
 
 Pod::Spec.new do |s|
   s.name             = 'Jsonful'
-  s.version          = '4.2.0'
+  s.version          = '4.2.1'
   s.summary          = 'Jsonful可以让你像JavaScript使用JSON一样使用iOS原生数据和模型.'
 
   s.homepage         = 'https://github.com/tianziyao/Jsonful'
