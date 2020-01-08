@@ -10,7 +10,7 @@ import Foundation
 
 public extension Unwrap {
         
-    struct Filter: OptionSet {
+    public struct Filter: OptionSet {
         
         public var rawValue: Int
 
