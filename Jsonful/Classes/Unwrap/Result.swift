@@ -35,7 +35,7 @@ public extension Unwrap {
         }
         
         public static func failure(value: Any?, identity: String, reason: String) -> Result<T> {
-            let message = Unwrap.debug { () -> String in
+            let message = Unwrap.message { () -> String in
                 var string: String = ""
                 string.append(contentsOf: identity)
                 if let value = value {
@@ -69,11 +69,11 @@ public extension Unwrap {
             return As(result: self)
         }
         
-        public func success(closure: (T) -> ()) {
+        public func success(_ closure: (T) -> ()) {
             then(success: closure)
         }
         
-        public func failure(closure: () -> ()) {
+        public func failure(_ closure: () -> ()) {
             then(success: { _ in }, failure: closure)
         }
         

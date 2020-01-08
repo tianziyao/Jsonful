@@ -11,7 +11,7 @@ import Foundation
 public struct Unwrap {
     
     public static func lint<T>(_ value: Optional<T>, _ filter: Filter = .exception, _ id: String = "", _ file: String = #file, _ line: Int = #line) -> Result<T> {
-        let identity = Unwrap.debug { () -> String in
+        let identity = Unwrap.message { () -> String in
             let id = id.isEmpty ? "unknow" : id
             let cls = String(describing: object_getClass(value))
             return "-----\(file):\(line)-----\nid: \(id)\nrawType: <\(cls)>\n"
@@ -19,20 +19,28 @@ public struct Unwrap {
         return filter.result(value: value, identity: identity).as.that()
     }
     
-//    public static func merge<O1, O2>(_ r1: Result<O1>, _ r2: Result<O2>) -> Result<(O1, O2)> {
-//        guard let v1 = r1.value else { return .failure(r1.message ?? "") }
-//        guard let v2 = r2.value else { return .failure(r2.message ?? "") }
-//        return .success(((v1, v2), "", .ex))
-//    }
-//
-//    public static func merge<O1, O2, O3>(_ r1: Result<O1>, _ r2: Result<O2>, _ r3: Result<O3>) -> Result<(O1, O2, O3)> {
-//        guard let v1 = r1.value else { return .failure(r1.message ?? "") }
-//        guard let v2 = r2.value else { return .failure(r2.message ?? "") }
-//        guard let v3 = r3.value else { return .failure(r3.message ?? "") }
-//        return .success(((v1, v2, v3), ""))
-//    }
+    public static func zip<O1, O2>(_ r1: Result<O1>, _ r2: Result<O2>) -> Result<(O1, O2)> {
+        guard let v1 = r1.value else { return .failure(r1.message ?? "") }
+        guard let v2 = r2.value else { return .failure(r2.message ?? "") }
+        return .success(((v1, v2), "", .none))
+    }
+
+    public static func zip<O1, O2, O3>(_ r1: Result<O1>, _ r2: Result<O2>, _ r3: Result<O3>) -> Result<(O1, O2, O3)> {
+        guard let v1 = r1.value else { return .failure(r1.message ?? "") }
+        guard let v2 = r2.value else { return .failure(r2.message ?? "") }
+        guard let v3 = r3.value else { return .failure(r3.message ?? "") }
+        return .success(((v1, v2, v3), "", .none))
+    }
     
-    internal static func debug(action: () -> String) -> String {
+    public static func zip<O1, O2, O3, O4>(_ r1: Result<O1>, _ r2: Result<O2>, _ r3: Result<O3>, _ r4: Result<O4>) -> Result<(O1, O2, O3, O4)> {
+        guard let v1 = r1.value else { return .failure(r1.message ?? "") }
+        guard let v2 = r2.value else { return .failure(r2.message ?? "") }
+        guard let v3 = r3.value else { return .failure(r3.message ?? "") }
+        guard let v4 = r4.value else { return .failure(r3.message ?? "") }
+        return .success(((v1, v2, v3, v4), "", .none))
+    }
+    
+    internal static func message(action: () -> String) -> String {
         #if DEBUG
         return action()
         #else

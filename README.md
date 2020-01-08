@@ -1,29 +1,93 @@
 # Jsonful
 
-[![CI Status](https://img.shields.io/travis/tianziyao/Jsonful.svg?style=flat)](https://travis-ci.org/tianziyao/Jsonful)
-[![Version](https://img.shields.io/cocoapods/v/Jsonful.svg?style=flat)](https://cocoapods.org/pods/Jsonful)
-[![License](https://img.shields.io/cocoapods/l/Jsonful.svg?style=flat)](https://cocoapods.org/pods/Jsonful)
-[![Platform](https://img.shields.io/cocoapods/p/Jsonful.svg?style=flat)](https://cocoapods.org/pods/Jsonful)
+这是一个可以让你像 JavaScript 一样使用数据的库。
+
+
 
 ## Example
 
-To run the example project, clone the repo, and run `pod install` from the Example directory first.
+```
+enum Number: Int {
+    case zero, one, two
+}
+
+enum Text: String {
+    case a, b, c
+}
+
+struct Enum {
+    var a: Text = .a
+    var zero: Number = .zero
+}
+
+class Mock {    
+    var tuple: (String, Int)
+    var `enum` = Enum()
+		var dictionary: [AnyHashable: Any]
+		var array: [Any]
+		var set: Set<AnyHashable>
+		var string: String
+		var nsAttributedString: NSAttributedString
+		var int: Int
+		var bool: Bool
+		var date: Date
+		var data: Data
+		var url: URL
+		var _image: UIImage
+    var _color: UIColor
+    var _font: UIFont
+    
+    init() {
+        self.tuple = ("success", 200)
+        self.dictionary = ["status": "success"]
+        self.array = [500, 501, 502]
+        self.set = .init([500, 501, 502])
+        self.setOrNil = .init([NSNull(), 501, 502])
+        self.string = "success"
+        self.nsAttributedString = .init(string: "success")
+        self.int = 0
+        self.bool = true
+        self.data = Data(repeating: 0, count: 10)
+        self.date = Date(timeIntervalSince1970: 0)        
+        self.url = URL(fileURLWithPath: "mock")
+        self._image = UIImage(named: "icon")!
+        self._color = .red
+        self._font = .systemFont(ofSize: 16)
+    }
+}
+
+
+let snapshot = Jsonful.snapshot(mock)
+
+XCTAssert(snapshot.tuple.0.lint().as.string.value == "success")
+XCTAssert(snapshot.tuple.1.lint().as.int.value == 200)
+XCTAssert(snapshot.enum.a.lint().map(Text.self).value?.rawValue == Text.a.rawValue)
+XCTAssert(snapshot.enum.zero.lint().map(Number.self).value?.rawValue == Number.zero.rawValue)
+XCTAssert(snapshot.dictionary.status.lint().as.string.value == "success")
+XCTAssert(snapshot.array[0].lint().as.int.value == 500)
+XCTAssert(snapshot.set.lint().as.set(AnyHashable.self).value?.count == 3)
+XCTAssert(snapshot.string.lint().as.string.value == "success")
+XCTAssert(snapshot.int.lint().as.int.value == 0)
+XCTAssert(snapshot.bool.lint().as.bool.value == true)
+XCTAssert(snapshot.data.lint().as.data.value?.count == 10)
+XCTAssert(snapshot.date.lint().as.date.value?.timeIntervalSince1970 == 0)
+XCTAssert(snapshot.urlRequest.lint().as.urlRequest.value?.url?.path == "/mock")
+XCTAssert(snapshot.image.lint().as.image.value === mock._image)
+XCTAssert(snapshot.color.lint().as.color.value === mock._color)
+XCTAssert(snapshot.font.lint().as.font.value === mock._font)
+```
+
+
 
 ## Requirements
 
-## Installation
+Swift 4.2 以上，iOS 8.0 以上。
 
-Jsonful is available through [CocoaPods](https://cocoapods.org). To install
-it, simply add the following line to your Podfile:
+
+
+## Installation
 
 ```ruby
 pod 'Jsonful'
 ```
 
-## Author
-
-tianziyao, ziyao.tian@gmail.com
-
-## License
-
-Jsonful is available under the MIT license. See the LICENSE file for more info.
