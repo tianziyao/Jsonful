@@ -91,18 +91,6 @@ extension NSRange: Containable {
     }
 }
 
-internal extension Unwrap.Filter {
-    
-    func result<T, O>(value: Unwrap.As<T>, closure: (Unwrap.As<T>) -> Unwrap.Result<O>) -> Unwrap.Result<O> {
-        if self.contains(.none) {
-            return value.that()
-        }
-        else {
-            return closure(value)
-        }
-    }
-}
-
 public extension Unwrap.As {
     
     //MARK: ---数组---

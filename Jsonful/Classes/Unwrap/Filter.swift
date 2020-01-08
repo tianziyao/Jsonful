@@ -33,7 +33,16 @@ public extension Unwrap {
             }
             return .success((data, identity, self))
         }
-                
+        
+        internal func result<T, O>(value: Unwrap.As<T>, closure: (Unwrap.As<T>) -> Unwrap.Result<O>) -> Unwrap.Result<O> {
+            if self.contains(.none) {
+                return value.that()
+            }
+            else {
+                return closure(value)
+            }
+        }
+        
         public func validate(value: Any?) -> (result: Bool, reason: String, value: Any?) {
             let value = Mirror.unwrap(value: value)
             if self.contains(.none) {
