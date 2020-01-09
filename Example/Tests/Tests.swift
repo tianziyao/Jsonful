@@ -362,11 +362,13 @@ class Tests: XCTestCase {
         let reference = Jsonful.reference(mock)
         let snapshot = Jsonful.snapshot(mock)
         
-        XCTAssert(snapshot.image.lint().as.image.value === mock._image)
-        XCTAssert(reference.image.lint().as.image.value === mock._image)
+        snapshot.image.lint().as.that().value === mock._image
+        
+        XCTAssert(mock._image === snapshot.image.lint().as.that().value)
+        XCTAssert(mock._image === reference.image.lint().as.that().value)
     
-        XCTAssert(snapshot.color.lint().as.color.value === mock._color)
-        XCTAssert(reference.color.lint().as.color.value === mock._color)
+        XCTAssert(snapshot.color.lint().as.that().value === mock._color)
+        XCTAssert(reference.color.lint().as.that().value === mock._color)
     
         XCTAssert(snapshot.font.lint().as.font.value === mock._font)
         XCTAssert(reference.font.lint().as.font.value === mock._font)

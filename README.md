@@ -71,8 +71,9 @@ XCTAssert(snapshot.bool.lint().as.bool.value == true)
 XCTAssert(snapshot.data.lint().as.data.value?.count == 10)
 XCTAssert(snapshot.date.lint().as.date.value?.timeIntervalSince1970 == 0)
 XCTAssert(snapshot.urlRequest.lint().as.urlRequest.value?.url?.path == "/mock")
-XCTAssert(snapshot.image.lint().as.image.value === mock._image)
-XCTAssert(snapshot.color.lint().as.color.value === mock._color)
+
+XCTAssert(mock._image === snapshot.image.lint().as.that().value)
+XCTAssert(snapshot.color.lint().as.that().value === mock._color)
 XCTAssert(snapshot.font.lint().as.font.value === mock._font)
 ```
 
