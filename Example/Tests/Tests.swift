@@ -361,9 +361,7 @@ class Tests: XCTestCase {
         let mock = Mock()
         let reference = Jsonful.reference(mock)
         let snapshot = Jsonful.snapshot(mock)
-        
-        snapshot.image.lint().as.that().value === mock._image
-        
+                
         XCTAssert(mock._image === snapshot.image.lint().as.that().value)
         XCTAssert(mock._image === reference.image.lint().as.that().value)
     
