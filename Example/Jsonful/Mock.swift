@@ -55,23 +55,23 @@ class Mock {
     var dictionary: [AnyHashable: Any]
     var dictionaryOrNil: [AnyHashable: Any??]?
     
-    let nsDictionary: NSDictionary
-    let nsDictionaryOrNil: NSDictionary?
-    let nsMutableDictionary: NSMutableDictionary
+    var nsDictionary: NSDictionary
+    var nsDictionaryOrNil: NSDictionary?
+    var nsMutableDictionary: NSMutableDictionary
 
     var array: [Any]
     var arrayOrNil: [Any???]
 
-    let nsArray: NSArray
-    let nsArrayOrNil: NSArray?
-    let nsMutableArray: NSMutableArray
+    var nsArray: NSArray
+    var nsArrayOrNil: NSArray?
+    var nsMutableArray: NSMutableArray
 
     var set: Set<AnyHashable>
     var setOrNil: Set<AnyHashable??>?
 
-    let nsSet: NSSet
-    let nsSetOrNil: NSSet?
-    let nsMutableSet: NSMutableSet
+    var nsSet: NSSet
+    var nsSetOrNil: NSSet?
+    var nsMutableSet: NSMutableSet
     
     //MARK: ---字符串---
     

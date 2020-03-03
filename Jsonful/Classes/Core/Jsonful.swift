@@ -37,7 +37,15 @@ public struct Jsonful {
     ///   - ignore: 类型前缀，符合该前缀的对象不会分解为字典。默认忽略大部分标准库类型。
     ///   - depth: 递归深度
     ///   - maper: 需要使用keyA取出KeyB的值，需要实现此闭包
-    public static func snapshot(_ raw: Any?, ignore: Set<String> = Mirror.ignore, depth: Int = 10, maper: MemberMaper? = nil) -> Jsonful {
+    public static func snapshot
+    (
+        _ raw: Any?,
+        ignore: Set<String> = Mirror.ignore,
+        depth: Int = 10,
+        maper: MemberMaper? = nil
+    )
+        -> Jsonful
+    {
         let raw = Mirror.parse(value: raw, ignore: ignore, depth: depth)
         return .init(raw, tokens: [], maper: maper)
     }
@@ -48,9 +56,17 @@ public struct Jsonful {
     ///   - prefixes: 需要匹配的前缀，例如使用somekey取到_somekey的值
     ///   - filter: 过滤条件，默认nil和empty取值失败
     /// - Returns: 取值结果
-    public func lint(_ prefixes: [String] = [".", "_"], _ filter: Unwrap.Filter = .exception, _ file: String = #file, _ line: Int = #line) -> Unwrap.Result<Any> {
+    public func unwraper
+    (
+        _ prefixes: [String] = [".", "_"],
+        _ blacklist: UnwrapFilter = .exception,
+        _ file: String = #file,
+        _ line: Int = #line
+    )
+        -> Unwraper<Any>
+    {
         let (result, members) = value(for: tokens, prefixes: prefixes)
-        return result.lint(filter, members.joined(), file, line)
+        return result.unwraper(blacklist, members.joined(separator: "."), file, line)
     }
     
     private func value(for tokens: [JsonfulKeyble], prefixes: [String]) -> (Any?, [String]) {
